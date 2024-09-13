@@ -26,7 +26,7 @@ function Navigationbar() {
 
             {/* Otros 3 links (Productos, Turnos, Contacto) */}
             <Nav.Link href="#link1" className="text-white">Productos</Nav.Link>
-            <Nav.Link href="#link2" className="text-white">Turnos</Nav.Link>
+            <Nav.Link href="#link2" className="text-white">Mis Turnos</Nav.Link>
             <Nav.Link href="#link4" className="text-white">Contacto</Nav.Link>
           </Nav>
 
