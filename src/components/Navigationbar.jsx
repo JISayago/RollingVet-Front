@@ -49,9 +49,9 @@ function Navigationbar() {
               </NavDropdown>
 
               {/* Otros 3 links (Productos, Turnos, Contacto) */}
-              <Nav.Link href="#link1" className="text-white">Productos</Nav.Link>
+              <Nav.Link href={'/productos' } className="text-white">Productos</Nav.Link>
               <Nav.Link href={'/perfil_usuario' } className="text-white">Mi Perfil</Nav.Link>
-              <Nav.Link href="#link4" className="text-white">Contacto</Nav.Link>
+              <Nav.Link href={'/contacto'} className="text-white">Contacto</Nav.Link>
             </Nav>
 
             {/* Link de Carrito en el medio */}
