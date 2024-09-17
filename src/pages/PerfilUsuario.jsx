@@ -23,6 +23,7 @@ const consultations = [
   { id: 10, dateTime: '2024-09-21 13:00', professional: 'Dr. Patel', location: 'Clinic J', patient: 'Oscar', responsible: 'Charlie Green' },
 ];
 
+
 const PerfilUsuario = () => {
   const userProfile = {
     image: 'https://via.placeholder.com/150',
@@ -70,7 +71,7 @@ const PerfilUsuario = () => {
         <Col xs={12} md={10} className="d-flex flex-column order-2 order-md-2">
           <Row className="flex-grow-1 overflow-auto mb-3" style={{ padding: '1rem' }}>
             <h3>Mascotas registradas</h3>
-            <div className="d-flex flex-wrap" style={{ overflowX: 'auto' }}>
+            <div className="d-flex" style={{ overflowY: 'auto' }}>
               {animals.map(animal => (
                 <Col key={animal.id} xs={11} md={6} lg={4} className="mb-3">
                   <Card className="h-100" style={{ maxWidth: '250px' }}>
@@ -101,6 +102,7 @@ const PerfilUsuario = () => {
                     <Card.Subtitle className="mb-2 text-muted">Responsible: {consultation.responsible}</Card.Subtitle>
                   </Card.Body>
                 </Card>
+
               ))}
             </Col>
           </Row>
