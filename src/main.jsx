@@ -9,10 +9,13 @@ import { Container } from 'react-bootstrap'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-     <Container fluid className="d-flex flex-column min-vh-100 p-0">
-    <Navigationbar />
+  <Container fluid className="d-flex flex-column min-vh-100 p-0">
+  <Navigationbar />
+  <div className="flex-grow-1">
     <App />
-    <FooterBar />
-      </Container>
+  </div>
+  <FooterBar />
+</Container>
+
   </StrictMode>,
 )
