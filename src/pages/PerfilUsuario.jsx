@@ -90,7 +90,7 @@ const PerfilUsuario = () => {
           </Row>
 
           <Row className="flex-grow-1" style={{ padding: '1rem' }}>
-            <h3>Últimos turnos</h3>
+            <h3>Últimas asistencias</h3>
             <Col xs={12} style={{ maxHeight: '400px', overflowY: 'auto' }}>
               {consultations.map(consultation => (
                 <Card key={consultation.id} className="mb-3">

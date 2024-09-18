@@ -1,10 +1,13 @@
 // src/components/ButtonComponent.js
 import { Button} from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 function ButtonOption({ route, text }) {
 
+  const navigate = useNavigate();
+
   const handleClick = () => {
-    console.log("click")
+    navigate('/turnos')
   };
 
   return (

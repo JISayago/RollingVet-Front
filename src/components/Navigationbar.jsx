@@ -32,7 +32,7 @@ function Navigationbar() {
       <Navbar expand="lg" className="bg-danger py-3">
         <Container fluid>
           {/* Logo a la izquierda */}
-          <Navbar.Brand href="#home" className="text-white">MiLogo</Navbar.Brand>
+          <Navbar.Brand href={'/'} className="text-white">MiLogo</Navbar.Brand>
 
           {/* Toggle para dispositivos móviles */}
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
