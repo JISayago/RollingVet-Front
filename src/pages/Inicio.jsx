@@ -40,16 +40,16 @@ function Inicio() {
     <Container fluid className="py-4">
   <Row className="text-center">
     <Col md={3} className="mb-3">
-      <ButtonOption route="/ruta1" text="Sacar Turno" />
+      <ButtonOption route="turnos" text="Sacar Turno" />
     </Col>
     <Col md={3} className="mb-3">
-      <ButtonOption route="/ruta2" text="Nuestros Especialistas" />
+      <ButtonOption route="especialistas" text="Nuestros Especialistas" />
     </Col>
     <Col md={3} className="mb-3">
-      <ButtonOption route="/ruta3" text="Planes disponibles para mascotas" />
+      <ButtonOption route="planes" text="Planes disponibles para mascotas" />
     </Col>
     <Col md={3} className="mb-3">
-      <ButtonOption route="/ruta4" text="Sucursales" />
+      <ButtonOption route="contacto" text="Sucursales" />
     </Col>
   </Row>
     </Container>

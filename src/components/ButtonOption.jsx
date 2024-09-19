@@ -5,9 +5,8 @@ import { useNavigate } from 'react-router-dom';
 function ButtonOption({ route, text }) {
 
   const navigate = useNavigate();
-
   const handleClick = () => {
-    navigate('/turnos')
+    navigate(`/${route}`)
   };
 
   return (

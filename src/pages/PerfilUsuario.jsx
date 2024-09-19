@@ -81,7 +81,7 @@ const PerfilUsuario = () => {
                       <Card.Subtitle className="mb-2 text-muted">Age: {animal.age}</Card.Subtitle>
                       <Card.Subtitle className="mb-2 text-muted">Breed: {animal.breed}</Card.Subtitle>
                       <Card.Subtitle className="mb-2 text-muted">Type: {animal.type}</Card.Subtitle>
-                      <Button variant="primary" href={animal.link}>More Info</Button>
+                      <Button variant="primary" href={'/perfil_mascota'}>More Info</Button>
                     </Card.Body>
                   </Card>
                 </Col>
