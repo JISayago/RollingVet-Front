@@ -7,6 +7,7 @@ import Turnos from './pages/Turnos';
 import PlanesDeSuscripcion from './pages/PlanesMascotas';
 import PerfilMascota from './pages/PerfilMascota';
 import ServiciosTurnos from './pages/ServiciosTurnos';
+import Especialistas from './pages/Especialistas';
 
 function App() {
  
@@ -21,6 +22,7 @@ function App() {
         <Route path='/servicios' element={<ServiciosTurnos/> } />
         <Route path='/turnos' element={<Turnos/> } />
         <Route path='/planes' element={<PlanesDeSuscripcion/> } />
+        <Route path='/nuestros_especialistas' element={<Especialistas/> } />
       </Routes>
    
     </BrowserRouter>

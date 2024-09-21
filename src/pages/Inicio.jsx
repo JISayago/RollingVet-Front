@@ -43,7 +43,7 @@ function Inicio() {
       <ButtonOption route="turnos" text="Sacar Turno" />
     </Col>
     <Col md={3} className="mb-3">
-      <ButtonOption route="especialistas" text="Nuestros Especialistas" />
+      <ButtonOption route="nuestros_especialistas" text="Nuestros Especialistas" />
     </Col>
     <Col md={3} className="mb-3">
       <ButtonOption route="planes" text="Planes disponibles para mascotas" />
