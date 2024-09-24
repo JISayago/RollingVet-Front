@@ -1,37 +1,12 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button, Card } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import clienteAxios from '../helpers/axios.config';
 
-// Datos de las sucursales
-const branches = [
-  { 
-    id: 1,
-    name: 'Sucursal Centro',
-    address: 'Av. Principal 123, Ciudad',
-    contactNumber: '+123456789',
-    contactEmail: 'centro@empresa.com',
-    emergency24h: true
-  },
-  { 
-    id: 2,
-    name: 'Sucursal Norte',
-    address: 'Calle Secundaria 456, Ciudad',
-    contactNumber: '+987654321',
-    contactEmail: 'norte@empresa.com',
-    emergency24h: false
-  },
-  { 
-    id: 3,
-    name: 'Sucursal Sur',
-    address: 'Avenida Tercera 789, Ciudad',
-    contactNumber: '+456789123',
-    contactEmail: 'sur@empresa.com',
-    emergency24h: true
-  },
-  // Se han duplicado varias sucursales en los datos originales, eliminamos los duplicados aquí
-];
 
 const Contacto = () => {
+ const [sucursales,setSucursales] = useState([])
+
   const [formData, setFormData] = useState({
     reason: '',
     message: '',
@@ -51,6 +26,13 @@ const Contacto = () => {
     alert('Formulario enviado');
     // Aquí podrías añadir la lógica para enviar el formulario
   };
+  const obtenerSucursales = async () => {
+    const sucursalesBD = await clienteAxios.get("/sucursales");
+    setSucursales(sucursalesBD.data)
+ }
+  useState(() => {
+    obtenerSucursales();
+  })
 
   return (
     <Container fluid style={{ padding: '2rem' }}>
@@ -103,8 +85,8 @@ const Contacto = () => {
                   required
                 >
                   <option value="">Seleccione una sucursal</option>
-                  {branches.map(branch => (
-                    <option key={branch.id} value={branch.name}>{branch.name}</option>
+                  {sucursales.map(s => (
+                    <option key={s.id} value={s.name}>{s.name}</option>
                   ))}
                 </Form.Control>
               </Form.Group>
@@ -122,19 +104,19 @@ const Contacto = () => {
         <Col xs={12} className="mt-4">
           <h2 className="text-center">Sucursales</h2>
           <Row className="justify-content-center">
-            {branches.map(branch => (
-              <Col key={branch.id} xs={12} sm={6} md={4} lg={3} className="mb-4">
+            {sucursales.map(s => (
+              <Col key={s.id} xs={12} sm={6} md={4} lg={3} className="mb-4">
                 <Card className="text-center" style={{ width: '100%', height: '100%' }}>
                   <Card.Body>
-                    <Card.Title>{branch.name}</Card.Title>
+                    <Card.Title>{s.nombre}</Card.Title>
                     <Card.Subtitle className="mb-2 text-muted">Dirección</Card.Subtitle>
-                    <Card.Text>{branch.address}</Card.Text>
+                    <Card.Text>{s.direccion}</Card.Text>
                     <Card.Subtitle className="mb-2 text-muted">Número de Contacto</Card.Subtitle>
-                    <Card.Text>{branch.contactNumber}</Card.Text>
+                    <Card.Text>{s.numeroContacto}</Card.Text>
                     <Card.Subtitle className="mb-2 text-muted">Correo de Contacto</Card.Subtitle>
-                    <Card.Text>{branch.contactEmail}</Card.Text>
+                    <Card.Text>{s.correo}</Card.Text>
                     <Card.Subtitle className="mb-2 text-muted">Atención de Emergencias 24 hs</Card.Subtitle>
-                    <Card.Text>{branch.emergency24h ? 'Sí' : 'No'}</Card.Text>
+                    <Card.Text>{s.atiendeEmergencia24H ? 'Sí' : 'No'}</Card.Text>
                   </Card.Body>
                 </Card>
               </Col>
