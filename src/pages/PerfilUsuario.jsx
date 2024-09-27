@@ -1,5 +1,5 @@
-import React from 'react';
-import { Container, Row, Col, Card, Button } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Container, Row, Col, Card, Button, Modal, Form } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const animals = [
@@ -23,8 +23,15 @@ const consultations = [
   { id: 10, dateTime: '2024-09-21 13:00', professional: 'Dr. Patel', location: 'Clinic J', patient: 'Oscar', responsible: 'Charlie Green' },
 ];
 
-
 const PerfilUsuario = () => {
+  const [showModal, setShowModal] = useState(false);
+  const [petData, setPetData] = useState({
+    name: '',
+    birthDate: '',
+    type: '',
+    breed: '',
+  });
+
   const userProfile = {
     image: 'https://via.placeholder.com/150',
     name: 'John Doe',
@@ -35,6 +42,21 @@ const PerfilUsuario = () => {
 
   const handleCancelAppointment = () => {
     alert('Appointment cancelled');
+  };
+
+  const handleShow = () => setShowModal(true);
+  const handleClose = () => setShowModal(false);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setPetData({ ...petData, [name]: value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Aquí podrías agregar la lógica para enviar la información de la mascota
+    console.log(petData);
+    handleClose(); // Cerrar el modal después de enviar
   };
 
   return (
@@ -51,6 +73,7 @@ const PerfilUsuario = () => {
               <li key={index}>{member}</li>
             ))}
           </ul>
+          <Button variant="success" onClick={handleShow} className="mt-3">Registrar Mascota</Button>
           <div className="mt-3 p-3" style={{
             width: '100%',
             maxWidth: '300px',
@@ -65,6 +88,7 @@ const PerfilUsuario = () => {
             <p><strong>Location:</strong> {userProfile.nextAppointment.location}</p>
             <Button variant="danger" onClick={handleCancelAppointment}>Cancel Appointment</Button>
           </div>
+          {/* Botón de agregar mascota dentro de la columna azul */}
         </Col>
 
         {/* Cards de Animales y Consultas */}
@@ -102,10 +126,37 @@ const PerfilUsuario = () => {
                     <Card.Subtitle className="mb-2 text-muted">Responsible: {consultation.responsible}</Card.Subtitle>
                   </Card.Body>
                 </Card>
-
               ))}
             </Col>
           </Row>
+
+          {/* Modal para agregar mascota */}
+          <Modal show={showModal} onHide={handleClose}>
+            <Modal.Header closeButton>
+              <Modal.Title>Registrar Nueva Mascota</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Form onSubmit={handleSubmit}>
+                <Form.Group controlId="formPetName">
+                  <Form.Label>Nombre</Form.Label>
+                  <Form.Control type="text" name="name" placeholder="Ingrese el nombre de la mascota" value={petData.name} onChange={handleInputChange} required />
+                </Form.Group>
+                <Form.Group controlId="formPetBirthDate">
+                  <Form.Label>Fecha de Nacimiento</Form.Label>
+                  <Form.Control type="date" name="birthDate" value={petData.birthDate} onChange={handleInputChange} required />
+                </Form.Group>
+                <Form.Group controlId="formPetType">
+                  <Form.Label>Tipo</Form.Label>
+                  <Form.Control type="text" name="type" placeholder="Ingrese el tipo (Perro/Gato)" value={petData.type} onChange={handleInputChange} required />
+                </Form.Group>
+                <Form.Group controlId="formPetBreed">
+                  <Form.Label>Raza</Form.Label>
+                  <Form.Control type="text" name="breed" placeholder="Ingrese la raza" value={petData.breed} onChange={handleInputChange} required />
+                </Form.Group>
+                <Button variant="primary" type="submit">Registrar</Button>
+              </Form>
+            </Modal.Body>
+          </Modal>
         </Col>
       </Row>
     </Container>
