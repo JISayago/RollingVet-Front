@@ -41,7 +41,7 @@ function FooterBar() {
           {/* Tercera columna: Dirección y Google Maps */}
           <Col lg={4} md={12} className="d-flex flex-column align-items-center">
             <h6 className="mb-2">Ubicación</h6>
-            <Card className="w-100 h-48 border border-dark bg-danger">
+            <Card className="w-75 h-48 border border-dark bg-danger">
               <Card.Body className="p-0">
                 <iframe
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3560.1059174753245!2d-65.20974728961748!3d-26.836583276595295!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94225d3ad7f30f1d%3A0xf8606cd659b8e3e4!2sRollingCode%20School!5e0!3m2!1ses!2sar!4v1727708259302!5m2!1ses!2sar"

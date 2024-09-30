@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { Container, Navbar, Nav } from "react-bootstrap";
+import { Container, Navbar, Nav, Row, Col } from "react-bootstrap";
 import ModalLR from "./ModalLR";
+import Clima from "./Clima";
 import Logo from "./Logo";
 import "../css/navbar.css";
 import LinksNavbar from "./LinksNavbar";
@@ -39,25 +40,49 @@ function Navigationbar() {
 
     return (
         <>
-            <Navbar expand="lg" className="py-3 navbar">
-                <Container>
-                    <Logo />
-                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                    <Navbar.Collapse id="basic-navbar-nav" className="text-center">
-                        {usuarioLogeado.logeado && (
-                            <LinksNavbar usuarioLogeado={usuarioLogeado} />
-                        )}
-                        <Nav>
-                            {!usuarioLogeado.logeado ? (
-                                <>
-                                    <Nav.Link className="link" onClick={() => handleShowModal("login")}>Ingresar</Nav.Link>
-                                    <Nav.Link className="link" onClick={() => handleShowModal("registro")}>Registro</Nav.Link>
-                                </>
-                            ) : (
-                                <Nav.Link className="link" onClick={cerrarSesion}>Cerrar sesión</Nav.Link>
-                            )}
-                        </Nav>
-                    </Navbar.Collapse>
+            {/* Contenedor superior */}
+            <Container fluid className="superior-nav w-100 p-2">
+                <Row className="text-center">
+                    <Col xs={12} md={3}>
+                        <label className="m-0">Atendemos emergencias 24 hs</label>
+                    </Col>
+                    <Col xs={12} md={3}>
+                        <label className="m-0">Contacto: ejemplo@correo.com</label>
+                    </Col>
+                    <Col xs={12} md={3}>
+                        <label className="m-0">Número de contacto: (123) 456-7890</label>
+                    </Col>
+                    <Col xs={12} md={3}>
+                        <Clima />
+                    </Col>
+                </Row>
+            </Container>
+
+            {/* Navbar */}
+            <Navbar expand="lg" className="py-3 navbar w-100">
+                <Container fluid>
+                    <div className="d-flex justify-content-between align-items-center w-100">
+                        <Logo />
+                        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                        <Navbar.Collapse id="basic-navbar-nav" className="text-center">
+                            {/* Centro de enlaces */}
+                            <Nav className="mx-auto">
+                                {usuarioLogeado.logeado && (
+                                    <LinksNavbar usuarioLogeado={usuarioLogeado} />
+                                )}
+                            </Nav>
+                            <Nav className="ml-auto">
+                                {!usuarioLogeado.logeado ? (
+                                    <>
+                                        <Nav.Link className="link" onClick={() => handleShowModal("login")}>Ingresar</Nav.Link>
+                                        <Nav.Link className="link" onClick={() => handleShowModal("registro")}>Registro</Nav.Link>
+                                    </>
+                                ) : (
+                                    <Nav.Link className="link" onClick={cerrarSesion}>Cerrar sesión</Nav.Link>
+                                )}
+                            </Nav>
+                        </Navbar.Collapse>
+                    </div>
                 </Container>
             </Navbar>
 

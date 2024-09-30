@@ -1,9 +1,22 @@
+.superior-nav{
+    background-color: #f45e00;
+    width: 100%;
+
+}
+.superior-nav label{
+    color: white;
+    font-weight: bold;
+}
+
 .navbar{
     background-color: #09336b;
 }
 
 .link{
     color:white;
+    font-size: large;
+    font-weight: bold;
+    margin: 0px 5px;
 }
 .link:hover{
     color: #f45e00;

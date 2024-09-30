@@ -1,12 +1,12 @@
 .boton{
-    background-color: #f45e00;
-    color: black;
-    border-color: black;
+    background-color: #09336b !important;
+    border-color: black !important;
+    color: white !important;
     height: 100px;
 }
 
 .boton:hover{
-    background-color: #09336b;
-    color: white;
+    background-color: #f45e00 !important;
+    color: black !important;
     border: none;
 }
