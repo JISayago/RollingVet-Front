@@ -1,77 +1,66 @@
-import { Card, Col, Container, Row } from "react-bootstrap"
-import ButtonOption from "../components/ButtonOption"
+import { Card, Col, Container, Row } from "react-bootstrap";
+import BotonesGrupo from "../components/BotonesGrupo";
+import '../css/inicio.css'
 
 function Inicio() {
   const cardData = [
     {
-      logo: 'https://via.placeholder.com/100',  // Reemplaza con la URL de tu logo
-      title: 'Título 1',
-      description: 'Descripción de la primera card.'
+      logo: 'https://veterinariabulevar.com/wp-content/uploads/2019/08/hospitalizacion-dia-70x70.png',
+      title: 'Consultas a Domicilio',
+      description: 'Brindamos atención veterinaria a domicilio, donde tu mascota recibe cuidados en la comodidad de su hogar. Nuestro equipo de profesionales se encarga de chequeos, vacunaciones y tratamientos.'
     },
     {
-      logo: 'https://via.placeholder.com/100',
-      title: 'Título 2',
-      description: 'Descripción de la segunda card.'
+      logo: 'https://veterinariabulevar.com/wp-content/uploads/2019/08/medicina-general-70x70.png',  // Reemplaza con la URL de tu logo
+      title: 'Medicina General',
+      description: 'Ofrecemos servicios de medicina general veterinaria para garantizar la salud y el bienestar de tus mascotas. Nuestro equipo de veterinarios está capacitado para realizar chequeos, diagnósticos y tratamientos para diversas condiciones.'
     },
     {
-      logo: 'https://via.placeholder.com/100',
-      title: 'Título 3',
-      description: 'Descripción de la tercera card.'
+      logo: 'https://veterinariabulevar.com/wp-content/uploads/2019/08/medicina-interna-70x70.png',
+      title: 'Cirugías',
+      description: 'Realizamos cirugías veterinarias con altos estándares de calidad y seguridad. Nuestro equipo de expertos está preparado para llevar a cabo procedimientos quirúrgicos con el máximo cuidado, asegurando el bienestar de tus mascotas durante todo el proceso. ¡Confía en nosotros para brindarles la atención que necesitan!'
     },
     {
-      logo: 'https://via.placeholder.com/100',
-      title: 'Título 4',
-      description: 'Descripción de la cuarta card.'
+      logo: 'https://veterinariabulevar.com/wp-content/uploads/2019/08/cirugia-general-70x70.png',
+      title: 'Esquema Vacunatorio',
+      description: 'Ofrecemos un completo esquema vacunatorio para garantizar la salud de tus mascotas. Nos aseguramos de que estén al día con sus vacunas para prevenir enfermedades y promover su bienestar.'
     },
     {
-      logo: 'https://via.placeholder.com/100',
-      title: 'Título 5',
-      description: 'Descripción de la quinta card.'
+      logo: 'https://veterinariabulevar.com/wp-content/uploads/2019/08/medicina-preventiva-70x70.png',
+      title: 'Servicio de Emergencias 24hs',
+      description: 'Brindamos atención de emergencias las 24 horas, asegurando que tu mascota reciba la ayuda necesaria en cualquier momento. Nuestro equipo de veterinarios está disponible para actuar rápidamente ante cualquier situación crítica. ¡Estamos aquí para cuidar de ellos cuando más lo necesitan!'
     },
     {
-      logo: 'https://via.placeholder.com/100',
-      title: 'Título 6',
-      description: 'Descripción de la sexta card.'
+      logo: 'https://veterinariabulevar.com/wp-content/uploads/2019/08/diagnostico-70x70.png',
+      title: 'Historial de Visitas',
+      description: 'Contamos con un historial de visitas para cada mascota, lo que nos permite realizar un seguimiento integral de su salud. Este registro nos ayuda a ofrecer un mejor servicio y atención personalizada, asegurando que cada visita sea efectiva y completa.'
     },
   ];
+
   return (
     <Container fluid className="flex-grow-1">
-    {/* Aquí va el contenido principal */}
-    <Container fluid className="py-4">
-  <Row className="text-center">
-    <Col md={3} className="mb-3">
-      <ButtonOption route="turnos" text="Sacar Turno" />
-    </Col>
-    <Col md={3} className="mb-3">
-      <ButtonOption route="nuestros_especialistas" text="Nuestros Especialistas" />
-    </Col>
-    <Col md={3} className="mb-3">
-      <ButtonOption route="planes" text="Planes disponibles para mascotas" />
-    </Col>
-    <Col md={3} className="mb-3">
-      <ButtonOption route="contacto" text="Sucursales" />
-    </Col>
-  </Row>
+       <BotonesGrupo/>
+      <Container className="py-5">
+        <Row>
+          {cardData.map((card, index) => (
+            <Col key={index} sm={12} md={6} lg={4} className="mb-4">
+              <Card className="h-100">
+                <Card.Img
+                  variant="top"
+                  src={card.logo}
+                  alt={`Logo ${index + 1}`}
+                  style={{ width: '100px', height: '100px', objectFit: 'contain', margin: '0 auto', padding: '20px' }}
+                />
+                <Card.Body>
+                  <Card.Title className="text-center">{card.title}</Card.Title>
+                  <Card.Text className="p-4">{card.description}</Card.Text>
+                </Card.Body>
+              </Card>
+            </Col>
+          ))}
+        </Row>
+      </Container>
     </Container>
-    
-    <Container className="py-5">
-  <Row>
-    {cardData.map((card, index) => (
-      <Col key={index} sm={12} md={6} lg={4} className="mb-4">
-        <Card className="h-100">
-          <Card.Img variant="top" src={card.logo} alt={`Logo ${index + 1}`} />
-          <Card.Body>
-            <Card.Title>{card.title}</Card.Title>
-            <Card.Text>{card.description}</Card.Text>
-          </Card.Body>
-        </Card>
-      </Col>
-    ))}
-  </Row>
-</Container>
-);
-  </Container>
-  )
+  );
 }
 
-export default Inicio
+export default Inicio;

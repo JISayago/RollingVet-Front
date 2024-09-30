@@ -11,7 +11,7 @@ function ButtonOption({ route, text }) {
 
   return (
     <>
-    <Button onClick={handleClick} variant="primary" className="w-100">
+    <Button onClick={handleClick}  className="w-100 boton" >
       {text}
     </Button>
     </>

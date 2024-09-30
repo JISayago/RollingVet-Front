@@ -39,8 +39,10 @@ function ModalLR({ show, handleCerrar, type }) {
     
             // Verifica si result y result.status existen
             if (result && result.status === 200) {
-                sessionStorage.setItem("token", JSON.stringify(result.data.token));
-                console.log("logeado correctamente", result);
+              sessionStorage.setItem("token", JSON.stringify(result.data.token));
+              sessionStorage.setItem("rol", JSON.stringify(result.data.rol));
+              alert("¡Ingreso Exitoso!")
+              handleCerrar()
             } else {
                 alert("Error inesperado al intentar iniciar sesión.");
             }
@@ -90,7 +92,8 @@ function ModalLR({ show, handleCerrar, type }) {
                 );
     
                 if (result && result.status === 201) {
-                    alert("Registro exitoso");
+                  alert("Registro exitoso. Por favor ingresar con las nuevas credenciales.");
+                  handleCerrar()
                 } else {
                     alert("Error inesperado al intentar registrar.");
                 }
