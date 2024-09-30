@@ -1,23 +1,36 @@
-.superior-nav{
+.superior-nav {
     background-color: #f45e00;
     width: 100%;
-
 }
-.superior-nav label{
+
+.superior-nav label {
     color: white;
     font-weight: bold;
 }
 
-.navbar{
+.navbar {
     background-color: #09336b;
 }
 
-.link{
-    color:white;
+.link {
+    color: white;
     font-size: large;
     font-weight: bold;
     margin: 0px 5px;
+    text-decoration: none; 
 }
-.link:hover{
+
+.link:hover {
     color: #f45e00;
+}
+
+.link:focus {
+    color: white; 
+    background-color: transparent; 
+    outline: none; 
+}
+
+.link.active {
+    color: white; 
+    background-color: transparent; 
 }

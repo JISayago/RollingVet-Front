@@ -1,0 +1,10 @@
+.footer{
+    background-color: #09336b;
+}
+
+.link{
+    color: white;
+}
+.link:hover{
+    color: #f45e00 !important;
+}

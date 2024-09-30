@@ -5,10 +5,11 @@ import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa';
 import Logo from './Logo';
 import { Card } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
+import '../css/footer.css'
 
 function FooterBar() {
   return (
-    <footer className="bg-dark text-white py-4">
+    <footer className="text-white py-4 footer">
       <Container fluid>
         <Row className="text-center">
           {/* Primera columna: Contacto y redes sociales */}
@@ -17,16 +18,16 @@ function FooterBar() {
             <p className="mb-1">Teléfono: +54 11 1234-5678</p>
             <p className="mb-1">Email: contacto@empresa.com</p>
             <div className="d-flex mt-4">
-              <Button as="a" href="https://facebook.com" variant="link" className="text-white me-3">
+              <Button as="a" href="https://facebook.com" variant="link" className="text-white me-3 link">
                 <FaFacebook size={20} />
               </Button>
-              <Button as="a" href="https://twitter.com" variant="link" className="text-white me-3">
+              <Button as="a" href="https://twitter.com" variant="link" className="text-white me-3 link">
                 <FaTwitter size={20} />
               </Button>
-              <Button as="a" href="https://instagram.com" variant="link" className="text-white me-3">
+              <Button as="a" href="https://instagram.com" variant="link" className="text-white me-3 link">
                 <FaInstagram size={20} />
               </Button>
-              <Button as="a" href="https://linkedin.com" variant="link" className="text-white">
+              <Button as="a" href="https://linkedin.com" variant="link" className="text-white link">
                 <FaLinkedin size={20} />
               </Button>
             </div>

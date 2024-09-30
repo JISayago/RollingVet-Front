@@ -41,7 +41,7 @@ function Navigationbar() {
     return (
         <>
             {/* Contenedor superior */}
-            <Container fluid className="superior-nav w-100 p-2">
+            <Container fluid className="superior-nav w-100 py-2">
                 <Row className="text-center">
                     <Col xs={12} md={3}>
                         <label className="m-0">Atendemos emergencias 24 hs</label>
