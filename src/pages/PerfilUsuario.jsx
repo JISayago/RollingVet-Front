@@ -1,94 +1,85 @@
-import React, { useState } from 'react';
-import { Container, Row, Col, Card, Button, Modal, Form } from 'react-bootstrap';
+import { useEffect, useState } from 'react';
+import { Container, Row, Col, Button, Card } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
-const animals = [
-  { id: 1, name: 'Luna', age: '2 years', breed: 'Labrador', type: 'Dog', image: 'https://via.placeholder.com/100', link: '/animal/1' },
-  { id: 2, name: 'Milo', age: '1 year', breed: 'Siamese', type: 'Cat', image: 'https://via.placeholder.com/100', link: '/animal/2' },
-  { id: 3, name: 'Charlie', age: '3 years', breed: 'Beagle', type: 'Dog', image: 'https://via.placeholder.com/100', link: '/animal/3' },
-  { id: 4, name: 'Bella', age: '4 years', breed: 'Bulldog', type: 'Dog', image: 'https://via.placeholder.com/100', link: '/animal/4' },
-  { id: 5, name: 'Oscar', age: '2 years', breed: 'Persian', type: 'Cat', image: 'https://via.placeholder.com/100', link: '/animal/5' },
-];
-
-const consultations = [
-  { id: 1, dateTime: '2024-09-16 10:00', professional: 'Dr. Smith', location: 'Clinic A', patient: 'Luna', responsible: 'John Doe' },
-  { id: 2, dateTime: '2024-09-16 14:00', professional: 'Dr. Jones', location: 'Clinic B', patient: 'Milo', responsible: 'Jane Smith' },
-  { id: 3, dateTime: '2024-09-17 09:00', professional: 'Dr. Adams', location: 'Clinic C', patient: 'Charlie', responsible: 'Alice Brown' },
-  { id: 4, dateTime: '2024-09-17 11:00', professional: 'Dr. Lee', location: 'Clinic D', patient: 'Bella', responsible: 'Bob White' },
-  { id: 5, dateTime: '2024-09-18 13:00', professional: 'Dr. Patel', location: 'Clinic E', patient: 'Oscar', responsible: 'Charlie Green' },
-  { id: 6, dateTime: '2024-09-19 10:00', professional: 'Dr. Smith', location: 'Clinic F', patient: 'Luna', responsible: 'John Doe' },
-  { id: 7, dateTime: '2024-09-19 13:00', professional: 'Dr. Jones', location: 'Clinic G', patient: 'Milo', responsible: 'Jane Smith' },
-  { id: 8, dateTime: '2024-09-20 09:00', professional: 'Dr. Adams', location: 'Clinic H', patient: 'Charlie', responsible: 'Alice Brown' },
-  { id: 9, dateTime: '2024-09-20 11:00', professional: 'Dr. Lee', location: 'Clinic I', patient: 'Bella', responsible: 'Bob White' },
-  { id: 10, dateTime: '2024-09-21 13:00', professional: 'Dr. Patel', location: 'Clinic J', patient: 'Oscar', responsible: 'Charlie Green' },
-];
+import clienteAxios from '../helpers/axios.config';
+import ModalMR from '../components/ModalMR'; // Importa el nuevo componente
 
 const PerfilUsuario = () => {
   const [showModal, setShowModal] = useState(false);
-  const [petData, setPetData] = useState({
-    name: '',
-    birthDate: '',
-    type: '',
-    breed: '',
-  });
-
-  const userProfile = {
-    image: 'https://via.placeholder.com/150',
-    name: 'John Doe',
-    petsCount: 5,
-    family: ['Alice', 'Bob', 'Charlie', 'Diana'],
-    nextAppointment: consultations[0],
-  };
-
-  const handleCancelAppointment = () => {
-    alert('Appointment cancelled');
-  };
+  const [usuario, setUsuario] = useState({});
+  const [mascotas, setMascotas] = useState([]);
 
   const handleShow = () => setShowModal(true);
   const handleClose = () => setShowModal(false);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setPetData({ ...petData, [name]: value });
+  const onMascotaRegistrada = () => {
+    // Lógica para actualizar las mascotas
+    cargarUsuario(); // Llama a cargarUsuario para obtener la lista actualizada
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Aquí podrías agregar la lógica para enviar la información de la mascota
-    console.log(petData);
-    handleClose(); // Cerrar el modal después de enviar
+  const cargarUsuario = async () => {
+    // Obtener el token desde sessionStorage
+    const token = JSON.parse(sessionStorage.getItem("token"));
+
+    if (token) {
+      try {
+        const result = await clienteAxios.get("/usuarios/perfilUsuario", {
+          headers: {
+            "Content-Type": "application/json",
+            "auth": token
+          }
+        });
+        if (result) {
+          setUsuario(result.data);
+          setMascotas(result.data.mascotas);
+        }
+      } catch (error) {
+        console.error("Error al cargar usuario:", error.response ? error.response.data : error);
+      }
+    } else {
+      console.log("No se encontró un token.");
+    }
   };
+
+  const calcularEdad = (fechaNacimiento) => {
+    const fechaNac = new Date(fechaNacimiento);
+    const fechaActual = new Date();
+    let edad = fechaActual.getFullYear() - fechaNac.getFullYear();
+    const mesActual = fechaActual.getMonth();
+    const mesNacimiento = fechaNac.getMonth();
+
+    if (mesActual < mesNacimiento || (mesActual === mesNacimiento && fechaActual.getDate() < fechaNac.getDate())) {
+      edad--;
+    }
+
+    let meses = mesActual - mesNacimiento;
+    if (meses < 0) {
+      meses += 12;
+    }
+
+    return `${edad} años y ${meses} meses`;
+  };
+
+
+  useEffect(() => {
+    cargarUsuario();
+  }, []);
 
   return (
     <Container fluid style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <Row style={{ flex: 1 }}>
         {/* Columna del Perfil */}
         <Col xs={12} md={2} className="bg-primary text-dark d-flex flex-column justify-content-start align-items-center order-1 order-md-1" style={{ padding: '1rem' }}>
-          <img src={userProfile.image} alt="Profile" style={{ width: '100px', height: '100px', borderRadius: '50%' }} />
-          <h2 className="mt-3" style={{ color: 'black' }}>{userProfile.name}</h2>
-          <p className="mt-2" style={{ color: 'black' }}>Pets: {userProfile.petsCount}</p>
+          <img src={usuario.image} alt="Profile" style={{ width: '100px', height: '100px', borderRadius: '50%' }} />
+          <h2 className="mt-3" style={{ color: 'black' }}>{usuario.nombre}</h2>
+          <p className="mt-2" style={{ color: 'black' }}>Mascotas: {usuario.mascotas && usuario.mascotas.length ? usuario.mascotas.length : 0}</p>
           <ul style={{ color: 'black' }}>
-            <strong>Family:</strong>
-            {userProfile.family.map((member, index) => (
+            <strong>Familia:</strong>
+            {/*usuario.family.map((member, index) => (
               <li key={index}>{member}</li>
-            ))}
+            ))*/}
           </ul>
           <Button variant="success" onClick={handleShow} className="mt-3">Registrar Mascota</Button>
-          <div className="mt-3 p-3" style={{
-            width: '100%',
-            maxWidth: '300px',
-            backgroundColor: '#fff',
-            borderRadius: '10px',
-            boxShadow: '0 0 5px rgba(0, 0, 0, 0.2)',
-            textAlign: 'center',
-          }}>
-            <h5>Próximo Turno</h5>
-            <p><strong>Professional:</strong> {userProfile.nextAppointment.professional}</p>
-            <p><strong>Date & Time:</strong> {userProfile.nextAppointment.dateTime}</p>
-            <p><strong>Location:</strong> {userProfile.nextAppointment.location}</p>
-            <Button variant="danger" onClick={handleCancelAppointment}>Cancel Appointment</Button>
-          </div>
-          {/* Botón de agregar mascota dentro de la columna azul */}
         </Col>
 
         {/* Cards de Animales y Consultas */}
@@ -96,16 +87,16 @@ const PerfilUsuario = () => {
           <Row className="flex-grow-1 overflow-auto mb-3" style={{ padding: '1rem' }}>
             <h3>Mascotas registradas</h3>
             <div className="d-flex" style={{ overflowY: 'auto' }}>
-              {animals.map(animal => (
+              {mascotas.map(animal => (
                 <Col key={animal.id} xs={11} md={6} lg={4} className="mb-3">
                   <Card className="h-100" style={{ maxWidth: '250px' }}>
                     <Card.Img variant="top" src={animal.image} style={{ height: '150px', objectFit: 'cover' }} />
                     <Card.Body className="text-center">
-                      <Card.Title>{animal.name}</Card.Title>
-                      <Card.Subtitle className="mb-2 text-muted">Age: {animal.age}</Card.Subtitle>
-                      <Card.Subtitle className="mb-2 text-muted">Breed: {animal.breed}</Card.Subtitle>
-                      <Card.Subtitle className="mb-2 text-muted">Type: {animal.type}</Card.Subtitle>
-                      <Button variant="primary" href={'/perfil_mascota'}>More Info</Button>
+                      <Card.Title>{animal.nombre}</Card.Title>
+                      <Card.Subtitle className="mb-2 text-muted">Años: {calcularEdad(animal.fechaNacimiento)}</Card.Subtitle>
+                      <Card.Subtitle className="mb-2 text-muted">Raza: {animal.raza}</Card.Subtitle>
+                      <Card.Subtitle className="mb-2 text-muted">Mascota: {animal.tipoDeMascota}</Card.Subtitle>
+                      <Button variant="primary" href={`/perfil_mascota/${animal.id}`}>Ver Más...</Button>
                     </Card.Body>
                   </Card>
                 </Col>
@@ -116,51 +107,30 @@ const PerfilUsuario = () => {
           <Row className="flex-grow-1" style={{ padding: '1rem' }}>
             <h3>Últimas asistencias</h3>
             <Col xs={12} style={{ maxHeight: '400px', overflowY: 'auto' }}>
-              {consultations.map(consultation => (
+              {/*consultations.map(consultation => (
                 <Card key={consultation.id} className="mb-3">
                   <Card.Body>
                     <Card.Title>{consultation.professional}</Card.Title>
-                    <Card.Subtitle className="mb-2 text-muted">Date & Time: {consultation.dateTime}</Card.Subtitle>
-                    <Card.Subtitle className="mb-2 text-muted">Location: {consultation.location}</Card.Subtitle>
-                    <Card.Subtitle className="mb-2 text-muted">Patient: {consultation.patient}</Card.Subtitle>
-                    <Card.Subtitle className="mb-2 text-muted">Responsible: {consultation.responsible}</Card.Subtitle>
+                    <Card.Subtitle className="mb-2 text-muted">Fecha y Hora: {consultation.dateTime}</Card.Subtitle>
+                    <Card.Subtitle className="mb-2 text-muted">Ubicación: {consultation.location}</Card.Subtitle>
+                    <Card.Subtitle className="mb-2 text-muted">Paciente: {consultation.patient}</Card.Subtitle>
+                    <Card.Subtitle className="mb-2 text-muted">Responsable: {consultation.responsible}</Card.Subtitle>
                   </Card.Body>
                 </Card>
-              ))}
+              ))*/}
             </Col>
           </Row>
 
           {/* Modal para agregar mascota */}
-          <Modal show={showModal} onHide={handleClose}>
-            <Modal.Header closeButton>
-              <Modal.Title>Registrar Nueva Mascota</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <Form onSubmit={handleSubmit}>
-                <Form.Group controlId="formPetName">
-                  <Form.Label>Nombre</Form.Label>
-                  <Form.Control type="text" name="name" placeholder="Ingrese el nombre de la mascota" value={petData.name} onChange={handleInputChange} required />
-                </Form.Group>
-                <Form.Group controlId="formPetBirthDate">
-                  <Form.Label>Fecha de Nacimiento</Form.Label>
-                  <Form.Control type="date" name="birthDate" value={petData.birthDate} onChange={handleInputChange} required />
-                </Form.Group>
-                <Form.Group controlId="formPetType">
-                  <Form.Label>Tipo</Form.Label>
-                  <Form.Control type="text" name="type" placeholder="Ingrese el tipo (Perro/Gato)" value={petData.type} onChange={handleInputChange} required />
-                </Form.Group>
-                <Form.Group controlId="formPetBreed">
-                  <Form.Label>Raza</Form.Label>
-                  <Form.Control type="text" name="breed" placeholder="Ingrese la raza" value={petData.breed} onChange={handleInputChange} required />
-                </Form.Group>
-                <Button variant="primary" type="submit">Registrar</Button>
-              </Form>
-            </Modal.Body>
-          </Modal>
+      <ModalMR
+        show={showModal}
+        handleClose={handleClose}
+        onMascotaRegistrada={onMascotaRegistrada} // Pasa la función de actualización
+      />
+          
         </Col>
       </Row>
     </Container>
   );
 };
-
 export default PerfilUsuario;

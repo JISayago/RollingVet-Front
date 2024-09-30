@@ -1,8 +1,10 @@
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Image from 'react-bootstrap/Image';
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa';
+import Logo from './Logo';
+import { Card } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 
 function FooterBar() {
   return (
@@ -15,35 +17,43 @@ function FooterBar() {
             <p className="mb-1">Teléfono: +54 11 1234-5678</p>
             <p className="mb-1">Email: contacto@empresa.com</p>
             <div className="d-flex mt-4">
-              <a href="https://facebook.com" className="text-white me-3">
+              <Button as="a" href="https://facebook.com" variant="link" className="text-white me-3">
                 <FaFacebook size={20} />
-              </a>
-              <a href="https://twitter.com" className="text-white me-3">
+              </Button>
+              <Button as="a" href="https://twitter.com" variant="link" className="text-white me-3">
                 <FaTwitter size={20} />
-              </a>
-              <a href="https://instagram.com" className="text-white me-3">
+              </Button>
+              <Button as="a" href="https://instagram.com" variant="link" className="text-white me-3">
                 <FaInstagram size={20} />
-              </a>
-              <a href="https://linkedin.com" className="text-white">
+              </Button>
+              <Button as="a" href="https://linkedin.com" variant="link" className="text-white">
                 <FaLinkedin size={20} />
-              </a>
+              </Button>
             </div>
           </Col>
 
           {/* Segunda columna: Logo y derechos reservados */}
           <Col lg={4} md={12} className="d-flex flex-column align-items-center justify-content-between">
-            <Image src="/path-to-logo.png" alt="Logo" width={60} className="mb-2" />
-            <p className="mb-0 text-center mt-auto">&copy; {new Date().getFullYear()} Mi Empresa. Todos los derechos reservados.</p>
+            <Logo />
+            <p className="mb-0 text-center mt-auto">&copy; {new Date().getFullYear()} Rolling Vet. Todos los derechos reservados.</p>
           </Col>
 
           {/* Tercera columna: Dirección y Google Maps */}
           <Col lg={4} md={12} className="d-flex flex-column align-items-center">
             <h6 className="mb-2">Ubicación</h6>
-            <p className="mb-1 text-center">1234 Calle Falsa, Ciudad, País</p>
-            <div className="map-container bg-light" style={{ width: '70%', height: '80px' }}>
-              {/* Aquí iría la API de Google Maps */}
-              <p className="text-center">Google Maps aquí</p>
-            </div>
+            <Card className="w-100 h-48 border border-dark bg-danger">
+              <Card.Body className="p-0">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3560.1059174753245!2d-65.20974728961748!3d-26.836583276595295!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94225d3ad7f30f1d%3A0xf8606cd659b8e3e4!2sRollingCode%20School!5e0!3m2!1ses!2sar!4v1727708259302!5m2!1ses!2sar"
+                  width="100%"
+                  height="120"
+                  style={{ border: 0 }}
+                  allowFullScreen=""
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
+              </Card.Body>
+            </Card>
           </Col>
         </Row>
       </Container>
