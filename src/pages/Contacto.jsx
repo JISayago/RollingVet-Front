@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Container, Row, Col, Form, Button, Card } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import clienteAxios from '../helpers/axios.config';
+import "../css/contacto_sucursales.css"
 
 
 const Contacto = () => {
@@ -38,13 +39,33 @@ const Contacto = () => {
     <Container fluid style={{ padding: '2rem' }}>
       <Row>
         {/* Formulario de contacto */}
+       
+        
+        {/* Información de sucursales */}
+        <Col xs={12} className="mt-4">
+          <h2 className="text-center">Sucursales</h2>
+          <Row className="justify-content-center">
+            {sucursales.map(s => (
+              <Col key={s.id} xs={12} sm={6} md={4} lg={3} className="mb-4">
+                <Card className="text-center" style={{ width: '100%', height: '100%' }}>
+                  <Card.Body>
+                    <Card.Title>{s.nombre}</Card.Title>
+                    <Card.Subtitle className="mb-2 text-muted">Dirección</Card.Subtitle>
+                    <Card.Text>{s.direccion}</Card.Text>
+                    <Card.Subtitle className="mb-2 text-muted">Número de Contacto</Card.Subtitle>
+                    <Card.Text>{s.numeroContacto}</Card.Text>
+                    <Card.Subtitle className="mb-2 text-muted">Correo de Contacto</Card.Subtitle>
+                    <Card.Text>{s.correo}</Card.Text>
+                    <Card.Subtitle className="mb-2 text-muted">Atención de Emergencias 24 hs</Card.Subtitle>
+                    <Card.Text>{s.atiendeEmergencia24H ? 'Sí' : 'No'}</Card.Text>
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))}
+          </Row>
+        </Col>
         <Col xs={12} md={8} lg={6} className="mx-auto mb-4">
-          <div style={{
-            backgroundColor: '#007bff', // Fondo azul
-            padding: '2rem',
-            borderRadius: '8px',
-            color: '#fff'
-          }}>
+          <div className='contacto-form'>
             <h2 className="text-center">Formulario de Contacto</h2>
             <Form onSubmit={handleSubmit}>
               <Form.Group controlId="formReason">
@@ -92,36 +113,12 @@ const Contacto = () => {
               </Form.Group>
               
               <div className="d-flex justify-content-center mt-3">
-                <Button variant="light" type="submit">
+                <Button  type="submit" className='contacto-form-boton'>
                   Enviar
                 </Button>
               </div>
             </Form>
           </div>
-        </Col>
-        
-        {/* Información de sucursales */}
-        <Col xs={12} className="mt-4">
-          <h2 className="text-center">Sucursales</h2>
-          <Row className="justify-content-center">
-            {sucursales.map(s => (
-              <Col key={s.id} xs={12} sm={6} md={4} lg={3} className="mb-4">
-                <Card className="text-center" style={{ width: '100%', height: '100%' }}>
-                  <Card.Body>
-                    <Card.Title>{s.nombre}</Card.Title>
-                    <Card.Subtitle className="mb-2 text-muted">Dirección</Card.Subtitle>
-                    <Card.Text>{s.direccion}</Card.Text>
-                    <Card.Subtitle className="mb-2 text-muted">Número de Contacto</Card.Subtitle>
-                    <Card.Text>{s.numeroContacto}</Card.Text>
-                    <Card.Subtitle className="mb-2 text-muted">Correo de Contacto</Card.Subtitle>
-                    <Card.Text>{s.correo}</Card.Text>
-                    <Card.Subtitle className="mb-2 text-muted">Atención de Emergencias 24 hs</Card.Subtitle>
-                    <Card.Text>{s.atiendeEmergencia24H ? 'Sí' : 'No'}</Card.Text>
-                  </Card.Body>
-                </Card>
-              </Col>
-            ))}
-          </Row>
         </Col>
       </Row>
     </Container>

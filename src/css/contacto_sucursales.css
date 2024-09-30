@@ -1,0 +1,15 @@
+.contacto-form{
+    background-color: #09336b;
+    padding: 2rem;
+    border-radius: 10px;
+    color: #fff;
+}
+.contacto-form-boton{
+    background-color: #f45e00 !important;
+    border: none;
+}
+.contacto-form-boton:hover{
+    background-color: #ffffff !important;
+    border: 1px solid #f45e00;
+    color: black;
+}
