@@ -97,16 +97,16 @@ const PerfilUsuario = () => {
           <Row className="flex-grow-1 overflow-auto mb-3" style={{ padding: '1rem' }}>
             <h3>Mascotas registradas</h3>
             <div className="d-flex" style={{ overflowY: 'auto' }}>
-              {mascotas.map(animal => (
-                <Col key={animal.id} xs={11} md={6} lg={4} className="mb-3">
+              {mascotas.map(m => (
+                <Col key={m.mascotaId} xs={11} md={6} lg={4} className="mb-3">
                   <Card className="h-100" style={{ maxWidth: '250px' }}>
-                    <Card.Img variant="top" src={animal.image} style={{ height: '150px', objectFit: 'cover' }} />
+                    <Card.Img variant="top" src={m.image} style={{ height: '150px', objectFit: 'cover' }} />
                     <Card.Body className="text-center">
-                      <Card.Title>{animal.nombre}</Card.Title>
-                      <Card.Subtitle className="mb-2 text-muted">Años: {calcularEdad(animal.fechaNacimiento)}</Card.Subtitle>
-                      <Card.Subtitle className="mb-2 text-muted">Raza: {animal.raza}</Card.Subtitle>
-                      <Card.Subtitle className="mb-2 text-muted">Mascota: {animal.tipoDeMascota}</Card.Subtitle>
-                      <Button variant="primary" href={`/perfil_mascota/${animal.id}`}>Ver Más...</Button>
+                      <Card.Title>{m.nombre}</Card.Title>
+                      <Card.Subtitle className="mb-2 text-muted">Años: {calcularEdad(m.fechaNacimiento)}</Card.Subtitle>
+                      <Card.Subtitle className="mb-2 text-muted">Raza: {m.raza}</Card.Subtitle>
+                      <Card.Subtitle className="mb-2 text-muted">Mascota: {m.tipoDeMascota}</Card.Subtitle>
+                      <Button variant="primary" href={`/perfil_mascota/${m.mascotaId}`}>Ver Perfil</Button>
                     </Card.Body>
                   </Card>
                 </Col>

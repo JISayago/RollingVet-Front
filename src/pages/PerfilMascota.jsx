@@ -1,10 +1,22 @@
-// PerfilMascota.js
-import { useState } from 'react';
-import { Container, Row, Col, Card, ListGroup, Button, Form } from 'react-bootstrap';
+import { useEffect, useState } from 'react';
+import { Container, Row, Col, Card, ListGroup, Button, Form, Modal } from 'react-bootstrap';
+import { useParams } from 'react-router-dom';
 
 const PerfilMascota = () => {
+  const params = useParams();
+  const [mascotaId, setMascotaId] = useState("");
   const [inMemoriam, setInMemoriam] = useState(false);
   const [filtroFecha, setFiltroFecha] = useState({ desde: '', hasta: '' });
+  const [nuevoProcedimiento, setNuevoProcedimiento] = useState({
+    fecha: '',
+    procedimiento: '',
+    vistoPor: '',
+    tratamiento: '',
+    dosificacion: '',
+  });
+  const [modalShow, setModalShow] = useState(false); // Estado para manejar el modal
+  const [modalPlanShow, setModalPlanShow] = useState(false); // Estado para manejar el modal de planes
+  const [planSeleccionado, setPlanSeleccionado] = useState(''); // Estado para manejar el plan seleccionado
 
   // Información del perfil de la mascota
   const mascota = {
@@ -57,6 +69,14 @@ const PerfilMascota = () => {
     setInMemoriam(true);
   };
 
+  const [tipoUsuario, setTipoUsuario] = useState('');
+  useEffect(() => {
+    if (sessionStorage.getItem('token')) {
+      setTipoUsuario(sessionStorage.getItem('rol'));
+    }
+    setMascotaId(params.id)
+  }, []);
+
   // Filtrar procedimientos por fecha
   const filtrarProcedimientos = () => {
     const { desde, hasta } = filtroFecha;
@@ -74,6 +94,22 @@ const PerfilMascota = () => {
       }
       return true;
     });
+  };
+
+  // Manejar el envío del formulario para agregar un procedimiento
+  const agregarProcedimiento = (e) => {
+    e.preventDefault();
+    // Aquí podrías agregar la lógica para guardar el nuevo procedimiento
+    console.log('Nuevo Procedimiento:', nuevoProcedimiento);
+    // Reiniciar el formulario
+    setNuevoProcedimiento({ fecha: '', procedimiento: '', vistoPor: '', tratamiento: '', dosificacion: '' });
+    setModalShow(false); // Cerrar el modal
+  };
+
+  // Función para asignar el plan seleccionado
+  const asignarPlan = () => {
+    mascota.planAsociado = planSeleccionado; // Asignar el plan seleccionado
+    setModalPlanShow(false); // Cerrar el modal
   };
 
   return (
@@ -94,8 +130,27 @@ const PerfilMascota = () => {
               </Card.Text>
             </Card.Body>
           </Card>
-        </Col>
+          
+          <Row>
 
+            {/* Botones debajo de la tarjeta de la mascota */console.log(tipoUsuario)}
+            {tipoUsuario === 'administrador' && (
+            <div className="mt-3">
+              <Button variant="primary" onClick={() => setModalShow(true)} className="me-2">
+                Agregar Consulta
+              </Button>
+              <Button variant="success" onClick={() => setModalPlanShow(true)} className="me-2">
+                Asignar Plan
+              </Button>
+            <Button variant="danger" onClick={marcarInMemoriam} className="me-2">
+              Eliminar
+            </Button>
+            </div>
+          )}
+           
+          </Row>
+        </Col>
+  
         <Col md={8}>
           <Card className="mb-4">
             <Card.Header>Historial de Vacunas</Card.Header>
@@ -104,7 +159,7 @@ const PerfilMascota = () => {
                 <ListGroup.Item key={index}>{vacuna}</ListGroup.Item>
               ))}
             </ListGroup>
-
+  
             {/* Vacunas Pendientes */}
             {mascota.vacunasPendientes.length > 0 && (
               <Card.Footer className="text-danger">
@@ -119,7 +174,7 @@ const PerfilMascota = () => {
               </Card.Footer>
             )}
           </Card>
-
+  
           {/* Filtros de Fecha */}
           <Form className="mb-3">
             <Row>
@@ -149,7 +204,7 @@ const PerfilMascota = () => {
               </Col>
             </Row>
           </Form>
-
+  
           {/* Historial de Procedimientos con scroll */}
           <Card className="mb-4" style={{ width: '100%' }}>
             <Card.Header>Historial de Procedimientos</Card.Header>
@@ -175,25 +230,98 @@ const PerfilMascota = () => {
               ))}
             </ListGroup>
           </Card>
-
-          {inMemoriam ? (
-            <Card className="text-center">
-              <Card.Body>
-                <Card.Title>In Memoriam</Card.Title>
-                <Card.Text>
-                  Esta mascota nos ha dejado, pero siempre será recordada con cariño.
-                </Card.Text>
-              </Card.Body>
-            </Card>
-          ) : (
-            <Button variant="danger" onClick={marcarInMemoriam}>
-              Marcar como
-            </Button>
-          )}
+  
+          {/* Modal para agregar un procedimiento */}
+          <Modal show={modalShow} onHide={() => setModalShow(false)}>
+            <Modal.Header closeButton>
+              <Modal.Title>Agregar Procedimiento</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Form onSubmit={agregarProcedimiento}>
+                <Form.Group controlId="fecha">
+                  <Form.Label>Fecha</Form.Label>
+                  <Form.Control
+                    type="date"
+                    value={nuevoProcedimiento.fecha}
+                    onChange={(e) => setNuevoProcedimiento({ ...nuevoProcedimiento, fecha: e.target.value })}
+                    required
+                  />
+                </Form.Group>
+                <Form.Group controlId="procedimiento">
+                  <Form.Label>Procedimiento</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={nuevoProcedimiento.procedimiento}
+                    onChange={(e) => setNuevoProcedimiento({ ...nuevoProcedimiento, procedimiento: e.target.value })}
+                    required
+                  />
+                </Form.Group>
+                <Form.Group controlId="vistoPor">
+                  <Form.Label>Visto por</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={nuevoProcedimiento.vistoPor}
+                    onChange={(e) => setNuevoProcedimiento({ ...nuevoProcedimiento, vistoPor: e.target.value })}
+                    required
+                  />
+                </Form.Group>
+                <Form.Group controlId="tratamiento">
+                  <Form.Label>Tratamiento</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={nuevoProcedimiento.tratamiento}
+                    onChange={(e) => setNuevoProcedimiento({ ...nuevoProcedimiento, tratamiento: e.target.value })}
+                    required
+                  />
+                </Form.Group>
+                <Form.Group controlId="dosificacion">
+                  <Form.Label>Dosificación (opcional)</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={nuevoProcedimiento.dosificacion}
+                    onChange={(e) => setNuevoProcedimiento({ ...nuevoProcedimiento, dosificacion: e.target.value })}
+                  />
+                </Form.Group>
+                <Button variant="primary" type="submit">
+                  Agregar
+                </Button>
+              </Form>
+            </Modal.Body>
+          </Modal>
+  
+          {/* Modal para seleccionar el plan */}
+          <Modal show={modalPlanShow} onHide={() => setModalPlanShow(false)}>
+            <Modal.Header closeButton>
+              <Modal.Title>Seleccionar Plan</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Form>
+                <Form.Group>
+                  <Form.Label>Selecciona un plan:</Form.Label>
+                  <Form.Control
+                    as="select"
+                    value={planSeleccionado}
+                    onChange={(e) => setPlanSeleccionado(e.target.value)}
+                  >
+                    <option value="">Seleccionar...</option>
+                    <option value="Plan Básico">Plan Básico</option>
+                    <option value="Plan Avanzado">Plan Avanzado</option>
+                    <option value="Plan Premium">Plan Premium</option>
+                    <option value="Plan Madurando">Plan Madurando</option>
+                  </Form.Control>
+                </Form.Group>
+                <Button variant="success" onClick={asignarPlan}>
+                  Asignar Plan
+                </Button>
+              </Form>
+            </Modal.Body>
+          </Modal>
         </Col>
       </Row>
     </Container>
   );
+  
+  
 };
 
 export default PerfilMascota;

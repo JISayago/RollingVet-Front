@@ -5,11 +5,13 @@ import Clima from "./Clima";
 import Logo from "./Logo";
 import "../css/navbar.css";
 import LinksNavbar from "./LinksNavbar";
+import { useNavigate } from "react-router-dom";
 
 function Navigationbar() {
     const [mostrarModal, setMostrarModal] = useState(false);
     const [tipoModal, setTipoModal] = useState("login");
     const [usuarioLogeado, setUsuarioLogeado] = useState({ logeado: false, rol: "-" });
+    const navigate = useNavigate();
 
     const handleShowModal = (tipo) => {
         setTipoModal(tipo);
@@ -31,6 +33,7 @@ function Navigationbar() {
             setUsuarioLogeado({ logeado: false, rol: "-" });
             sessionStorage.removeItem('token');
             sessionStorage.removeItem('rol');
+            navigate('/')
         }
     };
 

@@ -13,11 +13,11 @@ import AdministracionPanel from './pages/AdministracionPanel';
 function App() {
  
   return (
-    <BrowserRouter>
+    
       <Routes>
         <Route path='/' element={<Inicio/> } />
         <Route path='/perfil_usuario' element={<PerfilUsuario/> } />
-        <Route path='/perfil_mascota' element={<PerfilMascota/> } />
+        <Route path='/perfil_mascota/:id' element={<PerfilMascota/> } />
         <Route path='/contacto' element={<Contacto/> } />
         <Route path='/productos' element={<ListadoProductos/> } />
         <Route path='/servicios' element={<ServiciosTurnos/> } />
@@ -31,8 +31,6 @@ function App() {
         <Route path='/gestion_servicios' element={<Especialistas />} />
         <Route path='/gestion_productos' element={<Especialistas />} />
       </Routes>
-   
-    </BrowserRouter>
   );
 }
 

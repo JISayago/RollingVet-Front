@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Table, Button, Form, FormControl, Modal, Row, Col,Pagination } from 'react-bootstrap';
+import { Table, Button, Form, FormControl, Modal, Pagination } from 'react-bootstrap';
 
 const GestionUsuarios = () => {
     const initialUsers = [
@@ -9,8 +9,8 @@ const GestionUsuarios = () => {
             role: 'Usuario',
             deleted: false,
             mascotas: [
-                { nombre: 'Fido', plan: 'Plan Básico', fichaMedica: '' },
-                { nombre: 'Luna', plan: 'Plan Premium', fichaMedica: 'Consulta 2024-01-10' },
+                { nombre: 'Fido', fechaNacimiento: '2020-05-10', tipo: 'Perro', raza: 'Labrador', castrado: true },
+                { nombre: 'Luna', fechaNacimiento: '2018-08-22', tipo: 'Gato', raza: 'Siamés', castrado: false },
             ],
         },
         {
@@ -24,7 +24,6 @@ const GestionUsuarios = () => {
     ];
 
     const roles = ['Usuario', 'Administrador', 'Supervisor', 'Operador', 'Invitado'];
-    const planes = ['Plan Básico', 'Plan Premium', 'Plan VIP'];
 
     const [users, setUsers] = useState(initialUsers);
     const [searchTerm, setSearchTerm] = useState('');
@@ -33,9 +32,6 @@ const GestionUsuarios = () => {
     const [changedRoles, setChangedRoles] = useState({});
     const [showModal, setShowModal] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
-    const [fichaMedica, setFichaMedica] = useState('');
-    const [selectedMascota, setSelectedMascota] = useState(null);
-    const [selectedPlan, setSelectedPlan] = useState('');
 
     const handleRoleChange = (id, newRole) => {
         setChangedRoles((prev) => ({
@@ -66,42 +62,6 @@ const GestionUsuarios = () => {
 
     const handleCloseModal = () => {
         setShowModal(false);
-        setSelectedMascota(null);
-        setSelectedPlan('');
-        setFichaMedica('');
-    };
-
-    const handleAddFichaMedica = () => {
-        if (selectedUser && selectedMascota) {
-            setUsers(users.map(user => 
-                user.id === selectedUser.id 
-                ? {
-                    ...user, 
-                    mascotas: user.mascotas.map(mascota =>
-                        mascota.nombre === selectedMascota.nombre 
-                        ? { ...mascota, fichaMedica: fichaMedica } 
-                        : mascota
-                    )
-                } 
-                : user
-            ));
-            handleCloseModal();
-        }
-    };
-
-    const handlePlanChange = (mascota) => {
-        setUsers(users.map(user => 
-            user.id === selectedUser.id 
-            ? {
-                ...user,
-                mascotas: user.mascotas.map(m => 
-                    m.nombre === mascota.nombre 
-                    ? { ...m, plan: selectedPlan } 
-                    : m
-                )
-            }
-            : user
-        ));
     };
 
     const handlePageChange = (pageNumber) => {
@@ -200,58 +160,22 @@ const GestionUsuarios = () => {
                         <ul>
                             {selectedUser && selectedUser.mascotas.map((mascota, index) => (
                                 <li key={index}>
-                                    {mascota.nombre} - Plan: 
-                                    <Form.Select
-                                        value={selectedPlan || mascota.plan}
-                                        onChange={(e) => {
-                                            setSelectedMascota(mascota);
-                                            setSelectedPlan(e.target.value);
-                                            handlePlanChange(mascota);
-                                        }}
-                                    >
-                                        <option value="">Seleccione un plan</option>
-                                        {planes.map((plan, i) => (
-                                            <option key={i} value={plan}>{plan}</option>
-                                        ))}
-                                    </Form.Select>
-                                    - Ficha Médica: {mascota.fichaMedica || 'No disponible'}
+                                    <strong>Nombre:</strong> {mascota.nombre} <br />
+                                    <strong>Fecha de Nacimiento:</strong> {mascota.fechaNacimiento} <br />
+                                    <strong>Tipo:</strong> {mascota.tipo} <br />
+                                    <strong>Raza:</strong> {mascota.raza} <br />
+                                    <strong>Castrado:</strong> {mascota.castrado ? 'Sí' : 'No'} <br />
                                     <Button
-                                        variant="primary"
-                                        onClick={() => {
-                                            setSelectedMascota(mascota);
-                                            setFichaMedica(mascota.fichaMedica || ''); // Cargar la ficha médica existente
-                                        }}
+                                        variant="info"
+                                        href={`/perfil_mascota/66fafdd5c72490679957004f`}
                                         className="ms-2"
                                     >
-                                        Agregar Ficha Médica
+                                        Ver Perfil
                                     </Button>
                                 </li>
                             ))}
                         </ul>
                     )}
-                </Modal.Body>
-            </Modal>
-
-            {/* Modal para agregar ficha médica */}
-            <Modal show={selectedMascota} onHide={() => setSelectedMascota(null)} size="lg">
-                <Modal.Header closeButton>
-                    <Modal.Title>Agregar Ficha Médica a {selectedMascota?.nombre}</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form>
-                        <Form.Group controlId="formFichaMedica">
-                            <Form.Label>Ficha Médica</Form.Label>
-                            <Form.Control
-                                type="text"
-                                value={fichaMedica}
-                                onChange={(e) => setFichaMedica(e.target.value)}
-                                placeholder="Ingrese la ficha médica de la mascota"
-                            />
-                        </Form.Group>
-                    </Form>
-                    <Button variant="primary" onClick={handleAddFichaMedica}>
-                        Guardar Ficha Médica
-                    </Button>
                 </Modal.Body>
             </Modal>
         </div>
