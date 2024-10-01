@@ -48,7 +48,7 @@ const GestionSucursal = () => {
   };
   
   const handleEliminarSucursal = async (id) => {
-    if (confirm("Está por eliminar definitivamente una sucursal. ¡Está seguro?")) {
+    if (confirm("Está por eliminar definitivamente una sucursal. ¿Está seguro?")) {
       try {
         await clienteAxios.delete(
           `/sucursales/${id}`,
