@@ -8,6 +8,7 @@ import PlanesDeSuscripcion from './pages/PlanesMascotas';
 import PerfilMascota from './pages/PerfilMascota';
 import ServiciosTurnos from './pages/ServiciosTurnos';
 import Especialistas from './pages/Especialistas';
+import AdministracionPanel from './pages/AdministracionPanel';
 
 function App() {
  
@@ -22,7 +23,13 @@ function App() {
         <Route path='/servicios' element={<ServiciosTurnos/> } />
         <Route path='/turnos' element={<Turnos/> } />
         <Route path='/planes' element={<PlanesDeSuscripcion/> } />
-        <Route path='/nuestros_especialistas' element={<Especialistas/> } />
+        <Route path='/nuestros_especialistas' element={<Especialistas />} />
+        
+        <Route path='/administracion' element={<AdministracionPanel />} />
+        <Route path='/gestion_usuarios' element={<Especialistas />} />
+        <Route path='/gestion_turnos' element={<Especialistas />} />
+        <Route path='/gestion_servicios' element={<Especialistas />} />
+        <Route path='/gestion_productos' element={<Especialistas />} />
       </Routes>
    
     </BrowserRouter>

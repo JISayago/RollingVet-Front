@@ -23,11 +23,10 @@ function LinksNavbar({ usuarioLogeado }) {
             )}
             {user.logeado && user.rol === 'administrador' && (
                 <>
-                    <Nav.Link className="link" href="/">Inicio</Nav.Link>
-                    <Nav.Link className="link" href="/usuarios">Gestión de Usuarios</Nav.Link>
-                    <Nav.Link className="link" href="/reportes">Gestión de Turnos</Nav.Link>
-                    <Nav.Link className="link" href="/servicios">Gestión de Servicios</Nav.Link>
-                    <Nav.Link className="link" href="/productos">Gestión de Sucursales</Nav.Link>
+                    <Nav.Link className="link" href="/gestion_usuarios">Gestión de Usuarios</Nav.Link>
+                    <Nav.Link className="link" href="/gestion_turnos">Gestión de Turnos</Nav.Link>
+                    <Nav.Link className="link" href="/gestion_servicios">Gestión de Servicios</Nav.Link>
+                    <Nav.Link className="link" href="/gestion_productos">Gestión de Sucursales</Nav.Link>
                 </>
             )}
             {user.logeado && user.rol === 'veterinario' && (
