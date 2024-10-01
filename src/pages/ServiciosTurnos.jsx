@@ -1,4 +1,4 @@
-import  { useState } from 'react';
+import  { useEffect, useState } from 'react';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
@@ -16,9 +16,9 @@ const ServiciosCards = () => {
     const servciosBD = await clienteAxios.get('/servicios')
     setServicios(servciosBD.data);
   }
-  useState(() => {
+  useEffect(() => {
     obtenerServicios();
-  })
+  },[])
   return (
     <Container className="my-5">
       {/* Título centralizado */}

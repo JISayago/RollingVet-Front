@@ -13,7 +13,7 @@ function LinksNavbar({ usuarioLogeado }) {
 
     return (
         <Nav className="me-auto">
-            {user.logeado && user.rol === 'cliente' && (
+            {user.logeado && user.rol === 'Cliente' && (
                 <>
                     <Link className="link" to="/">Inicio</Link>
                     <Link className="link" to="/servicios">Servicios</Link>
@@ -22,22 +22,19 @@ function LinksNavbar({ usuarioLogeado }) {
                     <Link className="link" to="/contacto">Contacto</Link>
                 </>
             )}
-            {user.logeado && user.rol === 'administrador' && (
+            {user.logeado && user.rol === 'Administrador' && (
                 <>
-                    <Link className="link" to="/gestion_usuarios">Gestión de Usuarios</Link>
-                    <Link className="link" to="/gestion_turnos">Gestión de Turnos</Link>
-                    <Link className="link" to="/gestion_servicios">Gestión de Servicios</Link>
-                    <Link className="link" to="/gestion_productos">Gestión de Sucursales</Link>
+                    <Link className="link" to="/administracion">Administración</Link>
                 </>
             )}
-            {user.logeado && user.rol === 'veterinario' && (
+            {user.logeado && user.rol === 'Veterinario' && (
                 <>
                     <Link className="link" to="/">Inicio</Link>
                     <Link className="link" to="/servicios">Mis Turnos</Link>
                     <Link className="link" to="/mis_pacientes">Mis Pacientes</Link>
                 </>
             )}
-            {user.logeado && user.rol === 'peluquero' && (
+            {user.logeado && user.rol === 'Peluquero' && (
                 <>
                     <Link className="link" to="/">Inicio</Link>
                     <Link className="link" to="/servicios">Mis Turnos</Link>

@@ -6,7 +6,7 @@ import GestionSucursal from '../components/GestionSucursal';
 import GestionServicios from '../components/GestionServicios';
 
 const AdministracionPanel = () => {
-  const [activeTab, setActiveTab] = useState('users');
+  const [activeTab, setActiveTab] = useState('usuarios');
 
   return (
     <Container>
@@ -14,29 +14,29 @@ const AdministracionPanel = () => {
       <Tab.Container activeKey={activeTab} onSelect={(key) => setActiveTab(key)}>
         <Nav variant="tabs" className="justify-content-center mb-3">
           <Nav.Item>
-            <Nav.Link eventKey="users">Usuarios</Nav.Link>
+            <Nav.Link eventKey="usuarios">Usuarios</Nav.Link>
           </Nav.Item>
           <Nav.Item>
-            <Nav.Link eventKey="branches">Sucursales</Nav.Link>
+            <Nav.Link eventKey="sucursales">Sucursales</Nav.Link>
           </Nav.Item>
           <Nav.Item>
-            <Nav.Link eventKey="services">Servicios</Nav.Link>
+            <Nav.Link eventKey="servicios">Servicios</Nav.Link>
           </Nav.Item>
           <Nav.Item>
-            <Nav.Link eventKey="appointments">Turnos</Nav.Link>
+            <Nav.Link eventKey="turnos">Turnos</Nav.Link>
           </Nav.Item>
         </Nav>
         <Tab.Content>
-          <Tab.Pane eventKey="users">
+          <Tab.Pane eventKey="usuarios">
             <GestionUsuarios />
           </Tab.Pane>
-          <Tab.Pane eventKey="branches">
+          <Tab.Pane eventKey="sucursales">
             <GestionSucursal />
           </Tab.Pane>
-          <Tab.Pane eventKey="services">
+          <Tab.Pane eventKey="servicios">
             <GestionServicios />
           </Tab.Pane>
-          <Tab.Pane eventKey="appointments">
+          <Tab.Pane eventKey="turnos">
             <GestionTurnos />
           </Tab.Pane>
         </Tab.Content>

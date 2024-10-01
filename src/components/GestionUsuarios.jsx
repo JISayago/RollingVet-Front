@@ -1,37 +1,26 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Table, Button, Form, FormControl, Modal, Pagination } from 'react-bootstrap';
+import clienteAxios from '../helpers/axios.config';
 
 const GestionUsuarios = () => {
-    const initialUsers = [
-        {
-            id: 1,
-            name: 'Juan Pérez',
-            role: 'Usuario',
-            deleted: false,
-            mascotas: [
-                { nombre: 'Fido', fechaNacimiento: '2020-05-10', tipo: 'Perro', raza: 'Labrador', castrado: true },
-                { nombre: 'Luna', fechaNacimiento: '2018-08-22', tipo: 'Gato', raza: 'Siamés', castrado: false },
-            ],
-        },
-        {
-            id: 2,
-            name: 'Ana Gómez',
-            role: 'Administrador',
-            deleted: false,
-            mascotas: [],
-        },
-        // ... otros usuarios
-    ];
 
-    const roles = ['Usuario', 'Administrador', 'Supervisor', 'Operador', 'Invitado'];
+    const roles = ['Cliente', 'Administrador', 'Veterinario', 'Pasante', 'Peluquero', 'Empleado'];
 
-    const [users, setUsers] = useState(initialUsers);
+    const [usuarios, setUsuarios] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 5;
     const [changedRoles, setChangedRoles] = useState({});
     const [showModal, setShowModal] = useState(false);
-    const [selectedUser, setSelectedUser] = useState(null);
+    const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
+
+    const obtenerUsuarios = async () => {
+        const usuariosBD = await clienteAxios.get('/usuarios')
+        setUsuarios(usuariosBD.data);
+      }
+      useEffect(() => {
+        obtenerUsuarios();
+      },[])
 
     const handleRoleChange = (id, newRole) => {
         setChangedRoles((prev) => ({
@@ -41,12 +30,12 @@ const GestionUsuarios = () => {
     };
 
     const handleDeleteUser = (id) => {
-        setUsers(users.map(user => user.id === id ? { ...user, deleted: !user.deleted } : user));
+        setUsuarios(usuarios.map(u => u.id === id ? { ...u, deleted: !u.deleted } : u));
     };
 
     const handleSaveChanges = (id) => {
-        setUsers(users.map(user =>
-            user.id === id ? { ...user, role: changedRoles[id] } : user
+        setUsuarios(usuarios.map(u =>
+            u.id === id ? { ...u, role: changedRoles[id] } : u
         ));
         setChangedRoles((prev) => {
             const newState = { ...prev };
@@ -55,8 +44,8 @@ const GestionUsuarios = () => {
         });
     };
 
-    const handleShowModal = (user) => {
-        setSelectedUser(user);
+    const handleShowModal = (usuario) => {
+        setUsuarioSeleccionado(usuario);
         setShowModal(true);
     };
 
@@ -73,8 +62,8 @@ const GestionUsuarios = () => {
         setCurrentPage(1);
     };
 
-    const filteredUsers = users.filter(user =>
-        user.name.toLowerCase().includes(searchTerm.toLowerCase())
+    const filteredUsers = usuarios.filter(u =>
+        u.nombre.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     const indexOfLastUser = currentPage * itemsPerPage;
@@ -104,29 +93,29 @@ const GestionUsuarios = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {currentUsers.map((user) => (
-                        <tr key={user.id}>
-                            <td>{user.name}</td>
+                    {currentUsers.map((usuario) => (
+                        <tr key={usuario._id}>
+                            <td>{usuario.nombre}</td>
                             <td>
                                 <Form.Select 
-                                    defaultValue={user.role} 
-                                    onChange={(e) => handleRoleChange(user.id, e.target.value)}
+                                    defaultValue={usuario.rol} 
+                                    onChange={(e) => handleRoleChange(usuario._id, e.target.value)}
                                 >
-                                    {roles.map((role, index) => (
-                                        <option key={index} value={role}>{role}</option>
+                                    {roles.map((rol, index) => (
+                                        <option key={index} value={rol}>{rol}</option>
                                     ))}
                                 </Form.Select>
                             </td>
                             <td>
-                                {changedRoles[user.id] && (
-                                    <Button variant="primary" onClick={() => handleSaveChanges(user.id)}>
+                                {changedRoles[usuario._id] && (
+                                    <Button variant="primary" onClick={() => handleSaveChanges(usuario._id)}>
                                         Guardar
                                     </Button>
                                 )}
-                                <Button variant={user.deleted ? "success" : "danger"} onClick={() => handleDeleteUser(user.id)}>
-                                    {user.deleted ? "Reincorporar" : "Eliminar"}
+                                <Button variant={usuario.estaEliminado ? "success" : "danger"} onClick={() => handleDeleteUser(usuario._id)}>
+                                    {usuario.estaEliminado ? "Reincorporar" : "Eliminar"}
                                 </Button>{' '}
-                                <Button variant="info" onClick={() => handleShowModal(user)}>
+                                <Button variant="info" onClick={() => handleShowModal(usuario)}>
                                     Ver Mascotas
                                 </Button>
                             </td>
@@ -150,15 +139,15 @@ const GestionUsuarios = () => {
             {/* Modal para ver mascotas */}
             <Modal show={showModal} onHide={handleCloseModal} size="lg">
                 <Modal.Header closeButton>
-                    <Modal.Title>Mascotas de {selectedUser?.name}</Modal.Title>
+                    <Modal.Title>Mascotas de {usuarioSeleccionado?.nombre}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <h5>Mascotas Asignadas</h5>
-                    {selectedUser && selectedUser.mascotas.length === 0 ? (
+                    {usuarioSeleccionado && usuarioSeleccionado.mascotas.length === 0 ? (
                         <p>No hay mascotas asignadas.</p>
                     ) : (
                         <ul>
-                            {selectedUser && selectedUser.mascotas.map((mascota, index) => (
+                            {usuarioSeleccionado && usuarioSeleccionado.mascotas.map((mascota, index) => (
                                 <li key={index}>
                                     <strong>Nombre:</strong> {mascota.nombre} <br />
                                     <strong>Fecha de Nacimiento:</strong> {mascota.fechaNacimiento} <br />
@@ -167,7 +156,7 @@ const GestionUsuarios = () => {
                                     <strong>Castrado:</strong> {mascota.castrado ? 'Sí' : 'No'} <br />
                                     <Button
                                         variant="info"
-                                        href={`/perfil_mascota/66fafdd5c72490679957004f`}
+                                        href={`/perfil_mascota/${mascota.mascotaId}`}
                                         className="ms-2"
                                     >
                                         Ver Perfil

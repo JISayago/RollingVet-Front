@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Container, Row, Col, Card, ListGroup, Button, Form, Modal } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
+import clienteAxios from '../helpers/axios.config';
 
 const PerfilMascota = () => {
   const params = useParams();
-  const [mascotaId, setMascotaId] = useState("");
+  const [mascota, setMascota] = useState({});
   const [inMemoriam, setInMemoriam] = useState(false);
   const [filtroFecha, setFiltroFecha] = useState({ desde: '', hasta: '' });
   const [nuevoProcedimiento, setNuevoProcedimiento] = useState({
@@ -18,63 +19,38 @@ const PerfilMascota = () => {
   const [modalPlanShow, setModalPlanShow] = useState(false); // Estado para manejar el modal de planes
   const [planSeleccionado, setPlanSeleccionado] = useState(''); // Estado para manejar el plan seleccionado
 
-  // Información del perfil de la mascota
-  const mascota = {
-    fotoPerfil: 'url_de_la_foto_de_perfil',
-    nombre: 'Firulais',
-    dueño: 'Juan Pérez',
-    edad: 7,
-    tipo: 'Perro',
-    raza: 'Golden Retriever',
-    castrado: true,
-    planAsociado: 'Plan Madurando',
-    vacunasPendientes: [
-      {
-        nombre: 'Refuerzo de Rabia',
-        fecha: '15/10/2024',
-      },
-    ],
-    historialVacunas: [
-      'Rabia - 01/02/2023',
-      'Parvovirus - 01/08/2023',
-      'Moquillo - 01/02/2024',
-    ],
-    historialProcedimientos: [
-      {
-        fecha: '2023-05-01',
-        procedimiento: 'Limpieza dental',
-        vistoPor: 'Dr. González',
-        tratamiento: 'Limpieza profunda y aplicación de flúor',
-        dosificacion: null,
-      },
-      {
-        fecha: '2023-11-01',
-        procedimiento: 'Castración',
-        vistoPor: 'Dr. Fernández',
-        tratamiento: 'Cirugía y postoperatorio con analgésicos',
-        dosificacion: 'Analgésicos cada 12 horas por 5 días',
-      },
-      {
-        fecha: '2024-08-01',
-        procedimiento: 'Consulta de chequeo general',
-        vistoPor: 'Dra. Martínez',
-        tratamiento: 'Chequeo físico completo, no se detectaron anomalías',
-        dosificacion: null,
-      },
-    ],
-  };
+  function calcularEdad(fechaNacimiento) {
+    const hoy = new Date();
+    const nacimiento = new Date(fechaNacimiento);
+  
+    let edad = hoy.getFullYear() - nacimiento.getFullYear();
+    const mes = hoy.getMonth() - nacimiento.getMonth();
+  
+    if (mes < 0 || (mes === 0 && hoy.getDate() < nacimiento.getDate())) {
+      edad--;
+    }
+  
+    return edad;
+  }
 
   // Función para marcar a la mascota en "In Memoriam"
   const marcarInMemoriam = () => {
     setInMemoriam(true);
   };
 
+  const cargarMascota = async () => {
+    const mascotaBD = await clienteAxios.get(`/mascotas/${params.id}`)
+    setMascota(mascotaBD.data);
+    console.log("masbd", mascotaBD)
+  }
+
   const [tipoUsuario, setTipoUsuario] = useState('');
   useEffect(() => {
+    console.log("params id",params)
     if (sessionStorage.getItem('token')) {
-      setTipoUsuario(sessionStorage.getItem('rol'));
+      setTipoUsuario(JSON.parse(sessionStorage.getItem('rol')));
     }
-    setMascotaId(params.id)
+    cargarMascota();
   }, []);
 
   // Filtrar procedimientos por fecha
@@ -121,20 +97,20 @@ const PerfilMascota = () => {
             <Card.Body>
               <Card.Title>{mascota.nombre}</Card.Title>
               <Card.Text>
-                <strong>Dueño:</strong> {mascota.dueño} <br />
-                <strong>Edad:</strong> {mascota.edad} años <br />
-                <strong>Tipo:</strong> {mascota.tipo} <br />
+                <strong>Dueño:</strong> {mascota.duenioNombre} <br />
+                <strong>Edad:</strong> {`${calcularEdad(mascota.fechaNacimiento)} años.`} <br />
+                <strong>Tipo:</strong> {mascota.tipoDeMascota} <br />
                 <strong>Raza:</strong> {mascota.raza} <br />
                 <strong>Castrado:</strong> {mascota.castrado ? 'Sí' : 'No'} <br />
-                <strong>Plan Asociado:</strong> {mascota.planAsociado || 'Sin plan asignado'}
+                <strong>Plan Asociado:</strong> {mascota.plan || 'Sin plan asignado'}
               </Card.Text>
             </Card.Body>
           </Card>
           
           <Row>
 
-            {/* Botones debajo de la tarjeta de la mascota */console.log(tipoUsuario)}
-            {tipoUsuario === 'administrador' && (
+            {/* Botones debajo de la tarjeta de la mascota */}
+            {tipoUsuario === 'Administrador' && (
             <div className="mt-3">
               <Button variant="primary" onClick={() => setModalShow(true)} className="me-2">
                 Agregar Consulta
@@ -150,7 +126,7 @@ const PerfilMascota = () => {
            
           </Row>
         </Col>
-  
+  {/*
         <Col md={8}>
           <Card className="mb-4">
             <Card.Header>Historial de Vacunas</Card.Header>
@@ -160,7 +136,7 @@ const PerfilMascota = () => {
               ))}
             </ListGroup>
   
-            {/* Vacunas Pendientes */}
+            
             {mascota.vacunasPendientes.length > 0 && (
               <Card.Footer className="text-danger">
                 <strong>Vacunas Pendientes:</strong>
@@ -175,7 +151,7 @@ const PerfilMascota = () => {
             )}
           </Card>
   
-          {/* Filtros de Fecha */}
+          
           <Form className="mb-3">
             <Row>
               <Col md={6}>
@@ -205,7 +181,7 @@ const PerfilMascota = () => {
             </Row>
           </Form>
   
-          {/* Historial de Procedimientos con scroll */}
+       
           <Card className="mb-4" style={{ width: '100%' }}>
             <Card.Header>Historial de Procedimientos</Card.Header>
             <ListGroup
@@ -230,8 +206,8 @@ const PerfilMascota = () => {
               ))}
             </ListGroup>
           </Card>
-  
-          {/* Modal para agregar un procedimiento */}
+  */}
+          <Col>
           <Modal show={modalShow} onHide={() => setModalShow(false)}>
             <Modal.Header closeButton>
               <Modal.Title>Agregar Procedimiento</Modal.Title>
@@ -289,7 +265,7 @@ const PerfilMascota = () => {
             </Modal.Body>
           </Modal>
   
-          {/* Modal para seleccionar el plan */}
+         
           <Modal show={modalPlanShow} onHide={() => setModalPlanShow(false)}>
             <Modal.Header closeButton>
               <Modal.Title>Seleccionar Plan</Modal.Title>
