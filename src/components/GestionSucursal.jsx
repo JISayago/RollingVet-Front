@@ -1,31 +1,73 @@
-import React, { useState } from 'react';
-import { Table, Button, Form, Modal, Container, Row, Col } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import { Table, Button, Container } from 'react-bootstrap';
+import clienteAxios from '../helpers/axios.config';
+import ModalSuc from '../components/ModalSuc';
+import { configHeaders } from '../helpers/extra.config';
 
 const GestionSucursal = () => {
-  const [branches, setBranches] = useState([
-    { id: 1, name: 'Sucursal Centro', address: 'Av. Principal 123', contactNumber: '123456789', email: 'centro@sucursal.com', emergencyService: true },
-    { id: 2, name: 'Sucursal Norte', address: 'Calle Secundaria 456', contactNumber: '987654321', email: 'norte@sucursal.com', emergencyService: false },
-  ]);
+  const [sucursales, setSucursales] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [currentBranch, setCurrentBranch] = useState({ id: null, name: '', address: '', contactNumber: '', email: '', emergencyService: false });
+  const [nuevaSucursal, setNuevaSucursal] = useState({ _id: null, nombre: '', direccion: '', numeroContacto: '', correo: '', atiendeEmergencias24H: false });
 
-  const handleShowModal = (branch = { id: null, name: '', address: '', contactNumber: '', email: '', emergencyService: false }) => {
-    setCurrentBranch(branch);
+  const cargarSucursales = async () => {
+    const sucursalesBD = await clienteAxios.get('/sucursales');
+    setSucursales(sucursalesBD.data);
+  };
+
+  const handleShowModal = (sucursal = { _id: null, nombre: '', direccion: '', numeroContacto: '', correo: '', atiendeEmergencias24H: false }) => {
+    setNuevaSucursal(sucursal);
     setShowModal(true);
   };
 
-  const handleSaveBranch = () => {
-    if (currentBranch.id) {
-      setBranches(branches.map(branch => branch.id === currentBranch.id ? currentBranch : branch));
-    } else {
-      setBranches([...branches, { ...currentBranch, id: branches.length + 1 }]);
+  const handleGuardarSucursal = async () => {
+    try {
+      if (nuevaSucursal._id) {
+        // Edición de sucursal existente
+        const result = await clienteAxios.put(
+          `/sucursales/${nuevaSucursal._id}`,
+          nuevaSucursal,
+          configHeaders
+        );
+        setSucursales(sucursales.map(s => s._id === nuevaSucursal._id ? result.data : s));
+        alert("Sucursal Editada con éxito!");
+      } else {
+        const result = await clienteAxios.post(
+          '/sucursales',
+          nuevaSucursal,
+          configHeaders
+        );
+        setSucursales([...sucursales, result.data]);
+        alert("Sucursal Agregada con éxito!");
+      }
+  
+      setShowModal(false);
+    } catch (error) {
+      console.error('Error al guardar la sucursal:', error);
+      alert("Error al guardar la sucursal. Inténtelo de nuevo.");
     }
-    setShowModal(false);
   };
+  
+  const handleEliminarSucursal = async (id) => {
+    if (confirm("Está por eliminar definitivamente una sucursal. ¡Está seguro?")) {
+      try {
+        await clienteAxios.delete(
+          `/sucursales/${id}`,
+          configHeaders);
+      
+        setSucursales(sucursales.filter(s => s._id !== id));
 
-  const handleDeleteBranch = (id) => {
-    setBranches(branches.filter(branch => branch.id !== id));
+        alert("Sucursal eliminada con éxito!");
+      } catch (error) {
+        console.error('Error al eliminar la sucursal:', error);
+        alert("Error al eliminar la sucursal. Inténtelo de nuevo.");
+      }
+    }
   };
+  
+
+  useEffect(() => {
+    cargarSucursales();
+  }, [sucursales]);
 
   return (
     <Container fluid className="p-3">
@@ -45,16 +87,16 @@ const GestionSucursal = () => {
           </tr>
         </thead>
         <tbody>
-          {branches.map((branch) => (
-            <tr key={branch.id}>
-              <td>{branch.name}</td>
-              <td>{branch.address}</td>
-              <td>{branch.contactNumber}</td>
-              <td>{branch.email}</td>
-              <td>{branch.emergencyService ? 'Sí' : 'No'}</td>
+          {sucursales.map((s) => (
+            <tr key={s._id}>
+              <td>{s.nombre}</td>
+              <td>{s.direccion}</td>
+              <td>{s.numeroContacto}</td>
+              <td>{s.correo}</td>
+              <td>{s.atiendeEmergencias24H ? 'Sí' : 'No'}</td>
               <td>
-                <Button variant="warning" onClick={() => handleShowModal(branch)} className="me-2">Editar</Button>
-                <Button variant="danger" onClick={() => handleDeleteBranch(branch.id)}>Eliminar</Button>
+                <Button variant="warning" onClick={() => handleShowModal(s)} className="me-2">Editar</Button>
+                <Button variant="danger" onClick={() => handleEliminarSucursal(s._id)}>Eliminar</Button>
               </td>
             </tr>
           ))}
@@ -62,59 +104,13 @@ const GestionSucursal = () => {
       </Table>
 
       {/* Modal para agregar/editar sucursales */}
-      <Modal show={showModal} onHide={() => setShowModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>{currentBranch.id ? 'Editar Sucursal' : 'Agregar Sucursal'}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group controlId="branchName" className="mb-3">
-              <Form.Label>Nombre de la Sucursal</Form.Label>
-              <Form.Control
-                type="text"
-                value={currentBranch.name}
-                onChange={(e) => setCurrentBranch({ ...currentBranch, name: e.target.value })}
-              />
-            </Form.Group>
-            <Form.Group controlId="branchAddress" className="mb-3">
-              <Form.Label>Dirección</Form.Label>
-              <Form.Control
-                type="text"
-                value={currentBranch.address}
-                onChange={(e) => setCurrentBranch({ ...currentBranch, address: e.target.value })}
-              />
-            </Form.Group>
-            <Form.Group controlId="branchContactNumber" className="mb-3">
-              <Form.Label>Número de Contacto</Form.Label>
-              <Form.Control
-                type="text"
-                value={currentBranch.contactNumber}
-                onChange={(e) => setCurrentBranch({ ...currentBranch, contactNumber: e.target.value })}
-              />
-            </Form.Group>
-            <Form.Group controlId="branchEmail" className="mb-3">
-              <Form.Label>Correo Electrónico</Form.Label>
-              <Form.Control
-                type="email"
-                value={currentBranch.email}
-                onChange={(e) => setCurrentBranch({ ...currentBranch, email: e.target.value })}
-              />
-            </Form.Group>
-            <Form.Group controlId="branchEmergencyService" className="mb-3">
-              <Form.Check
-                type="checkbox"
-                label="Atención Emergencias 24 hs"
-                checked={currentBranch.emergencyService}
-                onChange={(e) => setCurrentBranch({ ...currentBranch, emergencyService: e.target.checked })}
-              />
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowModal(false)}>Cancelar</Button>
-          <Button variant="primary" onClick={handleSaveBranch}>Guardar</Button>
-        </Modal.Footer>
-      </Modal>
+      <ModalSuc
+        showModal={showModal}
+        handleClose={() => setShowModal(false)}
+        sucursal={nuevaSucursal}
+        setSucursal={setNuevaSucursal}
+        handleGuardar={handleGuardarSucursal}
+      />
     </Container>
   );
 };
