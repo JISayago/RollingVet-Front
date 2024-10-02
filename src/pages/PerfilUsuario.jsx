@@ -94,7 +94,7 @@ const PerfilUsuario = () => {
               {mascotas.map(m => (
                 <Col key={m.mascotaId} xs={11} md={6} lg={4} className="mb-3">
                   <Card className="h-100" style={{ maxWidth: '250px' }}>
-                    <Card.Img variant="top" src={m.image} style={{ height: '150px', objectFit: 'cover' }} />
+                    <Card.Img variant="top" src={m.imagen} style={{ height: '150px', objectFit: 'cover' }} />
                     <Card.Body className="text-center">
                       <Card.Title>{m.nombre}</Card.Title>
                       <Card.Subtitle className="mb-2 text-muted">Años: {calcularEdad(m.fechaNacimiento)}</Card.Subtitle>

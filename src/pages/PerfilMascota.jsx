@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Container, Row, Col, Card, ListGroup, Button} from 'react-bootstrap';
+import { Container, Row, Col, Card, ListGroup, Button, Form} from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import clienteAxios from '../helpers/axios.config';
 import ModalConsulta from '../components/ModalConsulta';
@@ -29,11 +29,12 @@ const PerfilMascota = () => {
   const [modalPlanShow, setModalPlanShow] = useState(false); // Estado para manejar el modal de planes
   const [planSeleccionado, setPlanSeleccionado] = useState(''); // Estado para manejar el plan seleccionado
   const [fichasVeterinarias, setFichasVeterinarias] = useState([]);
-  const [historialVacunas, setHistorialVacunas] = useState([ "Vacuna contra la rabia - 12/03/2023",
+  const [historialVacunas, setHistorialVacunas] = useState(["Vacuna contra la rabia - 12/03/2023",
     "Vacuna parvovirus - 15/05/2023",
     "Vacuna moquillo - 20/07/2023",
     "Vacuna leptospirosis - 10/09/2023"]);
-  
+    const [imagen, setImagen] = useState(null);
+    
   // Función para asignar el plan seleccionado
   const asignarPlan = (plan) => {
     mascota.planAsociado = plan; // Asignar el plan seleccionado
@@ -77,7 +78,7 @@ const PerfilMascota = () => {
       setTipoUsuario(JSON.parse(sessionStorage.getItem('rol')));
     }
     cargarMascota();
-  }, [modalShow]);
+  }, [modalShow,imagen]);
 
 
   const agregarProcedimiento = async (e) => {
@@ -104,8 +105,26 @@ const PerfilMascota = () => {
       alert("Error al guardar la sucursal. Inténtelo de nuevo.");
     }
   };
+  const handleActualizacionImagen = async () => {
+    if (imagen) {
+      try {
+        const formData = new FormData();
+        formData.append('imagen', imagen); 
   
-
+        const result = await clienteAxios.post(
+          `mascotas/agregarImagen/${mascota._id}`,
+          formData,
+          configHeaders);
+  
+        alert("Imagen actualizada con éxito!");
+      } catch (error) {
+        console.error('Error al actualizar la imagen:', error);
+        alert("Error al actualizar la imagen. Inténtelo de nuevo.");
+      }
+    } else {
+      alert("Por favor, seleccione una imagen para actualizar.");
+    }
+  };
   const agregarVacuna = (nuevaVacuna) => {
     // Aquí podrías agregar la lógica para guardar la nueva vacuna
     historialVacunas.push(nuevaVacuna); // Solo para el ejemplo, modifica según tu lógica real
@@ -113,72 +132,102 @@ const PerfilMascota = () => {
   };
   return (
     <Container className="mt-4" fluid>
-      <Row>
-        {/* Tarjeta de la Mascota (arriba izquierda) */}
-        <Col md={6}>
-          <Card>
-            <Card.Img variant="top" src={mascota.fotoPerfil} alt="Foto de la mascota" />
-            <Card.Body>
-              <Card.Title>{mascota.nombre}</Card.Title>
-              <Card.Text>
-                <strong>Dueño:</strong> {mascota.duenioNombre} <br />
-                <strong>Edad:</strong> {`${calcularEdad(mascota.fechaNacimiento)}`} <br />
-                <strong>Tipo:</strong> {mascota.tipoDeMascota} <br />
-                <strong>Raza:</strong> {mascota.raza} <br />
-                <strong>Castrado:</strong> {mascota.castrado ? 'Sí' : 'No'} <br />
-                <strong>Plan Asociado:</strong> {mascota.plan || 'Sin plan asignado'}
-              </Card.Text>
-            </Card.Body>
-          </Card>
+<Row className="justify-content-center"> {/* Centra las columnas en la fila */}
+  {/* Tarjeta de la Mascota (arriba izquierda) */}
+  <Col md={6} className="d-flex justify-content-center"> {/* Centra el contenido de la columna */}
+  <Card style={{
+  width: '50%',
+  display: 'flex',
+  flexDirection: 'column', // Asegura que los elementos estén en una columna
+  alignItems: 'center',    // Centra los elementos horizontalmente
+}}>
+  <Card.Img 
+    variant="top" 
+    src={mascota.imagen} 
+    alt="Foto de la mascota" 
+    style={{
+      width: '200px',
+      height: 'auto', // Ajusta la altura automáticamente para mantener la proporción
+      maxHeight: '150px', // Establece la altura máxima
+      objectFit: 'contain' // Asegúrate de que la imagen cubra el área sin deformarse
+    }} 
+  />
+  <Card.Body style={{ textAlign: 'center' }}> {/* Centra el texto */}
+    <Card.Title>{mascota.nombre}</Card.Title>
+    <Card.Text>
+      <strong>Dueño:</strong> {mascota.duenioNombre} <br />
+      <strong>Edad:</strong> {`${calcularEdad(mascota.fechaNacimiento)}`} <br />
+      <strong>Tipo:</strong> {mascota.tipoDeMascota} <br />
+      <strong>Raza:</strong> {mascota.raza} <br />
+      <strong>Castrado:</strong> {mascota.castrado ? 'Sí' : 'No'} <br />
+      <strong>Plan Asociado:</strong> {mascota.plan || 'Sin plan asignado'}
+    </Card.Text>
+    {/* Botón para cargar imagen de perfil (solo visible para Clientes) */}
+    {tipoUsuario === 'Cliente' && (
+      <Form.Group className="mb-3 d-flex align-items-center"> {/* Alinea los elementos en una fila */}
+        <Form.Label className="me-2">Imagen</Form.Label>
+        <Form.Control
+          type="file"
+          onChange={(ev) => setImagen(ev.target.files[0])}
+          className="me-2" // Añade margen a la derecha para separar el botón
+        />
+        <Button variant="primary" onClick={handleActualizacionImagen}> {/* Cambia 'handleImageUpload' por la función que maneje la carga de la imagen */}
+          Confirmar
+        </Button>
+      </Form.Group>
+    )}
+  </Card.Body>
+</Card>
 
-          {/* Botones debajo de la tarjeta de la mascota */}
-          {tipoUsuario === 'Administrador' && (
-            <div className="mt-3">
-              <Button variant="primary" onClick={() => setModalShow(true)} className="me-2">
-                Agregar Consulta
-              </Button>
-              <Button variant="success" onClick={() => setModalPlanShow(true)} className="me-2">
-                Asignar Plan
-              </Button>
-              <Button variant="danger" onClick={marcarInMemoriam} className="me-2">
-                Eliminar
-              </Button>
-              <Button variant="info" onClick={() => setModalVacunaShow(true)} className="me-2">
-                Agregar Vacuna
-              </Button>
-            </div>
-          )}
-        </Col>
+    {/* Botones debajo de la tarjeta de la mascota */}
+    {tipoUsuario === 'Administrador' && (
+      <div className="mt-3">
+        <Button variant="primary" onClick={() => setModalShow(true)} className="me-2">
+          Agregar Consulta
+        </Button>
+        <Button variant="success" onClick={() => setModalPlanShow(true)} className="me-2">
+          Asignar Plan
+        </Button>
+        <Button variant="danger" onClick={marcarInMemoriam} className="me-2">
+          Eliminar
+        </Button>
+        <Button variant="info" onClick={() => setModalVacunaShow(true)} className="me-2">
+          Agregar Vacuna
+        </Button>
+      </div>
+    )}
+  </Col>
 
-        {/* Historial de Vacunas (arriba derecha) */}
-        <Col md={6} className="justify-content-center">
-          <Card className="mb-4 mx-auto w-75" style={{ maxWidth: '600px' }}>
-            <Card.Header>Historial de Vacunas</Card.Header>
-            <ListGroup
-              variant="flush"
-              style={{
-                maxHeight: '250px',
-                overflowY: 'auto',
-              }}
-            >
-              {historialVacunas.map((vacuna, index) => (
-                <ListGroup.Item key={index}>
-                  <Row className="align-items-center">
-                    <Col md={9}>
-                      <strong>{vacuna}</strong>
-                    </Col>
-                    <Col md={3} className="text-end">
-                      <Button variant="danger" onClick={() => console.log("Eliminar")}>
-                        Eliminar
-                      </Button>
-                    </Col>
-                  </Row>
-                </ListGroup.Item>
-              ))}
-            </ListGroup>
-          </Card>
-        </Col>
-      </Row>
+  {/* Historial de Vacunas (arriba derecha) */}
+  <Col md={6} className="d-flex justify-content-center"> {/* Centra el contenido de la columna */}
+    <Card className="mb-4 mx-auto w-75" style={{ maxWidth: '600px' }}>
+      <Card.Header>Historial de Vacunas</Card.Header>
+      <ListGroup
+        variant="flush"
+        style={{
+          maxHeight: '250px',
+          overflowY: 'auto',
+        }}
+      >
+        {historialVacunas.map((vacuna, index) => (
+          <ListGroup.Item key={index}>
+            <Row className="align-items-center">
+              <Col md={9}>
+                <strong>{vacuna}</strong>
+              </Col>
+              <Col md={3} className="text-end">
+                <Button variant="danger" onClick={() => console.log("Eliminar")}>
+                  Eliminar
+                </Button>
+              </Col>
+            </Row>
+          </ListGroup.Item>
+        ))}
+      </ListGroup>
+    </Card>
+  </Col>
+</Row>
+
 
       <Row>
         <Col md={12} className="justify-content-center">

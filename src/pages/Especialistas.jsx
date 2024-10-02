@@ -1,4 +1,3 @@
-import React from 'react';
 import { Card, Container, Row, Col } from 'react-bootstrap';
 
 const profesionales = {
@@ -21,8 +20,6 @@ function Especialistas() {
   return (
     <Container className="my-5">
       <h2 className="text-center mb-4">Nuestro Equipo de Profesionales</h2>
-
-      {/* Sección de Veterinarios Clínicos */}
       <h3 className="text-center mb-3">Veterinarios Clínicos</h3>
       <Row className="justify-content-center">
         {profesionales.veterinariosClinicos.map((vet, index) => (
@@ -39,7 +36,6 @@ function Especialistas() {
         ))}
       </Row>
 
-      {/* Sección de Cirujanos */}
       <h3 className="text-center mb-3">Cirujanos</h3>
       <Row className="justify-content-center">
         {profesionales.cirujanos.map((cirujano, index) => (
@@ -56,7 +52,6 @@ function Especialistas() {
         ))}
       </Row>
 
-      {/* Sección de Pasantes Estudiantiles */}
       <h3 className="text-center mb-3">Pasantes Estudiantiles</h3>
       <Row className="justify-content-center">
         {profesionales.pasantesEstudiantiles.map((pasante, index) => (
@@ -73,7 +68,6 @@ function Especialistas() {
         ))}
       </Row>
 
-      {/* Sección de Peluqueros Caninos */}
       <h3 className="text-center mb-3">Peluqueros Caninos</h3>
       <Row className="justify-content-center">
         {profesionales.peluquerosCaninos.map((peluquero, index) => (
