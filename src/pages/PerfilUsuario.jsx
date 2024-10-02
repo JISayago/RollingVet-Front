@@ -4,20 +4,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import clienteAxios from '../helpers/axios.config';
 import ModalMascotaRegistro from '../components/ModalMascotaRegistro';
 
-const consultations = [
-  { id: 1, dateTime: '2024-09-16 10:00', professional: 'Dr. Smith', location: 'Clinic A', patient: 'Luna', responsible: 'John Doe' },
-  { id: 2, dateTime: '2024-09-16 14:00', professional: 'Dr. Jones', location: 'Clinic B', patient: 'Milo', responsible: 'Jane Smith' },
-  { id: 2, dateTime: '2024-09-16 14:00', professional: 'Dr. Jones', location: 'Clinic B', patient: 'Milo', responsible: 'Jane Smith' },
-  { id: 2, dateTime: '2024-09-16 14:00', professional: 'Dr. Jones', location: 'Clinic B', patient: 'Milo', responsible: 'Jane Smith' },
-  { id: 2, dateTime: '2024-09-16 14:00', professional: 'Dr. Jones', location: 'Clinic B', patient: 'Milo', responsible: 'Jane Smith' },
-  { id: 2, dateTime: '2024-09-16 14:00', professional: 'Dr. Jones', location: 'Clinic B', patient: 'Milo', responsible: 'Jane Smith' },
-  // Add more consultations as needed
-];
+
 
 const PerfilUsuario = () => {
   const [showModal, setShowModal] = useState(false);
   const [usuario, setUsuario] = useState({});
   const [mascotas, setMascotas] = useState([]);
+  const [fichas,setFichas] = useState([])
 
   const handleShow = () => setShowModal(true);
   const handleClose = () => setShowModal(false);
@@ -40,8 +33,9 @@ const PerfilUsuario = () => {
           }
         });
         if (result) {
-          setUsuario(result.data);
-          setMascotas(result.data.mascotas);
+          setUsuario(result.data.usuario);
+          setMascotas(result.data.usuario.mascotas);
+          setFichas(result.data.fichas)
         }
       } catch (error) {
         console.error("Error al cargar usuario:", error.response ? error.response.data : error);
@@ -117,14 +111,13 @@ const PerfilUsuario = () => {
           <Row className="flex-grow-1" style={{ padding: '1rem' }}>
             <h3>Últimas asistencias</h3>
             <Col xs={12} style={{ maxHeight: '400px', overflowY: 'auto' }}>
-              {consultations.map(consultation => (
-                <Card key={consultation.id} className="mb-3">
+              {fichas.map(f => (
+                <Card key={f._id} className="mb-3">
                   <Card.Body>
-                    <Card.Title>{consultation.professional}</Card.Title>
-                    <Card.Subtitle className="mb-2 text-muted">Fecha y Hora: {consultation.dateTime}</Card.Subtitle>
-                    <Card.Subtitle className="mb-2 text-muted">Ubicación: {consultation.location}</Card.Subtitle>
-                    <Card.Subtitle className="mb-2 text-muted">Paciente: {consultation.patient}</Card.Subtitle>
-                    <Card.Subtitle className="mb-2 text-muted">Responsable: {consultation.responsible}</Card.Subtitle>
+                    <Card.Title>{f.vistoPor}</Card.Title>
+                    <Card.Subtitle className="mb-2 text-muted">Fecha {f.fecha}</Card.Subtitle>
+                    <Card.Subtitle className="mb-2 text-muted">Motivo: {f.motivo}</Card.Subtitle>
+                    <Card.Subtitle className="mb-2 text-muted">Mascota: {f.mascotaNombre}</Card.Subtitle>
                   </Card.Body>
                 </Card>
               ))}
