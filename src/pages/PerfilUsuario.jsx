@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Container, Row, Col, Button, Card } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import clienteAxios from '../helpers/axios.config';
-import ModalMR from '../components/ModalMR'; // Importa el nuevo componente
+import ModalMascotaRegistro from '../components/ModalMascotaRegistro';
 
 const consultations = [
   { id: 1, dateTime: '2024-09-16 10:00', professional: 'Dr. Smith', location: 'Clinic A', patient: 'Luna', responsible: 'John Doe' },
@@ -132,7 +132,7 @@ const PerfilUsuario = () => {
           </Row>
 
           {/* Modal para agregar mascota */}
-      <ModalMR
+      <ModalMascotaRegistro
         show={showModal}
         handleClose={handleClose}
         onMascotaRegistrada={onMascotaRegistrada} // Pasa la función de actualización

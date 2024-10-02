@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Container, Navbar, Nav, Row, Col } from "react-bootstrap";
-import ModalLR from "./ModalLR";
+import ModalLoginRegistro from "./ModalLoginRegistro";
 import Clima from "./Clima";
 import Logo from "./Logo";
 import "../css/navbar.css";
@@ -89,7 +89,7 @@ function Navigationbar() {
                 </Container>
             </Navbar>
 
-            <ModalLR
+            <ModalLoginRegistro
                 show={mostrarModal}
                 handleCerrar={handleCerrarModal}
                 type={tipoModal}

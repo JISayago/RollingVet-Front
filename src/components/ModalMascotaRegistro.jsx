@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import clienteAxios from '../helpers/axios.config';
 
-const ModalMR = ({ show, handleClose, onMascotaRegistrada }) => {
+const ModalMascotaRegistro = ({ show, handleClose, onMascotaRegistrada }) => {
   const [petData, setPetData] = useState({
     nombre: '',
     fechaNacimiento: '',
@@ -115,4 +115,4 @@ const ModalMR = ({ show, handleClose, onMascotaRegistrada }) => {
   );
 };
 
-export default ModalMR;
+export default ModalMascotaRegistro;

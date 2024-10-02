@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button, Container } from 'react-bootstrap';
 import clienteAxios from '../helpers/axios.config';
-import ModalSuc from '../components/ModalSuc';
+import ModalSucursalRegistro from './ModalSucursalRegistro';
 import { configHeaders } from '../helpers/extra.config';
 
 const GestionSucursal = () => {
@@ -104,7 +104,7 @@ const GestionSucursal = () => {
       </Table>
 
       {/* Modal para agregar/editar sucursales */}
-      <ModalSuc
+      <ModalSucursalRegistro
         showModal={showModal}
         handleClose={() => setShowModal(false)}
         sucursal={nuevaSucursal}

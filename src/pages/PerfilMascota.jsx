@@ -1,23 +1,45 @@
 import { useEffect, useState } from 'react';
-import { Container, Row, Col, Card, ListGroup, Button, Form, Modal } from 'react-bootstrap';
+import { Container, Row, Col, Card, ListGroup, Button} from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import clienteAxios from '../helpers/axios.config';
+import ModalConsulta from '../components/ModalConsulta';
+import ModalVacunaRegistro from '../components/ModalVacunaRegistro'
+import ModalPlanAsignacion from '../components/ModalPlanAsignacion';
+import { configHeaders } from '../helpers/extra.config';
 
 const PerfilMascota = () => {
+
+  const planesDisponibles = [
+    'Plan Básico',
+    'Plan Avanzado',
+    'Plan Premium',
+  ];
   const params = useParams();
   const [mascota, setMascota] = useState({});
+  const [tipoUsuario, setTipoUsuario] = useState('');
   const [inMemoriam, setInMemoriam] = useState(false);
-  const [filtroFecha, setFiltroFecha] = useState({ desde: '', hasta: '' });
   const [nuevoProcedimiento, setNuevoProcedimiento] = useState({
     fecha: '',
-    procedimiento: '',
+    motivo: '',
     vistoPor: '',
     tratamiento: '',
-    dosificacion: '',
   });
+  const [modalVacunaShow, setModalVacunaShow] = useState(false); // Estado para manejar el modal de vacuna
   const [modalShow, setModalShow] = useState(false); // Estado para manejar el modal
   const [modalPlanShow, setModalPlanShow] = useState(false); // Estado para manejar el modal de planes
   const [planSeleccionado, setPlanSeleccionado] = useState(''); // Estado para manejar el plan seleccionado
+  const [fichasVeterinarias, setFichasVeterinarias] = useState([]);
+  const [historialVacunas, setHistorialVacunas] = useState([ "Vacuna contra la rabia - 12/03/2023",
+    "Vacuna parvovirus - 15/05/2023",
+    "Vacuna moquillo - 20/07/2023",
+    "Vacuna leptospirosis - 10/09/2023"]);
+  
+  // Función para asignar el plan seleccionado
+  const asignarPlan = (plan) => {
+    mascota.planAsociado = plan; // Asignar el plan seleccionado
+    setPlanSeleccionado(plan); // Actualizar el estado del plan seleccionado
+    setModalPlanShow(false); // Cerrar el modal
+  };
 
   function calcularEdad(fechaNacimiento) {
     const hoy = new Date();
@@ -41,57 +63,54 @@ const PerfilMascota = () => {
   const cargarMascota = async () => {
     const mascotaBD = await clienteAxios.get(`/mascotas/${params.id}`)
     setMascota(mascotaBD.data);
+    setFichasVeterinarias(mascotaBD.data.fichas)
     console.log("masbd", mascotaBD)
   }
 
-  const [tipoUsuario, setTipoUsuario] = useState('');
   useEffect(() => {
-    console.log("params id",params)
     if (sessionStorage.getItem('token')) {
       setTipoUsuario(JSON.parse(sessionStorage.getItem('rol')));
     }
     cargarMascota();
-  }, []);
+  }, [fichasVeterinarias]);
 
-  // Filtrar procedimientos por fecha
-  const filtrarProcedimientos = () => {
-    const { desde, hasta } = filtroFecha;
-    const desdeFecha = new Date(desde);
-    const hastaFecha = new Date(hasta);
 
-    return mascota.historialProcedimientos.filter((proc) => {
-      const fechaProc = new Date(proc.fecha);
-      if (desde && hasta) {
-        return fechaProc >= desdeFecha && fechaProc <= hastaFecha;
-      } else if (desde) {
-        return fechaProc >= desdeFecha;
-      } else if (hasta) {
-        return fechaProc <= hastaFecha;
-      }
-      return true;
-    });
-  };
-
-  // Manejar el envío del formulario para agregar un procedimiento
-  const agregarProcedimiento = (e) => {
+  const agregarProcedimiento = async (e) => {
     e.preventDefault();
-    // Aquí podrías agregar la lógica para guardar el nuevo procedimiento
-    console.log('Nuevo Procedimiento:', nuevoProcedimiento);
-    // Reiniciar el formulario
-    setNuevoProcedimiento({ fecha: '', procedimiento: '', vistoPor: '', tratamiento: '', dosificacion: '' });
-    setModalShow(false); // Cerrar el modal
+    try {
+      const result = await clienteAxios.post(
+        `/fichas/${mascota._id}`,
+        nuevoProcedimiento,
+        configHeaders
+      );
+  
+      // Add the new entry to the existing list of "fichasVeterinarias"
+      setFichasVeterinarias([...fichasVeterinarias, result.data]);
+      
+      alert("Sucursal Agregada con éxito!");
+  
+      // Optionally reset the form input
+      setNuevoProcedimiento({}); // Reset the input fields if needed
+  
+      // Close the modal
+      setModalShow(false);
+    } catch (error) {
+      console.error('Error al guardar la sucursal:', error);
+      alert("Error al guardar la sucursal. Inténtelo de nuevo.");
+    }
   };
+  
 
-  // Función para asignar el plan seleccionado
-  const asignarPlan = () => {
-    mascota.planAsociado = planSeleccionado; // Asignar el plan seleccionado
-    setModalPlanShow(false); // Cerrar el modal
+  const agregarVacuna = (nuevaVacuna) => {
+    // Aquí podrías agregar la lógica para guardar la nueva vacuna
+    historialVacunas.push(nuevaVacuna); // Solo para el ejemplo, modifica según tu lógica real
+    console.log('Nueva Vacuna:', nuevaVacuna);
   };
-
   return (
     <Container className="mt-4" fluid>
       <Row>
-        <Col md={4}>
+        {/* Tarjeta de la Mascota (arriba izquierda) */}
+        <Col md={6}>
           <Card>
             <Card.Img variant="top" src={mascota.fotoPerfil} alt="Foto de la mascota" />
             <Card.Body>
@@ -106,11 +125,9 @@ const PerfilMascota = () => {
               </Card.Text>
             </Card.Body>
           </Card>
-          
-          <Row>
 
-            {/* Botones debajo de la tarjeta de la mascota */}
-            {tipoUsuario === 'Administrador' && (
+          {/* Botones debajo de la tarjeta de la mascota */}
+          {tipoUsuario === 'Administrador' && (
             <div className="mt-3">
               <Button variant="primary" onClick={() => setModalShow(true)} className="me-2">
                 Agregar Consulta
@@ -118,186 +135,105 @@ const PerfilMascota = () => {
               <Button variant="success" onClick={() => setModalPlanShow(true)} className="me-2">
                 Asignar Plan
               </Button>
-            <Button variant="danger" onClick={marcarInMemoriam} className="me-2">
-              Eliminar
-            </Button>
+              <Button variant="danger" onClick={marcarInMemoriam} className="me-2">
+                Eliminar
+              </Button>
+              <Button variant="info" onClick={() => setModalVacunaShow(true)} className="me-2">
+                Agregar Vacuna
+              </Button>
             </div>
           )}
-           
-          </Row>
         </Col>
-  {/*
-        <Col md={8}>
-          <Card className="mb-4">
+
+        {/* Historial de Vacunas (arriba derecha) */}
+        <Col md={6} className="justify-content-center">
+          <Card className="mb-4 mx-auto w-75" style={{ maxWidth: '600px' }}>
             <Card.Header>Historial de Vacunas</Card.Header>
-            <ListGroup variant="flush">
-              {mascota.historialVacunas.map((vacuna, index) => (
-                <ListGroup.Item key={index}>{vacuna}</ListGroup.Item>
-              ))}
-            </ListGroup>
-  
-            
-            {mascota.vacunasPendientes.length > 0 && (
-              <Card.Footer className="text-danger">
-                <strong>Vacunas Pendientes:</strong>
-                <ul>
-                  {mascota.vacunasPendientes.map((vacuna, index) => (
-                    <li key={index}>
-                      {vacuna.nombre} - Fecha estimada: {vacuna.fecha}
-                    </li>
-                  ))}
-                </ul>
-              </Card.Footer>
-            )}
-          </Card>
-  
-          
-          <Form className="mb-3">
-            <Row>
-              <Col md={6}>
-                <Form.Group controlId="desdeFecha">
-                  <Form.Label>Desde:</Form.Label>
-                  <Form.Control
-                    type="date"
-                    value={filtroFecha.desde}
-                    onChange={(e) =>
-                      setFiltroFecha({ ...filtroFecha, desde: e.target.value })
-                    }
-                  />
-                </Form.Group>
-              </Col>
-              <Col md={6}>
-                <Form.Group controlId="hastaFecha">
-                  <Form.Label>Hasta:</Form.Label>
-                  <Form.Control
-                    type="date"
-                    value={filtroFecha.hasta}
-                    onChange={(e) =>
-                      setFiltroFecha({ ...filtroFecha, hasta: e.target.value })
-                    }
-                  />
-                </Form.Group>
-              </Col>
-            </Row>
-          </Form>
-  
-       
-          <Card className="mb-4" style={{ width: '100%' }}>
-            <Card.Header>Historial de Procedimientos</Card.Header>
             <ListGroup
               variant="flush"
               style={{
-                maxHeight: '250px', // Limitar la altura
-                overflowY: 'auto',  // Habilitar scroll
+                maxHeight: '250px',
+                overflowY: 'auto',
               }}
             >
-              {filtrarProcedimientos().map((proc, index) => (
+              {historialVacunas.map((vacuna, index) => (
                 <ListGroup.Item key={index}>
-                  <strong>Fecha:</strong> {proc.fecha} <br />
-                  <strong>Procedimiento:</strong> {proc.procedimiento} <br />
-                  <strong>Visto por:</strong> {proc.vistoPor} <br />
-                  <strong>Tratamiento:</strong> {proc.tratamiento} <br />
-                  {proc.dosificacion && (
-                    <span style={{ color: 'orange' }}>
-                      <strong>Dosificación:</strong> {proc.dosificacion}
-                    </span>
-                  )}
+                  <Row className="align-items-center">
+                    <Col md={9}>
+                      <strong>{vacuna}</strong>
+                    </Col>
+                    <Col md={3} className="text-end">
+                      <Button variant="danger" onClick={() => console.log("Eliminar")}>
+                        Eliminar
+                      </Button>
+                    </Col>
+                  </Row>
                 </ListGroup.Item>
               ))}
             </ListGroup>
           </Card>
-  */}
-          <Col>
-          <Modal show={modalShow} onHide={() => setModalShow(false)}>
-            <Modal.Header closeButton>
-              <Modal.Title>Agregar Procedimiento</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <Form onSubmit={agregarProcedimiento}>
-                <Form.Group controlId="fecha">
-                  <Form.Label>Fecha</Form.Label>
-                  <Form.Control
-                    type="date"
-                    value={nuevoProcedimiento.fecha}
-                    onChange={(e) => setNuevoProcedimiento({ ...nuevoProcedimiento, fecha: e.target.value })}
-                    required
-                  />
-                </Form.Group>
-                <Form.Group controlId="procedimiento">
-                  <Form.Label>Procedimiento</Form.Label>
-                  <Form.Control
-                    type="text"
-                    value={nuevoProcedimiento.procedimiento}
-                    onChange={(e) => setNuevoProcedimiento({ ...nuevoProcedimiento, procedimiento: e.target.value })}
-                    required
-                  />
-                </Form.Group>
-                <Form.Group controlId="vistoPor">
-                  <Form.Label>Visto por</Form.Label>
-                  <Form.Control
-                    type="text"
-                    value={nuevoProcedimiento.vistoPor}
-                    onChange={(e) => setNuevoProcedimiento({ ...nuevoProcedimiento, vistoPor: e.target.value })}
-                    required
-                  />
-                </Form.Group>
-                <Form.Group controlId="tratamiento">
-                  <Form.Label>Tratamiento</Form.Label>
-                  <Form.Control
-                    type="text"
-                    value={nuevoProcedimiento.tratamiento}
-                    onChange={(e) => setNuevoProcedimiento({ ...nuevoProcedimiento, tratamiento: e.target.value })}
-                    required
-                  />
-                </Form.Group>
-                <Form.Group controlId="dosificacion">
-                  <Form.Label>Dosificación (opcional)</Form.Label>
-                  <Form.Control
-                    type="text"
-                    value={nuevoProcedimiento.dosificacion}
-                    onChange={(e) => setNuevoProcedimiento({ ...nuevoProcedimiento, dosificacion: e.target.value })}
-                  />
-                </Form.Group>
-                <Button variant="primary" type="submit">
-                  Agregar
-                </Button>
-              </Form>
-            </Modal.Body>
-          </Modal>
-  
-         
-          <Modal show={modalPlanShow} onHide={() => setModalPlanShow(false)}>
-            <Modal.Header closeButton>
-              <Modal.Title>Seleccionar Plan</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <Form>
-                <Form.Group>
-                  <Form.Label>Selecciona un plan:</Form.Label>
-                  <Form.Control
-                    as="select"
-                    value={planSeleccionado}
-                    onChange={(e) => setPlanSeleccionado(e.target.value)}
-                  >
-                    <option value="">Seleccionar...</option>
-                    <option value="Plan Básico">Plan Básico</option>
-                    <option value="Plan Avanzado">Plan Avanzado</option>
-                    <option value="Plan Premium">Plan Premium</option>
-                    <option value="Plan Madurando">Plan Madurando</option>
-                  </Form.Control>
-                </Form.Group>
-                <Button variant="success" onClick={asignarPlan}>
-                  Asignar Plan
-                </Button>
-              </Form>
-            </Modal.Body>
-          </Modal>
         </Col>
       </Row>
+
+      <Row>
+        <Col md={12} className="justify-content-center">
+          <Card className="mb-4 mx-auto w-75" style={{ maxWidth: '600px' }}>
+            <Card.Header>Historial de Procedimientos</Card.Header>
+            <ListGroup
+              variant="flush"
+              style={{
+                maxHeight: '250px',
+                overflowY: 'auto',
+              }}
+            >
+              {fichasVeterinarias.map((ficha, index) => (
+                <ListGroup.Item key={index}>
+                  <Row className="align-items-center">
+                    <Col md={9}>
+                      <strong>Fecha:</strong> {new Date(ficha.fecha).toLocaleDateString()} <br />
+                      <strong>Motivo:</strong> {ficha.motivo} <br />
+                      <strong>Visto por:</strong> {ficha.vistoPor} <br />
+                      <strong>Tratamiento:</strong> {ficha.tratamiento} <br />
+                      {ficha.estaEliminada && (
+                        <span style={{ color: 'red' }}>
+                          <strong>Estado:</strong> Eliminado
+                        </span>
+                      )}
+                    </Col>
+                    <Col md={3} className="text-center">
+                      <Button variant="danger" onClick={() => console.log("Eliminar")}>
+                        Eliminar
+                      </Button>
+                    </Col>
+                  </Row>
+                </ListGroup.Item>
+              ))}
+            </ListGroup>
+          </Card>
+        </Col>
+      </Row>
+
+      {/* Modales */}
+      <ModalConsulta
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+        nuevoProcedimiento={nuevoProcedimiento}
+        setNuevoProcedimiento={setNuevoProcedimiento}
+        agregarProcedimiento={agregarProcedimiento}
+      />
+      <ModalVacunaRegistro
+        show={modalVacunaShow}
+        onHide={() => setModalVacunaShow(false)}
+        agregarVacuna={agregarVacuna}
+      />
+      <ModalPlanAsignacion
+        show={modalPlanShow}
+        onHide={() => setModalPlanShow(false)}
+        planes={planesDisponibles}
+        asignarPlan={asignarPlan}
+      />
     </Container>
   );
-  
-  
 };
 
 export default PerfilMascota;

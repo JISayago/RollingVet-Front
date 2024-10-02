@@ -1,31 +1,77 @@
-import { useState } from 'react';
-import { Container, Table, Button, Form, Modal } from 'react-bootstrap';
+// GestionServicios.js
+import { useEffect, useState } from 'react';
+import { Container, Table, Button } from 'react-bootstrap';
+import ModalServicioRegistro from '../components/ModalServicioRegistro'; // Asegúrate de la ruta correcta
+import clienteAxios from '../helpers/axios.config';
+import { configHeaders } from '../helpers/extra.config';
 
 const GestionServicios = () => {
-  const [services, setServices] = useState([
-    { id: 1, name: 'Consulta General', description: 'Revisión médica general.' },
-    { id: 2, name: 'Vacunación', description: 'Aplicación de vacunas.' },
-  ]);
+  const [servicios, setServicios] = useState([]);
+ 
   const [showModal, setShowModal] = useState(false);
-  const [currentService, setCurrentService] = useState({ id: null, name: '', description: '' });
+  const [nuevoServicio, setNuevoServicio] = useState({ _id: null, nombre: '', descripcion: '' });
 
-  const handleShowModal = (service = { id: null, name: '', description: '' }) => {
-    setCurrentService(service);
+
+  const cargarServicios = async() => {
+    const serviciosBD = await clienteAxios.get('/servicios');
+    setServicios(serviciosBD.data);
+  }
+
+  const handleShowModal = (service = { _id: null, nombre: '', descripcion: '' }) => {
+    setNuevoServicio(service);
     setShowModal(true);
   };
 
-  const handleSaveService = () => {
-    if (currentService.id) {
-      setServices(services.map(service => service.id === currentService.id ? currentService : service));
-    } else {
-      setServices([...services, { ...currentService, id: services.length + 1 }]);
+  const handleGuardarServicio = async () => {
+    try {
+      if (nuevoServicio._id) {
+        // Edición de servicio existente
+        const result = await clienteAxios.put(
+          `/servicios/${nuevoServicio._id}`, // Asegúrate de que esta URL sea la correcta para tu API
+          nuevoServicio,
+          configHeaders // Asegúrate de que esto esté definido
+        );
+        setServicios(servicios.map(s => s._id === nuevoServicio._id ? result.data : s));
+        alert("Servicio Editado con éxito!");
+      } else {
+        // Creación de nuevo servicio
+        const result = await clienteAxios.post(
+          '/servicios',
+          nuevoServicio,
+          configHeaders // Asegúrate de que esto esté definido
+        );
+        setServicios([...servicios, result.data]);
+        alert("Servicio Agregado con éxito!");
+      }
+      
+      setShowModal(false);
+    } catch (error) {
+      console.error('Error al guardar el servicio:', error);
+      alert("Error al guardar el servicio. Inténtelo de nuevo.");
     }
-    setShowModal(false);
+  };
+  
+
+  const handleEliminarServicio = async (id) => {
+    if (confirm("Está por eliminar definitivamente un Servicio. ¿Está seguro?")) {
+      try {
+        await clienteAxios.delete(
+          `/servicios/${id}`,
+          configHeaders);
+      
+        setServicios(servicios.filter(s => s._id !== id));
+
+        alert("Servicio eliminado con éxito!");
+      } catch (error) {
+        console.error('Error al eliminar el Servicio:', error);
+        alert("Error al eliminar el Servicio. Inténtelo de nuevo.");
+      }
+    }
   };
 
-  const handleDeleteService = (id) => {
-    setServices(services.filter(service => service.id !== id));
-  };
+  useEffect(() => { 
+   cargarServicios()
+  },[servicios])
 
   return (
     <Container>
@@ -40,13 +86,13 @@ const GestionServicios = () => {
           </tr>
         </thead>
         <tbody>
-          {services.map((service) => (
-            <tr key={service.id}>
-              <td>{service.name}</td>
-              <td>{service.description}</td>
+          {servicios.map((s) => (
+            <tr key={s._id}>
+              <td>{s.nombre}</td>
+              <td>{s.descripcion}</td>
               <td>
-                <Button variant="warning" onClick={() => handleShowModal(service)}>Editar</Button>{' '}
-                <Button variant="danger" onClick={() => handleDeleteService(service.id)}>Eliminar</Button>
+                <Button variant="warning" onClick={() => handleShowModal(s)}>Editar</Button>{' '}
+                <Button variant="danger" onClick={() => handleEliminarServicio(s._id)}>Eliminar</Button>
               </td>
             </tr>
           ))}
@@ -54,36 +100,13 @@ const GestionServicios = () => {
       </Table>
 
       {/* Modal para agregar/editar servicios */}
-      <Modal show={showModal} onHide={() => setShowModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>{currentService.id ? 'Editar Servicio' : 'Agregar Servicio'}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group controlId="serviceName">
-              <Form.Label>Nombre del Servicio</Form.Label>
-              <Form.Control
-                type="text"
-                value={currentService.name}
-                onChange={(e) => setCurrentService({ ...currentService, name: e.target.value })}
-              />
-            </Form.Group>
-            <Form.Group controlId="serviceDescription" className="mt-3">
-              <Form.Label>Descripción</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={3}
-                value={currentService.description}
-                onChange={(e) => setCurrentService({ ...currentService, description: e.target.value })}
-              />
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowModal(false)}>Cancelar</Button>
-          <Button variant="primary" onClick={handleSaveService}>Guardar</Button>
-        </Modal.Footer>
-      </Modal>
+      <ModalServicioRegistro 
+        show={showModal} 
+        onHide={() => setShowModal(false)} 
+        nuevoServicio={nuevoServicio} 
+        setNuevoServicio={setNuevoServicio} 
+        handleGuardarServicio={handleGuardarServicio} 
+      />
     </Container>
   );
 };
