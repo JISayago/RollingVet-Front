@@ -1,53 +1,46 @@
 // TurnosComponent.js
-
-import React, { useState } from 'react';
+import  { useState, useEffect } from 'react';
 import { Button, Card, Container, Form, Row, Col } from 'react-bootstrap';
-
-// Datos de ejemplo actualizados
-const turnos = [
-  { id: 1, fecha: '2024-09-18', hora: '19:00', tipo: 'Cirugía', profesional: 'Dr. Juan Pérez', especialidad: 'General', reservado: false, sucursal: 'Sucursal A'},
-  { id: 2, fecha: '2024-09-23', hora: '09:00', tipo: 'Consulta veterinaria', profesional: 'Dr. Juan Pérez', especialidad: 'General', reservado: true, sucursal: 'Sucursal B'},
-  { id: 3, fecha: '2024-09-23', hora: '14:00', tipo: 'Cirugía', profesional: 'Dr. Ana Gómez', especialidad: 'General', reservado: false, sucursal: 'Sucursal A'},
-  { id: 4, fecha: '2024-09-24', hora: '09:00', tipo: 'Cirugía', profesional: 'Dr. Luis Fernández', especialidad: 'Cirugía', reservado: false, sucursal: 'Sucursal C'},
-  { id: 5, fecha: '2024-09-24', hora: '14:00', tipo: 'Peluquería canina', profesional: 'Dr. Marta Ruiz', especialidad: 'Peluquería', reservado: true, sucursal: 'Sucursal B'},
-  // Agrega más turnos aquí
-];
-
-const tiposDeTurno = [
-  'Consulta veterinaria',
-  'Cirugía',
-  'Visita veterinaria',
-  'Peluquería canina'
-];
-
-const sucursales = [
-  'Sucursal A',
-  'Sucursal B',
-  'Sucursal C'
-];
+import clienteAxios from '../helpers/axios.config';
 
 const Turnos = () => {
+  const [turnos, setTurnos] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(getCurrentDate());
+
   // Obtener la fecha actual en formato YYYY-MM-DD
-  const getCurrentDate = () => {
+  function getCurrentDate() {
     const today = new Date();
     const year = today.getFullYear();
     const month = (today.getMonth() + 1).toString().padStart(2, '0');
     const day = today.getDate().toString().padStart(2, '0');
     return `${year}-${month}-${day}`;
-  };
+  }
 
-  // Inicializar el estado con la fecha actual
-  const [selectedDate, setSelectedDate] = useState(getCurrentDate());
-  const [selectedTipo, setSelectedTipo] = useState('');
-  const [selectedSucursal, setSelectedSucursal] = useState('');
+  const cargarrTurnosBD = async () => {
+    try {
+      const response = await clienteAxios.get(`/turnos/${selectedDate}`);
+      console.log("dentro de try response",response)
+      setTurnos(response.data);
+    } catch (error) {
+      console.error('Error al cargar los turnos:', error);
+    }
+  }
+  // Cargar los turnos desde la base de datos
+  useEffect(() => {
+    cargarrTurnosBD()
+  }, [selectedDate]);
+  const convertAFormatoFecha = (dia) => {
+    let diaConvertido = new Date(dia); 
+    
+    let d = diaConvertido.getUTCDate(); 
+    let m = diaConvertido.getUTCMonth() + 1; 
+    let a = diaConvertido.getUTCFullYear(); 
+    
+    let formattedDate = `${d.toString().padStart(2, '0')}/${m.toString().padStart(2, '0')}/${a}`;
+    return formattedDate; 
+    
+  }
 
-  // Filtra los turnos según la fecha, tipo y sucursal seleccionados
-  const filteredTurnos = turnos.filter(turno => 
-    (selectedDate ? turno.fecha === selectedDate : true) &&
-    (selectedTipo ? turno.tipo === selectedTipo : true) &&
-    (selectedSucursal ? turno.sucursal === selectedSucursal : true) &&
-    !turno.reservado // Mostrar solo turnos no reservados
-  );
 
   return (
     <Container>
@@ -64,50 +57,20 @@ const Turnos = () => {
             />
           </Form.Group>
         </Col>
-        <Col md={4}>
-          <Form.Group controlId="formTipo">
-            <Form.Label>Selecciona tipo de turno</Form.Label>
-            <Form.Control 
-              as="select"
-              value={selectedTipo}
-              onChange={(e) => setSelectedTipo(e.target.value)}
-            >
-              <option value="">Todos</option>
-              {tiposDeTurno.map((tipo, index) => (
-                <option key={index} value={tipo}>{tipo}</option>
-              ))}
-            </Form.Control>
-          </Form.Group>
-        </Col>
-        <Col md={4}>
-          <Form.Group controlId="formSucursal">
-            <Form.Label>Selecciona sucursal</Form.Label>
-            <Form.Control 
-              as="select"
-              value={selectedSucursal}
-              onChange={(e) => setSelectedSucursal(e.target.value)}
-            >
-              <option value="">Todas</option>
-              {sucursales.map((sucursal, index) => (
-                <option key={index} value={sucursal}>{sucursal}</option>
-              ))}
-            </Form.Control>
-          </Form.Group>
-        </Col>
-      </Row>
+         </Row>
 
       <Row>
-        {filteredTurnos.map(turno => (
-          <Col md={4} key={turno.id} className="mb-3">
+        {turnos.map(turno => (
+          <Col md={4} key={turno._id} className="mb-3">
             <Card>
               <Card.Body>
-                <Card.Title>{turno.tipo}</Card.Title>
+                <Card.Title>{turno.motivo}</Card.Title>
                 <Card.Text>
-                  <strong>Fecha:</strong> {turno.fecha} <br />
+                  <strong>Fecha:</strong> {convertAFormatoFecha(turno.dia)} <br />
                   <strong>Hora:</strong> {turno.hora} <br />
-                  <strong>Profesional:</strong> {turno.profesional} <br />
-                  <strong>Especialidad:</strong> {turno.especialidad} <br />
-                  <strong>Sucursal:</strong> {turno.sucursal}
+                  <strong>Profesional:</strong> {turno.responsable} <br />
+                  <strong>Motivo:</strong> {turno.motivo}
+                  <strong>Reservado:</strong> {turno.reservado ? "Reservado":"Disponible"} <br />
                 </Card.Text>
                 <Button variant="primary" disabled={turno.reservado}>Agendar Turno</Button>
               </Card.Body>

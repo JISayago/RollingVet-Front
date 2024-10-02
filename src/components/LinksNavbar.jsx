@@ -18,7 +18,6 @@ function LinksNavbar({ usuarioLogeado }) {
                     <Link className="link" to="/">Inicio</Link>
                     <Link className="link" to="/servicios">Servicios</Link>
                     <Link className="link" to="/perfil_usuario">Mi Perfil</Link>
-                    <Link className="link" to="/productos">Productos</Link>
                     <Link className="link" to="/contacto">Contacto</Link>
                 </>
             )}

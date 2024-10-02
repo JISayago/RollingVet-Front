@@ -41,19 +41,24 @@ const PerfilMascota = () => {
     setModalPlanShow(false); // Cerrar el modal
   };
 
-  function calcularEdad(fechaNacimiento) {
-    const hoy = new Date();
-    const nacimiento = new Date(fechaNacimiento);
-  
-    let edad = hoy.getFullYear() - nacimiento.getFullYear();
-    const mes = hoy.getMonth() - nacimiento.getMonth();
-  
-    if (mes < 0 || (mes === 0 && hoy.getDate() < nacimiento.getDate())) {
+  const calcularEdad = (fechaNacimiento) => {
+    const fechaNac = new Date(fechaNacimiento);
+    const fechaActual = new Date();
+    let edad = fechaActual.getFullYear() - fechaNac.getFullYear();
+    const mesActual = fechaActual.getMonth();
+    const mesNacimiento = fechaNac.getMonth();
+
+    if (mesActual < mesNacimiento || (mesActual === mesNacimiento && fechaActual.getDate() < fechaNac.getDate())) {
       edad--;
     }
-  
-    return edad;
-  }
+
+    let meses = mesActual - mesNacimiento;
+    if (meses < 0) {
+      meses += 12;
+    }
+
+    return `${edad} años y ${meses} meses`;
+  };
 
   // Función para marcar a la mascota en "In Memoriam"
   const marcarInMemoriam = () => {
@@ -72,7 +77,7 @@ const PerfilMascota = () => {
       setTipoUsuario(JSON.parse(sessionStorage.getItem('rol')));
     }
     cargarMascota();
-  }, [fichasVeterinarias]);
+  }, [modalShow]);
 
 
   const agregarProcedimiento = async (e) => {
@@ -117,7 +122,7 @@ const PerfilMascota = () => {
               <Card.Title>{mascota.nombre}</Card.Title>
               <Card.Text>
                 <strong>Dueño:</strong> {mascota.duenioNombre} <br />
-                <strong>Edad:</strong> {`${calcularEdad(mascota.fechaNacimiento)} años.`} <br />
+                <strong>Edad:</strong> {`${calcularEdad(mascota.fechaNacimiento)}`} <br />
                 <strong>Tipo:</strong> {mascota.tipoDeMascota} <br />
                 <strong>Raza:</strong> {mascota.raza} <br />
                 <strong>Castrado:</strong> {mascota.castrado ? 'Sí' : 'No'} <br />

@@ -1,8 +1,7 @@
-import {BrowserRouter,Routes,Route } from 'react-router-dom'
+import {Routes,Route } from 'react-router-dom'
 import Inicio from './pages/Inicio';
 import PerfilUsuario from './pages/PerfilUsuario';
 import Contacto from './pages/Contacto';
-import ListadoProductos from './pages/ListadoProductos';
 import Turnos from './pages/Turnos';
 import PlanesDeSuscripcion from './pages/PlanesMascotas';
 import PerfilMascota from './pages/PerfilMascota';
@@ -19,7 +18,6 @@ function App() {
         <Route path='/perfil_usuario' element={<PerfilUsuario/> } />
         <Route path='/perfil_mascota/:id' element={<PerfilMascota/> } />
         <Route path='/contacto' element={<Contacto/> } />
-        <Route path='/productos' element={<ListadoProductos/> } />
         <Route path='/servicios' element={<ServiciosTurnos/> } />
         <Route path='/turnos' element={<Turnos/> } />
         <Route path='/planes' element={<PlanesDeSuscripcion/> } />
