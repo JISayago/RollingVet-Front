@@ -20,9 +20,9 @@ function App() {
         <Route path='/perfil_mascota/:id' element={<PerfilMascota/> } />
         <Route path='/contacto' element={<Contacto/> } />
         <Route path='/servicios' element={<ServiciosTurnos/> } />
-        <Route path='/turnos' element={<Turnos/> } />
         <Route path='/planes' element={<PlanesDeSuscripcion/> } />
         <Route path='/nuestros_especialistas' element={<Especialistas />} />
+        <Route path='/turnos' element={<Turnos />} />
         
         <Route path='/administracion' element={<ValidacionUsuario rolRuta={"Administrador"}><AdministracionPanel /></ValidacionUsuario>} />
       </Routes>

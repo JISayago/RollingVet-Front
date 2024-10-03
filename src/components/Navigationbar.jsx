@@ -73,6 +73,9 @@ function Navigationbar() {
                                 {usuarioLogeado.logeado && (
                                     <LinksNavbar usuarioLogeado={usuarioLogeado} />
                                 )}
+                                {!usuarioLogeado.logeado && (
+                                    <LinksNavbar usuarioLogeado={usuarioLogeado} />
+                                )}
                             </Nav>
                             <Nav className="ml-auto">
                                 {!usuarioLogeado.logeado ? (

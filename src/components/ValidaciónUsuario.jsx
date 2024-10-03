@@ -6,11 +6,12 @@ const ValidacionUsuario = ({ children, rolRuta }) => {
   const rolUsuario = JSON.parse(sessionStorage.getItem("rol")) || "";
 
   if (!token) {
+    alert("Para ingresar a este servicio, por favor ingresa con tu cuenta.")
     setTimeout(() => {
       navigate("/");
     }, 500);
     }
-    if (rolRuta === rolUsuario) {
+    if (rolRuta === rolUsuario || rolRuta === "Logeado") {
         return children
     } else {
         alert("No posee las credenciales suficientes!")

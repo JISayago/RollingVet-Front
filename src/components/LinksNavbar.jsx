@@ -13,12 +13,14 @@ function LinksNavbar({ usuarioLogeado }) {
 
     return (
         <Nav className="me-auto">
-            {user.logeado && user.rol === 'Cliente' && (
-                <>
                     <Link className="link" to="/">Inicio</Link>
                     <Link className="link" to="/servicios">Servicios</Link>
-                    <Link className="link" to="/perfil_usuario">Mi Perfil</Link>
                     <Link className="link" to="/contacto">Contacto</Link>
+                    <Link className="link" to="/turnos">Turnos</Link>
+                    <Link className="link" to="/sobre_nosotros">Sobre Nosotros</Link>
+            {user.logeado && user.rol === 'Cliente' && (
+                <>
+                    <Link className="link" to="/perfil_usuario">Mi Perfil</Link>
                 </>
             )}
             {user.logeado && user.rol === 'Administrador' && (
