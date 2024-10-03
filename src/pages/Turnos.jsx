@@ -89,6 +89,7 @@ const Turnos = () => {
       </Row>
 
       <Row>
+        {!turnos.length  && <h3>No tenemos turnos disponibles para este día!</h3>}
         {turnos.map(turno => (
           <CardTurno key={turno._id} turno={turno} handleReserva={handleReserva} />
         ))}

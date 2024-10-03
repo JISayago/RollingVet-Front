@@ -107,6 +107,7 @@ const PerfilMascota = () => {
           configHeaders);
   
         alert("Imagen actualizada con éxito!");
+        cargarMascota();
       } catch (error) {
         alert("Error al actualizar la imagen. Inténtelo de nuevo.");
       }

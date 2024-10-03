@@ -69,10 +69,10 @@ const PerfilUsuario = () => {
             alt="Profile"
             style={{ width: '100px', height: '100px', borderRadius: '50%' }}
           />
-          <h2 className="mt-3 text-center" style={{ color: 'black', fontSize: '1.5rem' }}>
+          <h2 className="mt-3 text-center" style={{ color: 'white', fontSize: '1.5rem' }}>
             {usuario.nombre}
           </h2>
-          <p className="mt-2 text-center" style={{ color: 'black' }}>
+          <p className="mt-2 text-center" style={{ color: '#f45e00' }}>
             Mascotas: {usuario.mascotas && usuario.mascotas.length ? usuario.mascotas.length : 0}
           </p>
           <Button variant="success" onClick={handleShow} className="mt-3">
@@ -85,6 +85,7 @@ const PerfilUsuario = () => {
         <Col xs={12} md={10} className="d-flex flex-column order-2 order-md-2">
           <Row className="flex-grow-1 overflow-auto mb-3" style={{ padding: '1rem' }}>
             <h3>Mascotas registradas</h3>
+              { !mascotas.length  && <h6 style={{color:'grey'}}>No tienes ninguna mascota asignada!</h6>}
             <Container fluid className="d-flex" style={{ overflowY: 'auto' }}>
               {mascotas.map((mascota) => (
                 <CardMascotaPerfilUsuario key={mascota.mascotaId} mascota={mascota} />
@@ -94,6 +95,7 @@ const PerfilUsuario = () => {
 
           <Row className="flex-grow-1" style={{ padding: '1rem' }}>
             <h3>Últimas asistencias</h3>
+            { !fichas.length  && <h6 style={{color:'grey'}}>No tienes ninguna visita registrada!</h6>}
             <Col xs={12} style={{ maxHeight: '400px', overflowY: 'auto' }}>
               {fichas.map((ficha) => (
                 <ConsultaMascotaPerfilUsuario key={ficha._id} ficha={ficha} />
