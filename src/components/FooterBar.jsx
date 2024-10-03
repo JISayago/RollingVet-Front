@@ -15,7 +15,7 @@ function FooterBar() {
           <Col lg={4} md={12} className="d-flex flex-column align-items-center">
             <h6 className="mb-2">Contacto</h6>
             <p className="mb-1">Teléfono: +54 11 1234-5678</p>
-            <p className="mb-1">Email: contacto@empresa.com</p>
+            <p className="mb-1">Email: rollingvet@gmail.com</p>
             <div className="d-flex mt-4">
               <Button as="a" href="/error" variant="link" className="text-white me-3 link">
                 <FaFacebook size={20} />

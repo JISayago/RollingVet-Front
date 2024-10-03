@@ -49,7 +49,7 @@ function Navigationbar() {
                         <label className="m-0">Atendemos emergencias 24 hs</label>
                     </Col>
                     <Col xs={12} md={3}>
-                        <label className="m-0">Contacto: ejemplo@correo.com</label>
+                        <label className="m-0">Contacto: rollingvet@gmail.com</label>
                     </Col>
                     <Col xs={12} md={3}>
                         <label className="m-0">Número de contacto: (123) 456-7890</label>
