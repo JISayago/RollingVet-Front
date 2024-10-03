@@ -5,6 +5,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import clienteAxios from '../helpers/axios.config';
+import "../css/contacto_sucursales.css";
 
 // Array de servicios basado en el NavDropdown
 
@@ -32,7 +33,7 @@ const ServiciosCards = () => {
               <Card.Body className="d-flex flex-column justify-content-center align-items-center">
                 <Card.Title>{servicio.nombre}</Card.Title>
                 <Card.Text>{servicio.descripcion}</Card.Text>
-                <Button variant="primary">Sacar turno</Button>
+                <Button variant="primary" className='contacto-form-boton'>Sacar turno</Button>
               </Card.Body>
             </Card>
           </Col>

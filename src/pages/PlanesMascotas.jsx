@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
-import { Container, Row, Col, Card, Button, Form } from 'react-bootstrap';
+import { useState } from 'react';
+import { Container, Row, Col, Form, Button, Card } from 'react-bootstrap';
 import clienteAxios from '../helpers/axios.config';
 import { configHeaders } from '../helpers/extra.config';
+import "../css/contacto_sucursales.css";
+import "../css/inicio.css";
 
 const PlanesDeSuscripcion = () => {
   const [formData, setFormData] = useState({
@@ -49,8 +51,7 @@ const PlanesDeSuscripcion = () => {
     }));
   };
 
-
-  const envioMail = async() => {
+  const envioMail = async () => {
     const { nombre, email, numero, mensaje, plan } = formData;
 
     if (!nombre || !email || !numero || !mensaje || !plan) {
@@ -77,25 +78,25 @@ const PlanesDeSuscripcion = () => {
       console.error('Error al enviar el formulario:', error);
       alert('Hubo un error al enviar el formulario. Por favor, inténtalo nuevamente.');
     }
-  }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    envioMail()
-    
+    envioMail();
   };
 
   return (
     <Container>
-      <h2>Planes de Suscripción para Mascotas</h2>
+      <h2 className='text-center' style={{ padding: '10px' }}>Planes de Suscripción para Mascotas</h2>
       <Row className="mb-4">
         {planes.map((plan) => (
-          <Col md={4} key={plan.id} className="mb-3">
-            <Card>
-              <Card.Body>
-                <Card.Title>{plan.nombre}</Card.Title>
-                <Card.Subtitle className="mb-2 text-muted">Edad: {plan.edad}</Card.Subtitle>
-                <Card.Text>{plan.descripcion}</Card.Text>
-                <Button variant="primary" onClick={() => handlePlanSelect(plan.id)}>
+          <Col md={4} key={plan.id} className="mb-3 d-flex align-items-stretch">
+            <Card className="w-100">
+              <Card.Body className="d-flex flex-column justify-content-center align-items-center">
+                <Card.Title className="text-center">{plan.nombre}</Card.Title>
+                <Card.Subtitle className="mb-2 text-muted text-center">Edad: {plan.edad}</Card.Subtitle>
+                <Card.Text className="text-center">{plan.descripcion}</Card.Text>
+                <Button variant="primary" className='contacto-form-boton' onClick={() => handlePlanSelect(plan.id)}>
                   Más Información
                 </Button>
               </Card.Body>
@@ -105,8 +106,8 @@ const PlanesDeSuscripcion = () => {
       </Row>
 
       {formData.plan && (
-        <Container className="mt-4">
-          <h3>Contacto para {formData.plan}</h3>
+        <Container className="mt-4 contacto-form mb-5">
+          <h3 className="text-center">Contacto para {formData.plan}</h3>
           <Form onSubmit={handleSubmit}>
             <Form.Group controlId="formName">
               <Form.Label>Nombre</Form.Label>
@@ -153,9 +154,11 @@ const PlanesDeSuscripcion = () => {
                 required
               />
             </Form.Group>
-            <Button variant="primary" type="submit">
-              Enviar
-            </Button>
+            <div className="text-center">
+              <Button variant="primary" className='contacto-form-boton' style={{marginTop:'20px'} }type="submit">
+                Enviar
+              </Button>
+            </div>
           </Form>
         </Container>
       )}
