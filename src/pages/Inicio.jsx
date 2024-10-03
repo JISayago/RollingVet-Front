@@ -1,6 +1,7 @@
 import { Card, Col, Container, Row } from "react-bootstrap";
 import BotonesGrupo from "../components/BotonesGrupo";
 import '../css/inicio.css'
+import CardPresentacionInicio from "../components/CardPresentacionInicio";
 
 function Inicio() {
   const cardData = [
@@ -42,20 +43,7 @@ function Inicio() {
       <Container className="py-5">
         <Row>
           {cardData.map((card, index) => (
-            <Col key={index} sm={12} md={6} lg={4} className="mb-4">
-              <Card className="h-100">
-                <Card.Img
-                  variant="top"
-                  src={card.logo}
-                  alt={`Logo ${index + 1}`}
-                  style={{ width: '100px', height: '100px', objectFit: 'contain', margin: '0 auto', padding: '20px' }}
-                />
-                <Card.Body>
-                  <Card.Title className="text-center">{card.title}</Card.Title>
-                  <Card.Text className="p-4">{card.description}</Card.Text>
-                </Card.Body>
-              </Card>
-            </Col>
+            <CardPresentacionInicio key={index} card={card} index={index} />
           ))}
         </Row>
       </Container>

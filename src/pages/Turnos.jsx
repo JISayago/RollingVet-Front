@@ -1,11 +1,14 @@
 import  { useState, useEffect } from 'react';
-import { Button, Card, Container, Form, Row, Col } from 'react-bootstrap';
+import { Container, Form, Row, Col } from 'react-bootstrap';
 import clienteAxios from '../helpers/axios.config';
+import CardTurno from '../components/CardTurno';
+import { useNavigate } from "react-router-dom";
 
 const Turnos = () => {
   const [turnos, setTurnos] = useState([]);
   const [selectedDate, setSelectedDate] = useState(getCurrentDate());
-  const [seReserva,setSeReserva] = useState(false)
+  const [seReserva, setSeReserva] = useState(false)
+  const navigate = useNavigate();
 
   function getCurrentDate() {
     const today = new Date();
@@ -27,38 +30,35 @@ const Turnos = () => {
   useEffect(() => {
     cargarrTurnosBD()
     setSeReserva(false)
-  }, [selectedDate,seReserva]);
-  const convertAFormatoFecha = (dia) => {
-    let diaConvertido = new Date(dia); 
-    
-    let d = diaConvertido.getUTCDate(); 
-    let m = diaConvertido.getUTCMonth() + 1; 
-    let a = diaConvertido.getUTCFullYear(); 
-    
-    let formattedDate = `${d.toString().padStart(2, '0')}/${m.toString().padStart(2, '0')}/${a}`;
-    return formattedDate; 
-    
-  }
+  }, [selectedDate, seReserva]);
+
   const handleReserva = (e, idTurno) => {
     e.preventDefault();
-   reservar(idTurno)
+    reservar(idTurno)
   }
   const reservar = async (idTurno) => {
     try {
       const tok = JSON.parse(sessionStorage.getItem("token"));
-      const result = await clienteAxios.post(
-        `/turnos/reserva/${idTurno}`,
-        {},
-        {headers: {
-            "Content-Type": "application/json",
-            "auth": tok
-          }}
-      );
-      if (result && result.status === 200) {
-        alert("Turno reservado con éxito.");
-        setSeReserva(true)
+      if (tok) {
+        const result = await clienteAxios.post(
+          `/turnos/reserva/${idTurno}`,
+          {},
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "auth": tok
+            }
+          }
+        );
+        if (result && result.status === 200) {
+          alert("Turno reservado con éxito.");
+          setSeReserva(true)
+        } else {
+          alert("Error inesperado al intentar registrar.");
+        }
       } else {
-        alert("Error inesperado al intentar registrar.");
+        alert("Por favor ingresa al sistema si quieres reservar un turno.");
+        navigate('/')
       }
     } catch (error) {
       if (error.response) {
@@ -79,36 +79,21 @@ const Turnos = () => {
         <Col md={4}>
           <Form.Group controlId="formDate">
             <Form.Label>Selecciona una fecha</Form.Label>
-            <Form.Control 
-              type="date" 
+            <Form.Control
+              type="date"
               value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)} 
+              onChange={(e) => setSelectedDate(e.target.value)}
             />
           </Form.Group>
         </Col>
-         </Row>
+      </Row>
 
       <Row>
         {turnos.map(turno => (
-          <Col md={4} key={turno._id} className="mb-3">
-            <Card>
-              <Card.Body >
-                <Card.Title>{turno.motivo}</Card.Title>
-                <Card.Text>
-                  <strong>Fecha:</strong> {convertAFormatoFecha(turno.dia)} <br />
-                  <strong>Hora:</strong> {turno.hora} <br />
-                  <strong>Profesional:</strong> {turno.responsable} <br />
-                  <strong>Motivo:</strong> {turno.motivo}
-                  <strong>Reservado:</strong> {turno.reservado ? "Reservado":"Disponible"} <br />
-                </Card.Text>
-                <Button onClick={(e) => handleReserva(e,turno._id)} style={{backgroundColor:'#09336b'}} disabled={turno.reservado}>{`${turno.reservado ? "Reservado":"Agendar Turno"}`}</Button>
-              </Card.Body>
-            </Card>
-          </Col>
+          <CardTurno key={turno._id} turno={turno} handleReserva={handleReserva} />
         ))}
       </Row>
     </Container>
   );
-};
-
+}
 export default Turnos;

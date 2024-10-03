@@ -3,6 +3,9 @@ import { Container, Row, Col, Button, Card } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import clienteAxios from '../helpers/axios.config';
 import ModalMascotaRegistro from '../components/ModalMascotaRegistro';
+import CardProximoTurnoPerfilUsuario from '../components/CardProximoTurnoPerfilUsuario';
+import CardMascotaPerfilUsuario from '../components/CardMascotaPerfilUsuario';
+import ConsultaMascotaPerfilUsuario from '../components/ConsultaMascotaPerfilUsuario';
 
 const PerfilUsuario = () => {
   const [showModal, setShowModal] = useState(false);
@@ -43,24 +46,6 @@ const PerfilUsuario = () => {
     }
   };
 
-  const calcularEdad = (fechaNacimiento) => {
-    const fechaNac = new Date(fechaNacimiento);
-    const fechaActual = new Date();
-    let edad = fechaActual.getFullYear() - fechaNac.getFullYear();
-    const mesActual = fechaActual.getMonth();
-    const mesNacimiento = fechaNac.getMonth();
-
-    if (mesActual < mesNacimiento || (mesActual === mesNacimiento && fechaActual.getDate() < fechaNac.getDate())) {
-      edad--;
-    }
-
-    let meses = mesActual - mesNacimiento;
-    if (meses < 0) {
-      meses += 12;
-    }
-
-    return `${edad} años y ${meses} meses`;
-  };
 
   useEffect(() => {
     cargarUsuario();
@@ -68,13 +53,7 @@ const PerfilUsuario = () => {
 
   const turnoMasProximo = turnosPendientes.length > 0 ? turnosPendientes.sort((a, b) => new Date(a.fecha) - new Date(b.fecha))[0] : null;
 
-  function getCurrentDate() {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = (today.getMonth() + 1).toString().padStart(2, '0');
-    const day = today.getDate().toString().padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  }
+ 
 
   return (
     <Container fluid style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -92,50 +71,28 @@ const PerfilUsuario = () => {
           <Button variant="success" onClick={handleShow} className="mt-3">Registrar Mascota</Button>
 
           {turnoMasProximo && (
-            <Card className="mt-3" style={{ width: '100%' }}>
-              <Card.Body>
-                <Card.Title>Próximo Turno</Card.Title>
-                <Card.Subtitle className="mb-2 text-muted">{`Día: ${getCurrentDate(turnoMasProximo.dia)}`}</Card.Subtitle>
-                <Card.Subtitle className="mb-2 text-muted">{`Hora: ${turnoMasProximo.hora}`}</Card.Subtitle>
-                <Card.Text>Motivo: {turnoMasProximo.motivo}</Card.Text>
-              </Card.Body>
-            </Card>
+            <CardProximoTurnoPerfilUsuario turnoMasProximo={turnoMasProximo} />
           )}
         </Col>
 
         <Col xs={12} md={10} className="d-flex flex-column order-2 order-md-2">
           <Row className="flex-grow-1 overflow-auto mb-3" style={{ padding: '1rem' }}>
             <h3>Mascotas registradas</h3>
-            <div className="d-flex" style={{ overflowY: 'auto' }}>
-              {mascotas.map(m => (
-                <Col key={m.mascotaId} xs={11} md={6} lg={4} className="mb-3">
-                  <Card className="h-100" style={{ maxWidth: '250px' }}>
-                    <Card.Img variant="top" src={m.imagen} style={{ height: '150px', objectFit: 'cover' }} />
-                    <Card.Body className="text-center">
-                      <Card.Title>{m.nombre}</Card.Title>
-                      <Card.Subtitle className="mb-2 text-muted">Años: {calcularEdad(m.fechaNacimiento)}</Card.Subtitle>
-                      <Card.Subtitle className="mb-2 text-muted">Raza: {m.raza}</Card.Subtitle>
-                      <Card.Subtitle className="mb-2 text-muted">Mascota: {m.tipoDeMascota}</Card.Subtitle>
-                      <Button variant="primary" href={`/perfil_mascota/${m.mascotaId}`}>Ver Perfil</Button>
-                    </Card.Body>
-                  </Card>
-                </Col>
-              ))}
-            </div>
+            <Container className="d-flex" style={{ overflowY: 'auto' }}>
+              {
+                mascotas.map(mascota => (
+                  <CardMascotaPerfilUsuario key={mascota.mascotaId} mascota={mascota} />
+                    ))
+              }
+            </Container>
           </Row>
 
           <Row className="flex-grow-1" style={{ padding: '1rem' }}>
             <h3>Últimas asistencias</h3>
             <Col xs={12} style={{ maxHeight: '400px', overflowY: 'auto' }}>
-              {fichas.map(f => (
-                <Card key={f._id} className="mb-3">
-                  <Card.Body>
-                    <Card.Title>{f.vistoPor}</Card.Title>
-                    <Card.Subtitle className="mb-2 text-muted">Fecha {f.fecha}</Card.Subtitle>
-                    <Card.Subtitle className="mb-2 text-muted">Motivo: {f.motivo}</Card.Subtitle>
-                    <Card.Subtitle className="mb-2 text-muted">Mascota: {f.mascotaNombre}</Card.Subtitle>
-                  </Card.Body>
-                </Card>
+              {fichas.map(ficha => (
+                <ConsultaMascotaPerfilUsuario key={ficha._id
+                } ficha={ficha} />
               ))}
             </Col>
           </Row>
