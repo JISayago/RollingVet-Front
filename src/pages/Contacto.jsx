@@ -86,7 +86,7 @@ const Contacto = () => {
           </Row>
         </Col>
         <Col xs={12} md={8} lg={6} className="mx-auto mb-4">
-          <div className='contacto-form'>
+          <Container className='contacto-form'>
             <h2 className="text-center">Formulario de Contacto</h2>
             <Form onSubmit={handleSubmit}>
   <Form.Group controlId="formEmail">
@@ -130,14 +130,14 @@ const Contacto = () => {
     />
   </Form.Group>
    
-  <div className="d-flex justify-content-center mt-3">
+  <Container className="d-flex justify-content-center mt-3">
     <Button type="submit" className="contacto-form-boton">
       Enviar
     </Button>
-  </div>
+  </Container>
 </Form>
 
-          </div>
+          </Container>
         </Col>
       </Row>
     </Container>
