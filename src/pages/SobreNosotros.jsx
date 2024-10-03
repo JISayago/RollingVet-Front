@@ -22,18 +22,6 @@ const SobreNosotros = () => {
             </Card.Body>
           </Card>
         </Col>
-        <Col xs={12} sm={6} md={4} className="mb-4">
-          <Card>
-            <Card.Img 
-              variant="top" 
-              src="https://res.cloudinary.com/dqhdgsolz/image/upload/v1727967656/images_l0tgep.png" 
-              style={{ height: '200px', objectFit: 'contain' }} 
-            />
-            <Card.Body className="text-center">
-              <Card.Title>Chat-GPT</Card.Title>
-            </Card.Body>
-          </Card>
-        </Col>
       </Row>
     </Container>
   );
