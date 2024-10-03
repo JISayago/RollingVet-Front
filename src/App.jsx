@@ -23,7 +23,7 @@ function App() {
         <Route path='/contacto' element={<Contacto/> } />
         <Route path='/servicios' element={<ServiciosTurnos/> } />
         <Route path='/planes' element={<PlanesDeSuscripcion/> } />
-        <Route path='/nuestros_especialistas' element={<Especialistas />} />
+      {/*<Route path='/nuestros_especialistas' element={<Especialistas />} />*/}
         <Route path='/turnos' element={<Turnos />} />
         <Route path='/sobre_nosotros' element={<SobreNosotros />} />
         

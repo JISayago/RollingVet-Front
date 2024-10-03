@@ -132,6 +132,26 @@ const PerfilMascota = () => {
   };
   return (
     <Container className="mt-4" fluid>
+
+{tipoUsuario === 'Administrador' && (
+  <Container className="m-3">
+    <div className="d-flex justify-content-center">
+      <Button variant="primary" onClick={() => setModalShow(true)} className="me-2">
+        Agregar Consulta
+      </Button>
+      <Button variant="success" onClick={() => setModalPlanShow(true)} className="me-2">
+        Asignar Plan
+      </Button>
+      <Button variant="danger" onClick={marcarInMemoriam} className="me-2">
+        Eliminar
+      </Button>
+      <Button variant="info" onClick={() => setModalVacunaShow(true)} className="me-2">
+        Agregar Vacuna
+      </Button>
+    </div>
+  </Container>
+)}
+
 <Row className="justify-content-center"> {/* Centra las columnas en la fila */}
   {/* Tarjeta de la Mascota (arriba izquierda) */}
   <Col md={6} className="d-flex justify-content-center"> {/* Centra el contenido de la columna */}
@@ -180,22 +200,7 @@ const PerfilMascota = () => {
 </Card>
 
     {/* Botones debajo de la tarjeta de la mascota */}
-    {tipoUsuario === 'Administrador' && (
-      <div className="mt-3">
-        <Button variant="primary" onClick={() => setModalShow(true)} className="me-2">
-          Agregar Consulta
-        </Button>
-        <Button variant="success" onClick={() => setModalPlanShow(true)} className="me-2">
-          Asignar Plan
-        </Button>
-        <Button variant="danger" onClick={marcarInMemoriam} className="me-2">
-          Eliminar
-        </Button>
-        <Button variant="info" onClick={() => setModalVacunaShow(true)} className="me-2">
-          Agregar Vacuna
-        </Button>
-      </div>
-    )}
+  
   </Col>
 
   {/* Historial de Vacunas (arriba derecha) */}

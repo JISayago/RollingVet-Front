@@ -6,6 +6,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import clienteAxios from '../helpers/axios.config';
 import "../css/contacto_sucursales.css";
+import { useNavigate } from 'react-router-dom';
 
 // Array de servicios basado en el NavDropdown
 
@@ -13,9 +14,13 @@ import "../css/contacto_sucursales.css";
 // Componente de Servicios
 const ServiciosCards = () => {
   const [servicios, setServicios] = useState([]);
+  const navigate = useNavigate();
   const obtenerServicios = async () => {
     const servciosBD = await clienteAxios.get('/servicios')
     setServicios(servciosBD.data);
+  }
+  const handleRedirect = () => {
+  navigate('/turnos')
   }
   useEffect(() => {
     obtenerServicios();
@@ -33,7 +38,7 @@ const ServiciosCards = () => {
               <Card.Body className="d-flex flex-column justify-content-center align-items-center">
                 <Card.Title>{servicio.nombre}</Card.Title>
                 <Card.Text>{servicio.descripcion}</Card.Text>
-                <Button variant="primary" className='contacto-form-boton'>Sacar turno</Button>
+                <Button variant="primary" className='contacto-form-boton' onClick={handleRedirect}>Sacar turno</Button>
               </Card.Body>
             </Card>
           </Col>
