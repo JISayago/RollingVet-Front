@@ -3,16 +3,18 @@ import { Container, Row, Col, Form, Button, Card } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import clienteAxios from '../helpers/axios.config';
 import "../css/contacto_sucursales.css"
+import { configHeaders } from '../helpers/extra.config';
 
 
 const Contacto = () => {
  const [sucursales,setSucursales] = useState([])
 
   const [formData, setFormData] = useState({
-    reason: '',
-    message: '',
-    branch: '',
+    email: '',
+    asunto: '',
+    mensaje: '',
   });
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -22,10 +24,29 @@ const Contacto = () => {
     });
   };
 
+  const envioMail = async () => {
+    try {
+        const result = await clienteAxios.post(
+          '/mensajes/contacto',
+          formData,
+          configHeaders
+        );
+      alert("Mensaje enviado correctamente!");
+      setFormData({
+        email: '',
+        asunto: '',
+        mensaje: '',
+      });
+      }catch (error) {
+      console.error('Error al enviar el mensjae:', error);
+      alert("Error al enviar el mensajel. Inténtelo de nuevo.");
+    }
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert('Formulario enviado');
-    // Aquí podrías añadir la lógica para enviar el formulario
+    envioMail()
+
   };
   const obtenerSucursales = async () => {
     const sucursalesBD = await clienteAxios.get("/sucursales");
@@ -68,56 +89,54 @@ const Contacto = () => {
           <div className='contacto-form'>
             <h2 className="text-center">Formulario de Contacto</h2>
             <Form onSubmit={handleSubmit}>
-              <Form.Group controlId="formReason">
-                <Form.Label>Motivo</Form.Label>
-                <Form.Control
-                  as="select"
-                  name="reason"
-                  value={formData.reason}
-                  onChange={handleChange}
-                  required
-                >
-                  <option value="">Seleccione un motivo</option>
-                  <option value="consulta">Consulta</option>
-                  <option value="sugerencia">Sugerencia</option>
-                  <option value="queja">Queja</option>
-                </Form.Control>
-              </Form.Group>
-              
-              <Form.Group controlId="formMessage">
-                <Form.Label>Mensaje</Form.Label>
-                <Form.Control
-                  as="textarea"
-                  rows={4}
-                  name="message"
-                  value={formData.message}
-                  onChange={handleChange}
-                  required
-                />
-              </Form.Group>
-              
-              <Form.Group controlId="formBranch">
-                <Form.Label>Sucursal</Form.Label>
-                <Form.Control
-                  as="select"
-                  name="branch"
-                  value={formData.branch}
-                  onChange={handleChange}
-                  required
-                >
-                  <option value="">Seleccione una sucursal</option>
-                  {sucursales.map(s => (
-                    <option key={s.id} value={s.name}>{s.name}</option>
-                  ))}
-                </Form.Control>
-              </Form.Group>
-              
-              <div className="d-flex justify-content-center mt-3">
-                <Button  type="submit" className='contacto-form-boton'>
-                  Enviar
-                </Button>
-              </div>
-            </Form>
+  <Form.Group controlId="formEmail">
+    <Form.Label>Correo Electrónico</Form.Label>
+    <Form.Control
+      type="email"
+      name="email"
+      value={formData.email}
+      onChange={handleChange}
+      placeholder="Ingrese su correo electrónico"
+      required
+    />
+  </Form.Group>
+
+  <Form.Group controlId="formReason">
+    <Form.Label>Motivo</Form.Label>
+    <Form.Control
+      as="select"
+      name="asunto"
+      value={formData.asunto}
+      onChange={handleChange}
+      required
+    >
+      <option value="">Seleccione un motivo</option>
+      <option value="consulta">Consulta</option>
+      <option value="sugerencia">Sugerencia</option>
+      <option value="reclamo">Reclamo</option>
+    </Form.Control>
+  </Form.Group>
+  
+  <Form.Group controlId="formMessage">
+    <Form.Label>Mensaje</Form.Label>
+    <Form.Control
+      as="textarea"
+      rows={4}
+      name="mensaje"
+      value={formData.mensaje}
+      onChange={handleChange}
+      placeholder="Ingrese su mensaje"
+      required
+    />
+  </Form.Group>
+   
+  <div className="d-flex justify-content-center mt-3">
+    <Button type="submit" className="contacto-form-boton">
+      Enviar
+    </Button>
+  </div>
+</Form>
+
           </div>
         </Col>
       </Row>
