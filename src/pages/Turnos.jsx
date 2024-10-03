@@ -6,7 +6,7 @@ import clienteAxios from '../helpers/axios.config';
 const Turnos = () => {
   const [turnos, setTurnos] = useState([]);
   const [selectedDate, setSelectedDate] = useState(getCurrentDate());
-
+  const [seReserva,setSeReserva] = useState(false)
   // Obtener la fecha actual en formato YYYY-MM-DD
   function getCurrentDate() {
     const today = new Date();
@@ -19,7 +19,6 @@ const Turnos = () => {
   const cargarrTurnosBD = async () => {
     try {
       const response = await clienteAxios.get(`/turnos/${selectedDate}`);
-      console.log("dentro de try response",response)
       setTurnos(response.data);
     } catch (error) {
       console.error('Error al cargar los turnos:', error);
@@ -28,7 +27,8 @@ const Turnos = () => {
   // Cargar los turnos desde la base de datos
   useEffect(() => {
     cargarrTurnosBD()
-  }, [selectedDate]);
+    setSeReserva(false)
+  }, [selectedDate,seReserva]);
   const convertAFormatoFecha = (dia) => {
     let diaConvertido = new Date(dia); 
     
@@ -40,7 +40,37 @@ const Turnos = () => {
     return formattedDate; 
     
   }
-
+  const handleReserva = (e, idTurno) => {
+    e.preventDefault();
+   reservar(idTurno)
+  }
+  const reservar = async (idTurno) => {
+    try {
+      const tok = JSON.parse(sessionStorage.getItem("token"));
+      const result = await clienteAxios.post(
+        `/turnos/reserva/${idTurno}`,
+        {},
+        {headers: {
+            "Content-Type": "application/json",
+            "auth": tok
+          }}
+      );
+      if (result && result.status === 200) {
+        alert("Turno reservado con éxito.");
+        setSeReserva(true)
+      } else {
+        alert("Error inesperado al intentar registrar.");
+      }
+    } catch (error) {
+      if (error.response) {
+        alert("Error: " + (error.response.data.message || "Ha ocurrido un error."));
+      } else if (error.request) {
+        alert("No se pudo conectar al servidor. Por favor, inténtalo más tarde.");
+      } else {
+        alert("Hubo un error al configurar la solicitud.");
+      }
+    }
+  };
 
   return (
     <Container>
@@ -72,7 +102,7 @@ const Turnos = () => {
                   <strong>Motivo:</strong> {turno.motivo}
                   <strong>Reservado:</strong> {turno.reservado ? "Reservado":"Disponible"} <br />
                 </Card.Text>
-                <Button variant="primary" disabled={turno.reservado}>Agendar Turno</Button>
+                <Button onClick={(e) => handleReserva(e,turno._id)} variant="primary" disabled={turno.reservado}>Agendar Turno</Button>
               </Card.Body>
             </Card>
           </Col>
