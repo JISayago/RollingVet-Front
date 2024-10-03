@@ -7,8 +7,8 @@ const ModalVacunaRegistro = ({ show, onHide, agregarVacuna }) => {
   const handleAgregarVacuna = (e) => {
     e.preventDefault();
     agregarVacuna(vacuna);
-    setVacuna(''); // Reiniciar campo
-    onHide(); // Cerrar modal
+    setVacuna('');
+    onHide(); 
   };
 
   return (

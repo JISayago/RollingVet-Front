@@ -17,17 +17,16 @@ const PerfilMascota = () => {
   const params = useParams();
   const [mascota, setMascota] = useState({});
   const [tipoUsuario, setTipoUsuario] = useState('');
-  const [inMemoriam, setInMemoriam] = useState(false);
   const [nuevoProcedimiento, setNuevoProcedimiento] = useState({
     fecha: '',
     motivo: '',
     vistoPor: '',
     tratamiento: '',
   });
-  const [modalVacunaShow, setModalVacunaShow] = useState(false); // Estado para manejar el modal de vacuna
-  const [modalShow, setModalShow] = useState(false); // Estado para manejar el modal
-  const [modalPlanShow, setModalPlanShow] = useState(false); // Estado para manejar el modal de planes
-  const [planSeleccionado, setPlanSeleccionado] = useState(''); // Estado para manejar el plan seleccionado
+  const [modalVacunaShow, setModalVacunaShow] = useState(false); 
+  const [modalShow, setModalShow] = useState(false); 
+  const [modalPlanShow, setModalPlanShow] = useState(false); 
+  const [planSeleccionado, setPlanSeleccionado] = useState(''); 
   const [fichasVeterinarias, setFichasVeterinarias] = useState([]);
   const [historialVacunas, setHistorialVacunas] = useState(["Vacuna contra la rabia - 12/03/2023",
     "Vacuna parvovirus - 15/05/2023",
@@ -35,11 +34,10 @@ const PerfilMascota = () => {
     "Vacuna leptospirosis - 10/09/2023"]);
     const [imagen, setImagen] = useState(null);
     
-  // Función para asignar el plan seleccionado
   const asignarPlan = (plan) => {
-    mascota.planAsociado = plan; // Asignar el plan seleccionado
-    setPlanSeleccionado(plan); // Actualizar el estado del plan seleccionado
-    setModalPlanShow(false); // Cerrar el modal
+    mascota.planAsociado = plan; 
+    setPlanSeleccionado(plan); 
+    setModalPlanShow(false); 
   };
 
   const calcularEdad = (fechaNacimiento) => {
@@ -61,16 +59,11 @@ const PerfilMascota = () => {
     return `${edad} años y ${meses} meses`;
   };
 
-  // Función para marcar a la mascota en "In Memoriam"
-  const marcarInMemoriam = () => {
-    setInMemoriam(true);
-  };
 
   const cargarMascota = async () => {
     const mascotaBD = await clienteAxios.get(`/mascotas/${params.id}`)
     setMascota(mascotaBD.data);
     setFichasVeterinarias(mascotaBD.data.fichas)
-    console.log("masbd", mascotaBD)
   }
 
   useEffect(() => {
@@ -89,20 +82,17 @@ const PerfilMascota = () => {
         nuevoProcedimiento,
         configHeaders
       );
-  
-      // Add the new entry to the existing list of "fichasVeterinarias"
+
       setFichasVeterinarias([...fichasVeterinarias, result.data]);
-      
-      alert("Sucursal Agregada con éxito!");
+      alert("Visita agregada con éxito!");
+      setNuevoProcedimiento({fecha: '',
+    motivo: '',
+    vistoPor: '',
+    tratamiento: '',});
   
-      // Optionally reset the form input
-      setNuevoProcedimiento({}); // Reset the input fields if needed
-  
-      // Close the modal
       setModalShow(false);
     } catch (error) {
-      console.error('Error al guardar la sucursal:', error);
-      alert("Error al guardar la sucursal. Inténtelo de nuevo.");
+      alert("Error al guardar la visita. Inténtelo de nuevo.");
     }
   };
   const handleActualizacionImagen = async () => {
@@ -118,7 +108,6 @@ const PerfilMascota = () => {
   
         alert("Imagen actualizada con éxito!");
       } catch (error) {
-        console.error('Error al actualizar la imagen:', error);
         alert("Error al actualizar la imagen. Inténtelo de nuevo.");
       }
     } else {
@@ -126,10 +115,15 @@ const PerfilMascota = () => {
     }
   };
   const agregarVacuna = (nuevaVacuna) => {
-    // Aquí podrías agregar la lógica para guardar la nueva vacuna
-    historialVacunas.push(nuevaVacuna); // Solo para el ejemplo, modifica según tu lógica real
-    console.log('Nueva Vacuna:', nuevaVacuna);
+    historialVacunas.push(nuevaVacuna);
   };
+
+  const handleEliminarMascota = () => {
+   
+ }
+
+
+
   return (
     <Container className="mt-4" fluid>
 
@@ -142,7 +136,7 @@ const PerfilMascota = () => {
       <Button variant="success" onClick={() => setModalPlanShow(true)} className="me-2">
         Asignar Plan
       </Button>
-      <Button variant="danger" onClick={marcarInMemoriam} className="me-2">
+      <Button variant="danger" onClick={handleEliminarMascota} className="me-2">
         Eliminar
       </Button>
       <Button variant="info" onClick={() => setModalVacunaShow(true)} className="me-2">
@@ -152,27 +146,12 @@ const PerfilMascota = () => {
   </Container>
 )}
 
-<Row className="justify-content-center"> {/* Centra las columnas en la fila */}
-  {/* Tarjeta de la Mascota (arriba izquierda) */}
-  <Col md={6} className="d-flex justify-content-center"> {/* Centra el contenido de la columna */}
-  <Card style={{
-  width: '50%',
-  display: 'flex',
-  flexDirection: 'column', // Asegura que los elementos estén en una columna
-  alignItems: 'center',    // Centra los elementos horizontalmente
-}}>
-  <Card.Img 
-    variant="top" 
-    src={mascota.imagen} 
-    alt="Foto de la mascota" 
-    style={{
-      width: '200px',
-      height: 'auto', // Ajusta la altura automáticamente para mantener la proporción
-      maxHeight: '150px', // Establece la altura máxima
-      objectFit: 'contain' // Asegúrate de que la imagen cubra el área sin deformarse
-    }} 
+<Row className="justify-content-center"> 
+  <Col md={6} className="d-flex justify-content-center"> 
+  <Card style={{ width: '50%',display: 'flex',flexDirection: 'column',alignItems: 'center',}}>
+  <Card.Img variant="top" src={mascota.imagen} alt="Foto de la mascota" style={{width: '200px',   height: 'auto', maxHeight: '150px', objectFit: 'contain' }} 
   />
-  <Card.Body style={{ textAlign: 'center' }}> {/* Centra el texto */}
+  <Card.Body style={{ textAlign: 'center' }}>
     <Card.Title>{mascota.nombre}</Card.Title>
     <Card.Text>
       <strong>Dueño:</strong> {mascota.duenioNombre} <br />
@@ -182,16 +161,15 @@ const PerfilMascota = () => {
       <strong>Castrado:</strong> {mascota.castrado ? 'Sí' : 'No'} <br />
       <strong>Plan Asociado:</strong> {mascota.plan || 'Sin plan asignado'}
     </Card.Text>
-    {/* Botón para cargar imagen de perfil (solo visible para Clientes) */}
     {tipoUsuario === 'Cliente' && (
-      <Form.Group className="mb-3 d-flex align-items-center"> {/* Alinea los elementos en una fila */}
+      <Form.Group className="mb-3 d-flex align-items-center"> 
         <Form.Label className="me-2">Imagen</Form.Label>
         <Form.Control
           type="file"
           onChange={(ev) => setImagen(ev.target.files[0])}
-          className="me-2" // Añade margen a la derecha para separar el botón
+          className="me-2" 
         />
-        <Button variant="primary" onClick={handleActualizacionImagen}> {/* Cambia 'handleImageUpload' por la función que maneje la carga de la imagen */}
+        <Button variant="primary" onClick={handleActualizacionImagen}> 
           Confirmar
         </Button>
       </Form.Group>
@@ -199,12 +177,9 @@ const PerfilMascota = () => {
   </Card.Body>
 </Card>
 
-    {/* Botones debajo de la tarjeta de la mascota */}
-  
   </Col>
 
-  {/* Historial de Vacunas (arriba derecha) */}
-  <Col md={6} className="d-flex justify-content-center"> {/* Centra el contenido de la columna */}
+  <Col md={6} className="d-flex justify-content-center"> 
     <Card className="mb-4 mx-auto w-75" style={{ maxWidth: '600px' }}>
       <Card.Header>Historial de Vacunas</Card.Header>
       <ListGroup

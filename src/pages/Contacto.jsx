@@ -36,7 +36,6 @@ const Contacto = () => {
         mensaje: '',
       });
     } catch (error) {
-      console.error('Error al enviar el mensaje:', error);
       alert("Error al enviar el mensaje. Inténtelo de nuevo.");
     }
   };
@@ -58,7 +57,6 @@ const Contacto = () => {
   return (
     <Container fluid style={{ padding: '2rem' }}>
       <Row>
-        {/* Información de sucursales */}
         <Col xs={12} className="mt-4">
           <h2 className="text-center">Sucursales</h2>
           <Row className="justify-content-center">
@@ -82,9 +80,8 @@ const Contacto = () => {
           </Row>
         </Col>
 
-        {/* Formulario de contacto */}
         <Col xs={12} md={8} lg={6} className="mx-auto mb-4">
-          <Container className='contacto-form mb-5'> {/* Aumentado margen inferior */}
+          <Container className='contacto-form mb-5'>
             <h2 className="text-center">Formulario de Contacto</h2>
             <Form onSubmit={handleSubmit}>
               <Form.Group controlId="formEmail">
@@ -100,7 +97,7 @@ const Contacto = () => {
               </Form.Group>
 
               <Form.Group controlId="formReason">
-                <Form.Label>Motivo</Form.Label>
+                <Form.Label>Asunto</Form.Label>
                 <Form.Control
                   as="select"
                   name="asunto"
@@ -108,7 +105,7 @@ const Contacto = () => {
                   onChange={handleChange}
                   required
                 >
-                  <option value="">Seleccione un motivo</option>
+                  <option value="">Seleccione un asunto</option>
                   <option value="consulta">Consulta</option>
                   <option value="sugerencia">Sugerencia</option>
                   <option value="reclamo">Reclamo</option>

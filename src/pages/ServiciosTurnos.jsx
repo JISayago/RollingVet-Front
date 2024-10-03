@@ -8,10 +8,6 @@ import clienteAxios from '../helpers/axios.config';
 import "../css/contacto_sucursales.css";
 import { useNavigate } from 'react-router-dom';
 
-// Array de servicios basado en el NavDropdown
-
-
-// Componente de Servicios
 const ServiciosCards = () => {
   const [servicios, setServicios] = useState([]);
   const navigate = useNavigate();
@@ -27,14 +23,11 @@ const ServiciosCards = () => {
   },[])
   return (
     <Container className="my-5">
-      {/* Título centralizado */}
       <h2 className="text-center mb-4">Nuestros Servicios</h2>
-      
-      {/* Tarjetas de Servicios */}
       <Row className="gy-4">
         {servicios.map((servicio) => (
           <Col xs={12} md={6} lg={4} key={servicio.id}>
-            <Card className="h-100 text-center"> {/* Centramos el contenido de la card */}
+            <Card className="h-100 text-center">
               <Card.Body className="d-flex flex-column justify-content-center align-items-center">
                 <Card.Title>{servicio.nombre}</Card.Title>
                 <Card.Text>{servicio.descripcion}</Card.Text>

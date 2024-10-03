@@ -48,14 +48,14 @@ function IconoClima({ icon }) {
     };
 
     const getWeatherIcon = (iconName) => {
-        return climaIcons[iconName] || null; // Devuelve null si no encuentra el ícono
+        return climaIcons[iconName] || null;
     };
 
-    const iconSrc = getWeatherIcon(icon); // Obtiene la ruta del ícono basado en el nombre
+    const iconSrc = getWeatherIcon(icon); 
 
     return (
         <img 
-            style={{ width: '22px', height: '22px', margin:'0px 15px' }} // Corrige 'with' a 'width'
+            style={{ width: '22px', height: '22px', margin:'0px 15px' }} 
             src={iconSrc} 
             alt={icon} 
         />

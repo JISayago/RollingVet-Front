@@ -4,7 +4,7 @@ import ButtonOption from "./ButtonOption"
 function BotonesGrupo() {
   return (
 <Container fluid className="py-4">
-  <Row className="text-center justify-content-center"> {/* Añadir justify-content-center aquí */}
+  <Row className="text-center justify-content-center">
     {/* <Col md={3} className="mb-4">
       <ButtonOption route="nuestros_especialistas" text="Nuestros Especialistas" />
     </Col> */}

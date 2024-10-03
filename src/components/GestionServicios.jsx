@@ -1,7 +1,6 @@
-// GestionServicios.js
 import { useEffect, useState } from 'react';
 import { Container, Table, Button } from 'react-bootstrap';
-import ModalServicioRegistro from '../components/ModalServicioRegistro'; // Asegúrate de la ruta correcta
+import ModalServicioRegistro from '../components/ModalServicioRegistro'; 
 import clienteAxios from '../helpers/axios.config';
 import { configHeaders } from '../helpers/extra.config';
 
@@ -25,20 +24,19 @@ const GestionServicios = () => {
   const handleGuardarServicio = async () => {
     try {
       if (nuevoServicio._id) {
-        // Edición de servicio existente
+      
         const result = await clienteAxios.put(
-          `/servicios/${nuevoServicio._id}`, // Asegúrate de que esta URL sea la correcta para tu API
+          `/servicios/${nuevoServicio._id}`,
           nuevoServicio,
-          configHeaders // Asegúrate de que esto esté definido
+          configHeaders 
         );
         setServicios(servicios.map(s => s._id === nuevoServicio._id ? result.data : s));
         alert("Servicio Editado con éxito!");
       } else {
-        // Creación de nuevo servicio
         const result = await clienteAxios.post(
           '/servicios',
           nuevoServicio,
-          configHeaders // Asegúrate de que esto esté definido
+          configHeaders
         );
         setServicios([...servicios, result.data]);
         alert("Servicio Agregado con éxito!");
@@ -46,7 +44,6 @@ const GestionServicios = () => {
       
       setShowModal(false);
     } catch (error) {
-      console.error('Error al guardar el servicio:', error);
       alert("Error al guardar el servicio. Inténtelo de nuevo.");
     }
   };
@@ -63,7 +60,6 @@ const GestionServicios = () => {
 
         alert("Servicio eliminado con éxito!");
       } catch (error) {
-        console.error('Error al eliminar el Servicio:', error);
         alert("Error al eliminar el Servicio. Inténtelo de nuevo.");
       }
     }
@@ -99,7 +95,6 @@ const GestionServicios = () => {
         </tbody>
       </Table>
 
-      {/* Modal para agregar/editar servicios */}
       <ModalServicioRegistro 
         show={showModal} 
         onHide={() => setShowModal(false)} 

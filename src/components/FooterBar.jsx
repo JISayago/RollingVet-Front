@@ -12,34 +12,31 @@ function FooterBar() {
     <footer className="text-white py-4 footer">
       <Container fluid>
         <Row className="text-center">
-          {/* Primera columna: Contacto y redes sociales */}
           <Col lg={4} md={12} className="d-flex flex-column align-items-center">
             <h6 className="mb-2">Contacto</h6>
             <p className="mb-1">Teléfono: +54 11 1234-5678</p>
             <p className="mb-1">Email: contacto@empresa.com</p>
             <div className="d-flex mt-4">
-              <Button as="a" href="https://facebook.com" variant="link" className="text-white me-3 link">
+              <Button as="a" href="/error" variant="link" className="text-white me-3 link">
                 <FaFacebook size={20} />
               </Button>
-              <Button as="a" href="https://twitter.com" variant="link" className="text-white me-3 link">
+              <Button as="a" href="/error" variant="link" className="text-white me-3 link">
                 <FaTwitter size={20} />
               </Button>
-              <Button as="a" href="https://instagram.com" variant="link" className="text-white me-3 link">
+              <Button as="a" href="/error" variant="link" className="text-white me-3 link">
                 <FaInstagram size={20} />
               </Button>
-              <Button as="a" href="https://linkedin.com" variant="link" className="text-white link">
+              <Button as="a" href="/error" variant="link" className="text-white link">
                 <FaLinkedin size={20} />
               </Button>
             </div>
           </Col>
 
-          {/* Segunda columna: Logo y derechos reservados */}
           <Col lg={4} md={12} className="d-flex flex-column align-items-center justify-content-between">
             <Logo />
             <p className="mb-0 text-center mt-auto">&copy; {new Date().getFullYear()} Rolling Vet. Todos los derechos reservados.</p>
           </Col>
 
-          {/* Tercera columna: Dirección y Google Maps */}
           <Col lg={4} md={12} className="d-flex flex-column align-items-center">
             <h6 className="mb-2">Ubicación</h6>
             <Card className="w-75 h-75 border border-dark bg-danger">

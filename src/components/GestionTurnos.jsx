@@ -66,7 +66,6 @@ const GestionTurnos = () => {
   const guardarTurnosEnDB = async () => {
     try {
       const resultado = await clienteAxios.post('/turnos', turnos, configHeaders);
-      console.log(resultado)
       
       if (resultado.status === 201) {
         alert('Turnos guardados exitosamente!');
@@ -74,7 +73,6 @@ const GestionTurnos = () => {
         alert('No se pudo guardar los turnos. Inténtalo de nuevo.');
       }
     } catch (error) {
-      console.error('Error al guardar turnos:', error);
       alert('Ocurrió un error al guardar los turnos. Verifica la consola para más detalles.');
     }
   };

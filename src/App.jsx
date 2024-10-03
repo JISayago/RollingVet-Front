@@ -6,7 +6,7 @@ import Turnos from './pages/Turnos';
 import PlanesDeSuscripcion from './pages/PlanesMascotas';
 import PerfilMascota from './pages/PerfilMascota';
 import ServiciosTurnos from './pages/ServiciosTurnos';
-import Especialistas from './pages/Especialistas';
+//import Especialistas from './pages/Especialistas';
 import AdministracionPanel from './pages/AdministracionPanel';
 import ValidacionUsuario from './components/ValidaciónUsuario';
 import Error404 from './pages/Error404';

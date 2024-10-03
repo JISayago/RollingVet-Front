@@ -39,8 +39,8 @@ const ModalMascotaRegistro = ({ show, handleClose, onMascotaRegistrada }) => {
 
       if (result && result.status === 201) {
         alert("Mascota registrada con éxito.");
-        onMascotaRegistrada(); // Llama a la función para actualizar las mascotas
-        handleClose(); // Cierra el modal
+        onMascotaRegistrada(); 
+        handleClose(); 
       } else {
         alert("Error inesperado al intentar registrar.");
       }

@@ -1,5 +1,3 @@
-// ModalPlanSeleccion.js
-import React from 'react';
 import { Modal, Button, ListGroup } from 'react-bootstrap';
 
 const ModalPlanAsignacion = ({ show, onHide, planes, asignarPlan }) => {

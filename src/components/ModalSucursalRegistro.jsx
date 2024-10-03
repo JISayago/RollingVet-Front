@@ -1,5 +1,3 @@
-// SucursalModal.js
-import React from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
 
 const ModalSuc = ({ showModal, handleClose, sucursal, setSucursal, handleGuardar }) => {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Table, Button, Container } from 'react-bootstrap';
 import clienteAxios from '../helpers/axios.config';
 import ModalSucursalRegistro from './ModalSucursalRegistro';
@@ -22,7 +22,6 @@ const GestionSucursal = () => {
   const handleGuardarSucursal = async () => {
     try {
       if (nuevaSucursal._id) {
-        // Edición de sucursal existente
         const result = await clienteAxios.put(
           `/sucursales/${nuevaSucursal._id}`,
           nuevaSucursal,
@@ -42,7 +41,6 @@ const GestionSucursal = () => {
   
       setShowModal(false);
     } catch (error) {
-      console.error('Error al guardar la sucursal:', error);
       alert("Error al guardar la sucursal. Inténtelo de nuevo.");
     }
   };
@@ -58,7 +56,6 @@ const GestionSucursal = () => {
 
         alert("Sucursal eliminada con éxito!");
       } catch (error) {
-        console.error('Error al eliminar la sucursal:', error);
         alert("Error al eliminar la sucursal. Inténtelo de nuevo.");
       }
     }
@@ -103,7 +100,6 @@ const GestionSucursal = () => {
         </tbody>
       </Table>
 
-      {/* Modal para agregar/editar sucursales */}
       <ModalSucursalRegistro
         showModal={showModal}
         handleClose={() => setShowModal(false)}

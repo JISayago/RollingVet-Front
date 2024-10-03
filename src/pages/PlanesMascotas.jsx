@@ -66,7 +66,6 @@ const PlanesDeSuscripcion = () => {
         configHeaders
       );
       alert('Formulario enviado correctamente.');
-      // Reinicia el formulario después de enviarlo
       setFormData({
         nombre: '',
         email: '',
@@ -75,7 +74,6 @@ const PlanesDeSuscripcion = () => {
         plan: '',
       });
     } catch (error) {
-      console.error('Error al enviar el formulario:', error);
       alert('Hubo un error al enviar el formulario. Por favor, inténtalo nuevamente.');
     }
   };
@@ -138,7 +136,7 @@ const PlanesDeSuscripcion = () => {
                 name="numero"
                 value={formData.numero}
                 onChange={handleChange}
-                placeholder="Ingresa tu número de referencia"
+                placeholder="Ingresa tu número de Teléfono"
                 required
               />
             </Form.Group>

@@ -43,7 +43,6 @@ function Navigationbar() {
 
     return (
         <>
-            {/* Contenedor superior */}
             <Container fluid className="superior-nav w-100 py-2">
                 <Row className="text-center">
                     <Col xs={12} md={3}>
@@ -61,14 +60,12 @@ function Navigationbar() {
                 </Row>
             </Container>
 
-            {/* Navbar */}
             <Navbar expand="lg" className="py-3 navbar w-100">
                 <Container fluid>
                     <div className="d-flex justify-content-between align-items-center w-100">
                         <Logo />
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
                         <Navbar.Collapse id="basic-navbar-nav" className="text-center">
-                            {/* Centro de enlaces */}
                             <Nav className="mx-auto">
                                 {usuarioLogeado.logeado && (
                                     <LinksNavbar usuarioLogeado={usuarioLogeado} />

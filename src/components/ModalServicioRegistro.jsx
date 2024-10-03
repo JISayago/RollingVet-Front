@@ -1,5 +1,4 @@
 // ServicioModal.js
-import React from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 
 const ModalServ = ({ show, onHide, nuevoServicio, setNuevoServicio, handleGuardarServicio }) => {

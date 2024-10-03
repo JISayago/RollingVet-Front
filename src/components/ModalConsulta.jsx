@@ -1,4 +1,3 @@
-import React from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 
 const ModalConsulta = ({ show, onHide, nuevoProcedimiento, setNuevoProcedimiento, agregarProcedimiento }) => {

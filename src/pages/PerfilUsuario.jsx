@@ -36,10 +36,10 @@ const PerfilUsuario = () => {
           setTurnosPendientes(result.data.turnos);
         }
       } catch (error) {
-        console.error("Error al cargar usuario:", error.response ? error.response.data : error);
+        alert("Error al cargar usuario");
       }
     } else {
-      console.log("No se encontró un token.");
+     alert("No se encontró un token.");
     }
   };
 
@@ -79,20 +79,18 @@ const PerfilUsuario = () => {
   return (
     <Container fluid style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <Row style={{ flex: 1 }}>
-        {/* Columna del Perfil */}
         <Col xs={12} md={2} className="bg-primary text-dark d-flex flex-column justify-content-start align-items-center order-1 order-md-1" style={{ padding: '1rem' }}>
           <img src={usuario.imagen} alt="Profile" style={{ width: '100px', height: '100px', borderRadius: '50%' }} />
           <h2 className="mt-3 text-center" style={{ color: 'black', fontSize: '1.5rem' }}>{usuario.nombre}</h2>
           <p className="mt-2 text-center" style={{ color: 'black' }}>Mascotas: {usuario.mascotas && usuario.mascotas.length ? usuario.mascotas.length : 0}</p>
-          <ul className="text-center" style={{ color: 'black' }}>
+          {/*<ul className="text-center" style={{ color: 'black' }}>
             <strong>Familia:</strong>
-            {/*usuario.family.map((member, index) => (
+            usuario.family.map((member, index) => (
               <li key={index}>{member}</li>
-            ))*/}
-          </ul>
+            ))
+          </ul>*/}
           <Button variant="success" onClick={handleShow} className="mt-3">Registrar Mascota</Button>
 
-          {/* Card de Turno Más Próximo */}
           {turnoMasProximo && (
             <Card className="mt-3" style={{ width: '100%' }}>
               <Card.Body>
@@ -105,7 +103,6 @@ const PerfilUsuario = () => {
           )}
         </Col>
 
-        {/* Cards de Animales y Consultas */}
         <Col xs={12} md={10} className="d-flex flex-column order-2 order-md-2">
           <Row className="flex-grow-1 overflow-auto mb-3" style={{ padding: '1rem' }}>
             <h3>Mascotas registradas</h3>
@@ -143,7 +140,6 @@ const PerfilUsuario = () => {
             </Col>
           </Row>
 
-          {/* Modal para agregar mascota */}
           <ModalMascotaRegistro
             show={showModal}
             handleClose={handleClose}

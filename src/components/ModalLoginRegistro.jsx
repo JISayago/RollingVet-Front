@@ -37,7 +37,6 @@ function ModalLR({ show, handleCerrar, type }) {
                 configHeaders
             );
     
-            // Verifica si result y result.status existen
             if (result && result.status === 200) {
               sessionStorage.setItem("token", JSON.stringify(result.data.token));
               sessionStorage.setItem("rol", JSON.stringify(result.data.rol));
@@ -47,22 +46,15 @@ function ModalLR({ show, handleCerrar, type }) {
                 alert("Error inesperado al intentar iniciar sesión.");
             }
         } catch (error) {
-            console.error("Error al intentar iniciar sesión:", error);
-        
             if (error.response) {
-                // Si hay una respuesta de error desde el servidor
                 if (error.response.status === 400) {
                     alert("Usuario bloqueado. Comunicarse con un administrador");
                 } else {
                     alert("Error: " + (error.response.data.message || "Ha ocurrido un error."));
                 }
             } else if (error.request) {
-                // Si la solicitud fue hecha pero no hubo respuesta
-                console.error("Error sin respuesta del servidor:", error.request);
                 alert("No se pudo conectar al servidor. Por favor, inténtalo más tarde.");
             } else {
-                // Error al configurar la solicitud
-                console.error("Error al configurar la solicitud:", error.message);
                 alert("Hubo un error al configurar la solicitud.");
             }
         }
@@ -130,7 +122,6 @@ function ModalLR({ show, handleCerrar, type }) {
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit}>
-           {/* Campo Correo Electrónico */}
            <Form.Group className="mb-3">
                 <Form.Label>Correo electrónico</Form.Label>
                 <Form.Control
@@ -143,10 +134,8 @@ function ModalLR({ show, handleCerrar, type }) {
                 />
               </Form.Group>
 
-          {/* Solo se muestra en el registro */}
           {type === "registro" && (
             <>
-              {/* Campo Nombres */}
               <Form.Group className="mb-3">
                 <Form.Label>Nombre</Form.Label>
                 <Form.Control
@@ -170,7 +159,6 @@ function ModalLR({ show, handleCerrar, type }) {
                 />
               </Form.Group>
 
-              {/* Campo Teléfono */}
               <Form.Group className="mb-3">
                 <Form.Label>Teléfono</Form.Label>
                 <Form.Control
@@ -185,7 +173,6 @@ function ModalLR({ show, handleCerrar, type }) {
             </>
           )}
 
-          {/* Campo Contraseña */}
           <Form.Group className="mb-3">
             <Form.Label>Contraseña</Form.Label>
             <Form.Control
@@ -198,7 +185,6 @@ function ModalLR({ show, handleCerrar, type }) {
             />
           </Form.Group>
 
-          {/* Solo se muestra en el registro */}
           {type === "registro" && (
             <Form.Group className="mb-3">
               <Form.Label>Repetir Contraseña</Form.Label>

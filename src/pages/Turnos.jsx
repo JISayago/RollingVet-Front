@@ -1,4 +1,3 @@
-// TurnosComponent.js
 import  { useState, useEffect } from 'react';
 import { Button, Card, Container, Form, Row, Col } from 'react-bootstrap';
 import clienteAxios from '../helpers/axios.config';
@@ -7,7 +6,7 @@ const Turnos = () => {
   const [turnos, setTurnos] = useState([]);
   const [selectedDate, setSelectedDate] = useState(getCurrentDate());
   const [seReserva,setSeReserva] = useState(false)
-  // Obtener la fecha actual en formato YYYY-MM-DD
+
   function getCurrentDate() {
     const today = new Date();
     const year = today.getFullYear();
@@ -21,10 +20,10 @@ const Turnos = () => {
       const response = await clienteAxios.get(`/turnos/${selectedDate}`);
       setTurnos(response.data);
     } catch (error) {
-      console.error('Error al cargar los turnos:', error);
+      alert('Error al cargar los turnos');
     }
   }
-  // Cargar los turnos desde la base de datos
+
   useEffect(() => {
     cargarrTurnosBD()
     setSeReserva(false)
