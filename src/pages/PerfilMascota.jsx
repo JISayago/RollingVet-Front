@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import { Container, Row, Col, Card, ListGroup, Button, Form} from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import clienteAxios from '../helpers/axios.config';
-import ModalConsulta from '../components/ModalConsulta';
-import ModalVacunaRegistro from '../components/ModalVacunaRegistro'
-import ModalPlanAsignacion from '../components/ModalPlanAsignacion';
+import ModalConsulta from '../components/ModalesFormularios/ModalConsulta';
+import ModalVacunaRegistro from '../components/ModalesFormularios/ModalVacunaRegistro'
+import ModalPlanAsignacion from '../components/ModalesFormularios/ModalPlanAsignacion';
 import { configHeaders } from '../helpers/extra.config';
 
 const PerfilMascota = () => {

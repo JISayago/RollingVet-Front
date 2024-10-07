@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 import { Container, Row, Col, Button, Card } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import clienteAxios from '../helpers/axios.config';
-import ModalMascotaRegistro from '../components/ModalMascotaRegistro';
-import CardProximoTurnoPerfilUsuario from '../components/CardProximoTurnoPerfilUsuario';
-import CardMascotaPerfilUsuario from '../components/CardMascotaPerfilUsuario';
-import ConsultaMascotaPerfilUsuario from '../components/ConsultaMascotaPerfilUsuario';
+import ModalMascotaRegistro from '../components/ModalesFormularios/ModalMascotaRegistro';
+import CardProximoTurnoPerfilUsuario from '../components/Cards/CardProximoTurnoPerfilUsuario';
+import CardMascotaPerfilUsuario from '../components/Cards/CardMascotaPerfilUsuario';
+import ConsultaMascotaPerfilUsuario from '../components/Cards/CardConsultaMascotaPerfilUsuario';
 
 const PerfilUsuario = () => {
   const [showModal, setShowModal] = useState(false);
@@ -69,7 +69,7 @@ const PerfilUsuario = () => {
             alt="Profile"
             style={{ width: '100px', height: '100px', borderRadius: '50%' }}
           />
-          <h2 className="mt-3 text-center" style={{ color: 'white', fontSize: '1.5rem' }}>
+          <h2 className="mt-3 text-center" style={{ color: '#ffffff', fontSize: '1.5rem' }}>
             {usuario.nombre}
           </h2>
           <p className="mt-2 text-center" style={{ color: '#f45e00' }}>

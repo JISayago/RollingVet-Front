@@ -4,8 +4,8 @@ import clienteAxios from '../helpers/axios.config';
 import { configHeaders } from '../helpers/extra.config';
 import "../css/contacto_sucursales.css";
 import "../css/inicio.css";
-import CardPlan from '../components/CardPlan';
-import FormularioContactoPorPlan from '../components/FormularioContactoPorPlan';
+import CardPlan from '../components/Cards/CardPlan';
+import FormularioContactoPorPlan from '../components/ModalesFormularios/FormularioContactoPorPlan';
 
 const PlanesDeSuscripcion = () => {
   const [formData, setFormData] = useState({

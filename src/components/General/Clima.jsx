@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
-import IconoClima from './IconoClima';
+import IconoClima from '../General/IconoClima';
 
 function Clima() {
   const [clima, setClima] = useState({temp:'0'});
-  useEffect(() => {
+  /*useEffect(() => {
     fetch("https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/Tucuman%2C%20Argentina?unitGroup=metric&include=current&key=CEYSJ57RNLRECTYY5BA9X6JHR&contentType=json", {
       method: "GET",
       headers: {}
@@ -21,7 +21,7 @@ function Clima() {
         console.error("Error:", err);
       });
     
-  },[])
+  },[])*/
 
    return (
      <div className="text-white">

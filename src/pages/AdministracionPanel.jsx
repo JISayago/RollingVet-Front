@@ -1,9 +1,9 @@
 import  { useState } from 'react';
 import { Container, Nav, Tab } from 'react-bootstrap';
-import GestionUsuarios from '../components/GestionUsuarios';
-import GestionTurnos from '../components/GestionTurnos';
-import GestionSucursal from '../components/GestionSucursal';
-import GestionServicios from '../components/GestionServicios';
+import GestionUsuarios from '../components/Administracion/GestionUsuarios';
+import GestionTurnos from '../components/Administracion/GestionTurnos';
+import GestionSucursal from '../components/Administracion/GestionSucursal';
+import GestionServicios from '../components/Administracion/GestionServicios';
 
 const AdministracionPanel = () => {
   const [activeTab, setActiveTab] = useState('usuarios');

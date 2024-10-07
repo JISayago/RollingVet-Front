@@ -1,7 +1,7 @@
 import { Card, Col, Container, Row } from "react-bootstrap";
-import BotonesGrupo from "../components/BotonesGrupo";
+import BotonesGrupo from "../components/General/BotonesGrupo";
 import '../css/inicio.css'
-import CardPresentacionInicio from "../components/CardPresentacionInicio";
+import CardPresentacionInicio from "../components/Cards/CardPresentacionInicio";
 
 function Inicio() {
   const cardData = [

@@ -5,8 +5,8 @@ import clienteAxios from '../helpers/axios.config';
 import "../css/contacto_sucursales.css";
 
 import { configHeaders } from '../helpers/extra.config';
-import ForumularioConsultaSucursales from '../components/ForumularioConsultaSucursales';
-import CardSucursalConsulta from '../components/CardSucursalConsulta';
+import ForumularioConsultaSucursales from '../components/ModalesFormularios/ForumularioConsultaSucursales';
+import CardSucursalConsulta from '../components/Cards/CardSucursalConsulta';
 
 const Contacto = () => {
   const [sucursales, setSucursales] = useState([]);

@@ -1,5 +1,5 @@
 import { Navbar, Image, } from 'react-bootstrap';
-import logo from '../assets/Logo/RollingVetLogo.png'
+import logo from '../../assets/Logo/RollingVetLogo.png'
 
 function Logo() {
   return (

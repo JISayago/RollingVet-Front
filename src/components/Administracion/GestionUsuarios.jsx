@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Table, Button, Form, FormControl, Modal, Pagination } from 'react-bootstrap';
-import clienteAxios from '../helpers/axios.config';
+import clienteAxios from '../../helpers/axios.config';
 
 const GestionUsuarios = () => {
 

@@ -5,7 +5,7 @@ import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa';
 import Logo from './Logo';
 import { Card } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
-import '../css/footer.css'
+import '../../css/footer.css'
 
 function FooterBar() {
   return (
