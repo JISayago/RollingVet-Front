@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Container, Table, Button } from 'react-bootstrap';
-import ModalServicioRegistro from '../components/ModalServicioRegistro'; 
-import clienteAxios from '../helpers/axios.config';
-import { configHeaders } from '../helpers/extra.config';
+import ModalServicioRegistro from '../ModalesFormularios/ModalServicioRegistro'; 
+import clienteAxios from '../../helpers/axios.config';
+import { configHeaders } from '../../helpers/extra.config';
 
 const GestionServicios = () => {
   const [servicios, setServicios] = useState([]);

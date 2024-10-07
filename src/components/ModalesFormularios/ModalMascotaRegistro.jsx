@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
-import clienteAxios from '../helpers/axios.config';
+import clienteAxios from '../../helpers/axios.config';
 
 const ModalMascotaRegistro = ({ show, handleClose, onMascotaRegistrada }) => {
   const [petData, setPetData] = useState({

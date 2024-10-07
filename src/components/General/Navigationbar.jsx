@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Container, Navbar, Nav, Row, Col } from "react-bootstrap";
-import ModalLoginRegistro from "./ModalLoginRegistro";
+import ModalLoginRegistro from "../ModalesFormularios/ModalLoginRegistro";
 import Clima from "./Clima";
 import Logo from "./Logo";
-import "../css/navbar.css";
+import "../../css/navbar.css";
 import LinksNavbar from "./LinksNavbar";
 import { useNavigate } from "react-router-dom";
 

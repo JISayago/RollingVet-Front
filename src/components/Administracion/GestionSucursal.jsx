@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Table, Button, Container } from 'react-bootstrap';
-import clienteAxios from '../helpers/axios.config';
-import ModalSucursalRegistro from './ModalSucursalRegistro';
-import { configHeaders } from '../helpers/extra.config';
+import clienteAxios from '../../helpers/axios.config';
+import ModalSucursalRegistro from '../ModalesFormularios/ModalSucursalRegistro';
+import { configHeaders } from '../../helpers/extra.config';
 
 const GestionSucursal = () => {
   const [sucursales, setSucursales] = useState([]);

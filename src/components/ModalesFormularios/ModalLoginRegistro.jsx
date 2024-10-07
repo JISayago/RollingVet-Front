@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
-import clienteAxios from "../helpers/axios.config";
-import { configHeaders } from "../helpers/extra.config";
+import clienteAxios from "../../helpers/axios.config";
+import { configHeaders } from "../../helpers/extra.config";
 
 function ModalLR({ show, handleCerrar, type }) {
     const [formData, setFormData] = useState({

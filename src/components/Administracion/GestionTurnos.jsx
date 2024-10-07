@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Button, Table, Form, Pagination } from 'react-bootstrap';
-import clienteAxios from '../helpers/axios.config';
-import { configHeaders } from '../helpers/extra.config';
+import clienteAxios from '../../helpers/axios.config';
+import { configHeaders } from '../../helpers/extra.config';
 
 const GestionTurnos = () => {
   const [turnos, setTurnos] = useState([]);

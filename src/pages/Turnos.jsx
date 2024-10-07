@@ -1,7 +1,7 @@
 import  { useState, useEffect } from 'react';
 import { Container, Form, Row, Col } from 'react-bootstrap';
 import clienteAxios from '../helpers/axios.config';
-import CardTurno from '../components/CardTurno';
+import CardTurno from '../components/Cards/CardTurno';
 import { useNavigate } from "react-router-dom";
 
 const Turnos = () => {
