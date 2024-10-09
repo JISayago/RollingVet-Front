@@ -1,24 +1,44 @@
 import { useEffect, useState } from 'react';
-import { Container, Row, Col, Button, Card } from 'react-bootstrap';
+import { Container, Row, Col, Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import clienteAxios from '../helpers/axios.config';
 import ModalMascotaRegistro from '../components/ModalesFormularios/ModalMascotaRegistro';
 import CardProximoTurnoPerfilUsuario from '../components/Cards/CardProximoTurnoPerfilUsuario';
 import CardMascotaPerfilUsuario from '../components/Cards/CardMascotaPerfilUsuario';
 import ConsultaMascotaPerfilUsuario from '../components/Cards/CardConsultaMascotaPerfilUsuario';
+import ModalLoginRegistro from '../components/ModalesFormularios/ModalLoginRegistro';
+import ModalActualizarImagenUsuario from '../components/ModalesFormularios/ModalActualizarImagenUsuario'; // Importa el nuevo modal
+import { Camera } from 'react-bootstrap-icons';
+import "../css/perfil_usuario.css"
 
 const PerfilUsuario = () => {
-  const [showModal, setShowModal] = useState(false);
+  const [showModalMascota, setShowModalMascota] = useState(false);
+  const [showModalUsuario, setShowModalUsuario] = useState(false);
+  const [showModalCargarImagen, setShowModalCargarImagen] = useState(false); // Nuevo estado para el modal
   const [usuario, setUsuario] = useState({});
   const [mascotas, setMascotas] = useState([]);
   const [fichas, setFichas] = useState([]);
   const [turnosPendientes, setTurnosPendientes] = useState([]);
 
-  const handleShow = () => setShowModal(true);
-  const handleClose = () => setShowModal(false);
+  const handleShowModalUsuario = (type) => {
+    setModalTipo(type);
+    setShowModalUsuario(true);
+  };
+  const handleCloseUsuario = () => {
+    console.log('cerrau')
+    setShowModalUsuario(false);
+  }
+  const handleShowMascota = () => setShowModalMascota(true);
+  const handleCloseMascota = () => setShowModalMascota(false);
+  const handleCloseCargarImagen = () => setShowModalCargarImagen(false); // Manejador para cerrar el modal de carga de imagen
+  const [modalTipo, setModalTipo] = useState(""); 
 
   const onMascotaRegistrada = () => {
     cargarUsuario();
+  };
+
+  const onImagenCargada = () => {
+    cargarUsuario(); // Recargar usuario después de cargar la imagen
   };
 
   const cargarUsuario = async () => {
@@ -48,7 +68,7 @@ const PerfilUsuario = () => {
 
   useEffect(() => {
     cargarUsuario();
-  }, []);
+  }, [showModalUsuario,showModalCargarImagen]);
 
   const turnoMasProximo =
     turnosPendientes.length > 0
@@ -56,36 +76,62 @@ const PerfilUsuario = () => {
       : null;
 
   return (
-    <Container fluid style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <Row style={{ flex: 1 }}>
-        <Col
-          xs={12}
-          md={2}
-          className="text-dark d-flex flex-column justify-content-start align-items-center order-1 order-md-1"
-          style={{ backgroundColor: '#09336b', padding: '1rem' }}
-        >
-          <img
-            src={usuario.imagen}
-            alt="Profile"
-            style={{ width: '100px', height: '100px', borderRadius: '50%' }}
-          />
-          <h2 className="mt-3 text-center" style={{ color: '#ffffff', fontSize: '1.5rem' }}>
+    <Container fluid className="p-0 min-h-screen max-h-content" style={{ backgroundColor: '#f8f9fa' }}>
+      <Row>
+        <Col lg={3} className="text-center" style={{backgroundColor:'#09336b', padding: '15px' }}>
+          <div style={{ position: 'relative', display: 'inline-block' }}>
+            <img
+              src={usuario.imagen}
+              alt="Profile"
+              style={{ width: '220px', height: '220px', borderRadius: '50%' }}
+            />
+            
+            <Button
+              variant="outline-light"
+              size="lg"
+              style={{
+                position: 'absolute',
+                bottom: '0px',
+                right: '0px',
+                borderRadius: '50%',
+                padding: '5px 10px',
+                backgroundColor: '#09336b',
+                color: '#ffffff',
+              }}
+              onClick={() => setShowModalCargarImagen(true)} // Mostrar modal de carga de imagen
+            >
+              <Camera />
+            </Button>
+          </div>
+          <h2 className="mt-3" style={{ color: '#ffffff', fontSize: '1.5rem' }}>
             {usuario.nombre}
           </h2>
-          <p className="mt-2 text-center" style={{ color: '#f45e00' }}>
+          <p className="mt-2" style={{ color: '#f45e00' }}>
             Mascotas: {usuario.mascotas && usuario.mascotas.length ? usuario.mascotas.length : 0}
           </p>
-          <Button variant="success" onClick={handleShow} className="mt-3">
-            Registrar Mascota
-          </Button>
+          <div className="d-flex flex-column mt-3 contenedor-botones justify-content-between">
+            <div className='d-flex flex-column jusstify-between'>
+  <Button variant="success" onClick={handleShowMascota} className="mb-2">
+    Registrar Mascota
+  </Button>
+  <Button variant="warning" className="mb-2" onClick={() => handleShowModalUsuario("editarPerfil")}>
+    Editar Perfil
+  </Button>
+            </div>
+            <div className='d-flex flex-column'>
+  <Button variant="danger" className='mt-10' >Eliminar Perfil</Button> {/* Añadimos mt-auto para empujarlo */}
+            </div>
+</div>
 
           {turnoMasProximo && <CardProximoTurnoPerfilUsuario turnoMasProximo={turnoMasProximo} />}
         </Col>
 
-        <Col xs={12} md={10} className="d-flex flex-column order-2 order-md-2">
-          <Row className="flex-grow-1 overflow-auto mb-3" style={{ padding: '1rem' }}>
+        <Col style={{padding:'20px'}}>
+          <Row style ={{padding:'20px'}}>
             <h3>Mascotas registradas</h3>
-              { !mascotas.length  && <h6 style={{color:'grey'}}>No tienes ninguna mascota asignada!</h6>}
+            {!mascotas.length && (
+              <h6 style={{ color: 'grey' }}>No tienes ninguna mascota asignada!</h6>
+            )}
             <Container fluid className="d-flex" style={{ overflowY: 'auto' }}>
               {mascotas.map((mascota) => (
                 <CardMascotaPerfilUsuario key={mascota.mascotaId} mascota={mascota} />
@@ -93,23 +139,37 @@ const PerfilUsuario = () => {
             </Container>
           </Row>
 
-          <Row className="flex-grow-1" style={{ padding: '1rem' }}>
+          <Row style ={{padding:'20px'}}>
             <h3>Últimas asistencias</h3>
-            { !fichas.length  && <h6 style={{color:'grey'}}>No tienes ninguna visita registrada!</h6>}
-            <Col xs={12} style={{ maxHeight: '400px', overflowY: 'auto' }}>
+            {!fichas.length && (
+              <h6 style={{ color: 'grey' }}>No tienes ninguna visita registrada!</h6>
+            )}
+            <Col>
               {fichas.map((ficha) => (
                 <ConsultaMascotaPerfilUsuario key={ficha._id} ficha={ficha} />
               ))}
             </Col>
           </Row>
-
-          <ModalMascotaRegistro
-            show={showModal}
-            handleClose={handleClose}
-            onMascotaRegistrada={onMascotaRegistrada}
-          />
         </Col>
       </Row>
+      <ModalLoginRegistro
+        show={showModalUsuario}
+        handleCerrar={handleCloseUsuario}
+        type={modalTipo}
+        onMascotaRegistrada={onMascotaRegistrada}
+        usuario={usuario}
+      />
+      <ModalMascotaRegistro
+        show={showModalMascota}
+        handleCerrar={handleCloseMascota}
+        onMascotaRegistrada={onMascotaRegistrada}
+      />
+      <ModalActualizarImagenUsuario 
+        show={showModalCargarImagen} 
+        handleCerrar={handleCloseCargarImagen}
+        usuario={usuario}
+        onImagenCargada={onImagenCargada} 
+      />
     </Container>
   );
 };

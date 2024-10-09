@@ -30,7 +30,7 @@ function CardMascotaPerfilUsuario({ mascota }) {
         <Card.Subtitle className="mb-2 text-muted">Raza: {mascota.raza}</Card.Subtitle>
         <Card.Subtitle className="mb-2 text-muted">Mascota: {mascota.tipoDeMascota}</Card.Subtitle>
         <Button
-         variant="primary" href={`/perfil_mascota/${mascota.mascotaId}`}>Ver Perfil</Button>
+         style={{backgroundColor:'#09336b'}} href={`/perfil_mascota/${mascota.mascotaId}`}>Ver Perfil</Button>
       </Card.Body>
     </Card>
   </Col>
