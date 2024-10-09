@@ -10,6 +10,7 @@ import ModalLoginRegistro from '../components/ModalesFormularios/ModalLoginRegis
 import ModalActualizarImagenUsuario from '../components/ModalesFormularios/ModalActualizarImagenUsuario'; // Importa el nuevo modal
 import { Camera } from 'react-bootstrap-icons';
 import "../css/perfil_usuario.css"
+import { useNavigate } from 'react-router-dom';
 
 const PerfilUsuario = () => {
   const [showModalMascota, setShowModalMascota] = useState(false);
@@ -19,6 +20,7 @@ const PerfilUsuario = () => {
   const [mascotas, setMascotas] = useState([]);
   const [fichas, setFichas] = useState([]);
   const [turnosPendientes, setTurnosPendientes] = useState([]);
+  const navigate = useNavigate();
 
   const handleShowModalUsuario = (type) => {
     setModalTipo(type);
@@ -42,7 +44,7 @@ const PerfilUsuario = () => {
   };
 
   const cargarUsuario = async () => {
-    const token = JSON.parse(sessionStorage.getItem('token'));
+    const token = JSON.parse(sessionStorage.getItem('token'))||"";
 
     if (token) {
       try {
@@ -74,6 +76,40 @@ const PerfilUsuario = () => {
     turnosPendientes.length > 0
       ? turnosPendientes.sort((a, b) => new Date(a.fecha) - new Date(b.fecha))[0]
       : null;
+  
+  const eliminarPerfil = async () => {
+    const token = JSON.parse(sessionStorage.getItem('token')) || "";
+    console.log(typeof(token))
+    if (!token) {
+      alert("Por favor logearse para realizar esta acción")
+    }
+    if (confirm("Está por ELIMINAR el perfil con todos sus datos y los datos de sus mascotas. ¿Está seguro?")) {
+          try {
+            const result = await clienteAxios.delete(
+              "/usuarios/eliminarPerfil",
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                  "auth": token
+                }
+              },
+            );
+          
+            alert("Usuario eliminado correctamente");
+            sessionStorage.removeItem('token');
+            sessionStorage.removeItem('rol');
+            navigate('/');
+            window.location.reload();
+        }
+        catch (error) {
+          alert("Ocurrió un error al eliminar el perfil.")
+        }
+    }
+   
+  }
+  const handleEliminar = () => {
+    eliminarPerfil();
+ }   
 
   return (
     <Container fluid className="p-0 min-h-screen max-h-content" style={{ backgroundColor: '#f8f9fa' }}>
@@ -119,7 +155,7 @@ const PerfilUsuario = () => {
   </Button>
             </div>
             <div className='d-flex flex-column'>
-  <Button variant="danger" className='mt-10' >Eliminar Perfil</Button> {/* Añadimos mt-auto para empujarlo */}
+  <Button onClick={handleEliminar} variant="danger" className='mt-10' >Eliminar Perfil</Button> {/* Añadimos mt-auto para empujarlo */}
             </div>
 </div>
 
