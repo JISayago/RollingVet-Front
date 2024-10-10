@@ -114,7 +114,7 @@ const PerfilUsuario = () => {
   return (
     <Container fluid className="p-0 min-h-screen max-h-content" style={{ backgroundColor: '#f8f9fa' }}>
       <Row>
-        <Col lg={3} className="text-center" style={{backgroundColor:'#09336b', padding: '15px' }}>
+        <Col lg={3} className="text-center" style={{backgroundColor:'#09336b', padding: '15px',height:'auto' }}>
           <div style={{ position: 'relative', display: 'inline-block' }}>
             <img
               src={usuario.imagen}
@@ -145,18 +145,15 @@ const PerfilUsuario = () => {
           <p className="mt-2" style={{ color: '#f45e00' }}>
             Mascotas: {usuario.mascotas && usuario.mascotas.length ? usuario.mascotas.length : 0}
           </p>
-          <div className="d-flex flex-column mt-3 contenedor-botones justify-content-between">
-            <div className='d-flex flex-column jusstify-between'>
+          <div className="d-flex flex-column mt-3">
+            
   <Button variant="success" onClick={handleShowMascota} className="mb-2">
     Registrar Mascota
   </Button>
   <Button variant="warning" className="mb-2" onClick={() => handleShowModalUsuario("editarPerfil")}>
     Editar Perfil
   </Button>
-            </div>
-            <div className='d-flex flex-column'>
   <Button onClick={handleEliminar} variant="danger" className='mt-10' >Eliminar Perfil</Button> {/* Añadimos mt-auto para empujarlo */}
-            </div>
 </div>
 
           {turnoMasProximo && <CardProximoTurnoPerfilUsuario turnoMasProximo={turnoMasProximo} />}

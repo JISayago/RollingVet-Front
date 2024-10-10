@@ -12,7 +12,7 @@ import FooterBar from './components/General/FooterBar.jsx'
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
-      <Container fluid className="d-flex flex-column min-vh-100 max-vh-auto p-0">
+      <Container fluid className="d-flex flex-column min-vh-100 p-0">
         <Navigationbar />
           <div className="flex-grow-1">
             <App />
