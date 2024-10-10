@@ -1,24 +1,30 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import clienteAxios from "../../helpers/axios.config";
 import { configHeaders } from "../../helpers/extra.config";
 
-function ModalLR({ show, handleCerrar, type }) {
-    const [formData, setFormData] = useState({
-        nombre: "",
-        email: "",
-        contrasenia: "",
-        rcontrasenia: "",
-        direccion: "",
-        telefono: ""
+function ModalLR({ show, handleCerrar, type, usuario }) {
+  console.log(usuario)
+  const [formData, setFormData] = useState({});
+  
+  useEffect(() => {
+    console.log(usuario)
+    setFormData({
+      nombre: usuario?.nombre || "",
+      email: usuario?.email || "",
+      contrasenia: "",
+      rcontrasenia: "",
+      direccion: usuario?.direccion || "",
+      telefono: usuario?.telefono || "",
     });
-
+  }, [type])
+  
     const handleChange = (e) => {
         setFormData({
             ...formData,
             [e.target.name]: e.target.value
         });
-    };
+  };
     
     const handleLogin = async () => {
         try {
@@ -102,18 +108,63 @@ function ModalLR({ show, handleCerrar, type }) {
             }
         }
     }
-    
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    const handleActualizarPerfil = async () => {
+      const token = JSON.parse(sessionStorage.getItem('token')) || "";
+      if (token) {
+        try {
+          const { nombre, email, telefono, direccion} = formData;
+          
+          if (!nombre || !email) {
+            return alert("El nombre y correo electrónico son obligatorios.");
+          }
+          
+          const formDataToSend = new FormData();
+          formDataToSend.append("nombre", nombre);
+          formDataToSend.append("email", email);
+          formDataToSend.append("telefono", telefono);
+          formDataToSend.append("direccion", direccion);
+          
+          const result = await clienteAxios.put(
+            "/usuarios",
+            formDataToSend,
+            { headers: {
+              'Content-Type': 'application/json',
+              auth: token,
+            },
+            }
+          );
 
-        if (type === "login") {
-            //Poner todas las validaciones aca que correspondan- de momento solo voy acontrolar que no queden vacios
-            handleLogin();
-        } else if (type === "registro") {
-            // 
-            handleRegistro();
+
+          if (result && result.status === 200) {
+              alert("Perfil actualizado exitosamente.");
+              handleCerrar();
+            } else {
+              alert("Error al actualizar el perfil.");
+            }
+          } catch (error) {
+          if (error.response) {
+              console.log(error.response)
+              alert("Error: " + (error.response.data.message || "Ha ocurrido un error."));
+            } else if (error.request) {
+              alert("No se pudo conectar al servidor. Por favor, inténtalo más tarde.");
+            } else {
+              alert("Hubo un error al configurar la solicitud.");
+          }
         }
-    };
+      }
+  };
+
+  const handleSubmit = (e) => {
+      e.preventDefault();
+
+      if (type === "login") {
+          handleLogin();
+      } else if (type === "registro") {
+          handleRegistro();
+      } else if (type === "editarPerfil") {
+          handleActualizarPerfil();
+      }
+  };
 
   return (
     <Modal show={show} onHide={handleCerrar}>
@@ -134,7 +185,7 @@ function ModalLR({ show, handleCerrar, type }) {
                 />
               </Form.Group>
 
-          {type === "registro" && (
+          {type !== "login" && (
             <>
               <Form.Group className="mb-3">
                 <Form.Label>Nombre</Form.Label>
@@ -172,7 +223,7 @@ function ModalLR({ show, handleCerrar, type }) {
               </Form.Group>
             </>
           )}
-
+          {type !== "editarPerfil" && (
           <Form.Group className="mb-3">
             <Form.Label>Contraseña</Form.Label>
             <Form.Control
@@ -181,9 +232,11 @@ function ModalLR({ show, handleCerrar, type }) {
               placeholder="Introduce tu contraseña"
               value={formData.contrasenia}
               onChange={handleChange}
+              disabled={type === "editarPerfil"} 
               required
             />
           </Form.Group>
+          )}
 
           {type === "registro" && (
             <Form.Group className="mb-3">
@@ -194,14 +247,16 @@ function ModalLR({ show, handleCerrar, type }) {
                 placeholder="Repite tu contraseña"
                 value={formData.rcontrasenia}
                 onChange={handleChange}
+                disabled={type === "editarPerfil"} 
                 required
               />
             </Form.Group>
           )}
-
-          <Button variant="primary" type="submit">
-            {type === "login" ? "Iniciar Sesión" : "Registrarse"}
-          </Button>
+                    <Button variant="primary" type="submit">
+                        {type === "login" ? "Iniciar Sesión" : 
+                         type === "registro" ? "Registrarse" : 
+                         "Guardar Cambios"}
+                    </Button>
         </Form>
       </Modal.Body>
     </Modal>

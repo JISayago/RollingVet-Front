@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import clienteAxios from '../../helpers/axios.config';
 
-const ModalMascotaRegistro = ({ show, handleClose, onMascotaRegistrada }) => {
+const ModalMascotaRegistro = ({ show, handleCerrar, onMascotaRegistrada }) => {
   const [petData, setPetData] = useState({
     nombre: '',
     fechaNacimiento: '',
@@ -40,7 +40,7 @@ const ModalMascotaRegistro = ({ show, handleClose, onMascotaRegistrada }) => {
       if (result && result.status === 201) {
         alert("Mascota registrada con éxito.");
         onMascotaRegistrada(); 
-        handleClose(); 
+        handleCerrar(); 
       } else {
         alert("Error inesperado al intentar registrar.");
       }
@@ -61,7 +61,7 @@ const ModalMascotaRegistro = ({ show, handleClose, onMascotaRegistrada }) => {
   };
 
   return (
-    <Modal show={show} onHide={handleClose}>
+    <Modal show={show} onHide={handleCerrar}>
       <Modal.Header closeButton>
         <Modal.Title>Registrar Nueva Mascota</Modal.Title>
       </Modal.Header>

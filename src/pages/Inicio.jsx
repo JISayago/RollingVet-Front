@@ -2,6 +2,7 @@ import { Card, Col, Container, Row } from "react-bootstrap";
 import BotonesGrupo from "../components/General/BotonesGrupo";
 import '../css/inicio.css'
 import CardPresentacionInicio from "../components/Cards/CardPresentacionInicio";
+import { useEffect } from "react";
 
 function Inicio() {
   const cardData = [
@@ -36,7 +37,6 @@ function Inicio() {
       description: 'Contamos con un historial de visitas para cada mascota, lo que nos permite realizar un seguimiento integral de su salud. Este registro nos ayuda a ofrecer un mejor servicio y atención personalizada, asegurando que cada visita sea efectiva y completa.'
     },
   ];
-
   return (
     <Container fluid className="flex-grow-1">
        <BotonesGrupo/>
