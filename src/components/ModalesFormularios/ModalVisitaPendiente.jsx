@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 
-const ModalVisitaPendiente = ({ show, handleClose, agregarVisitaPendiente }) => {
+const ModalVisitaPendiente = ({ show, handleClose, handleAgregarVisitaPendiente }) => {
   const [nuevaVisita, setNuevaVisita] = useState({
     detalle: '',
     fecha: '',
   });
 
   const handleGuardar = () => {
-    agregarVisitaPendiente(nuevaVisita);
+    handleAgregarVisitaPendiente(nuevaVisita);
     handleClose();
   };
 

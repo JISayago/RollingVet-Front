@@ -1,25 +1,9 @@
 import React from 'react'
 import { Button, Card, Col } from 'react-bootstrap'
+import { calcularEdad } from '../../helpers/funcionesUtiles'
 
 function CardMascotaPerfilUsuario({ mascota }) {
-    const calcularEdad = (fechaNacimiento) => {
-        const fechaNac = new Date(fechaNacimiento);
-        const fechaActual = new Date();
-        let edad = fechaActual.getFullYear() - fechaNac.getFullYear();
-        const mesActual = fechaActual.getMonth();
-        const mesNacimiento = fechaNac.getMonth();
     
-        if (mesActual < mesNacimiento || (mesActual === mesNacimiento && fechaActual.getDate() < fechaNac.getDate())) {
-          edad--;
-        }
-    
-        let meses = mesActual - mesNacimiento;
-        if (meses < 0) {
-          meses += 12;
-        }
-    
-        return `${edad} años y ${meses} meses`;
-      };
   return (
     <Col key={mascota.mascotaId} xs={11} md={6} lg={4} className="mb-3">
     <Card className="h-100" style={{ maxWidth: '250px' }}>

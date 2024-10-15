@@ -1,13 +1,13 @@
 import { Modal, Button, Form } from 'react-bootstrap';
 
-const ModalConsulta = ({ show, onHide, nuevoProcedimiento, setNuevoProcedimiento, agregarProcedimiento }) => {
+const ModalConsulta = ({ show, onHide, nuevoProcedimiento, setNuevoProcedimiento, handleAgregarProcedimiento }) => {
   return (
     <Modal show={show} onHide={onHide}>
       <Modal.Header closeButton>
         <Modal.Title>Agregar Procedimiento</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form onSubmit={agregarProcedimiento}>
+        <Form onSubmit={handleAgregarProcedimiento}>
           <Form.Group controlId="fecha">
             <Form.Label>Fecha</Form.Label>
             <Form.Control

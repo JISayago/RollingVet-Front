@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 
-const ModalAgregarVacuna = ({ show, handleClose, agregarVacuna }) => {
+const ModalAgregarVacuna = ({ show, handleClose, handleAgregarVacuna }) => {
   const [nuevaVacuna, setNuevaVacuna] = useState('');
   const [fechaVacuna, setFechaVacuna] = useState('');
 
@@ -10,7 +10,7 @@ const ModalAgregarVacuna = ({ show, handleClose, agregarVacuna }) => {
       nombre: nuevaVacuna,
       fecha: fechaVacuna,
     };
-    agregarVacuna(vacunaData);
+    handleAgregarVacuna(vacunaData);
     handleClose();
   };
 
