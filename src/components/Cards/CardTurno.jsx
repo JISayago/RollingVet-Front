@@ -1,17 +1,8 @@
 import React from 'react'
 import { Button, Card, Col } from 'react-bootstrap'
+import { convertAFormatoFecha } from '../../helpers/funcionesUtiles'
 
 function CardTurno({turno,handleReserva }) {
-    const convertAFormatoFecha = (dia) => {
-        let diaConvertido = new Date(dia);
-        
-        let d = diaConvertido.getUTCDate();
-        let m = diaConvertido.getUTCMonth() + 1;
-        let a = diaConvertido.getUTCFullYear();
-        
-        let formattedDate = `${d.toString().padStart(2, '0')}/${m.toString().padStart(2, '0')}/${a}`;
-        return formattedDate;
-    }
         
   return (
     <Col md={4} key={turno._id} className="mb-3">

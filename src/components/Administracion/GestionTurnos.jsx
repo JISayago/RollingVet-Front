@@ -5,7 +5,8 @@ import { configHeaders } from '../../helpers/extra.config';
 
 const GestionTurnos = () => {
   const [turnos, setTurnos] = useState([]);
-  const [sucursal, setSucursal] = useState('66f1d8a9a30cf53716f3d698');
+  const [sucursal, setSucursal] = useState();
+  const [sucursales, setSucursales] = useState();
   const [fechaInicio, setFechaInicio] = useState(new Date().toISOString().split('T')[0]);
   const [fechaFin, setFechaFin] = useState('');
   const [paginaActual, setPaginaActual] = useState(1);
@@ -17,6 +18,13 @@ const GestionTurnos = () => {
     inicio.setDate(inicio.getDate() + 7); 
     setFechaFin(inicio.toISOString().split('T')[0]); 
   }, [fechaInicio]);
+  useEffect(() => {
+    cargarSucursalesDisponibles();
+  }, []);
+  const cargarSucursalesDisponibles = async () => {
+    const sucursalesBD = await clienteAxios.get('/sucursales');
+    setSucursales(sucursalesBD.data);
+  }
 
   const esDiaLaborable = (fecha) => {
     const diaDeLaSemana = fecha.getDay();
@@ -88,18 +96,6 @@ const GestionTurnos = () => {
     <div>
       <h2>Gestión de Turnos</h2>
       <Form className="mt-3">
-        <Form.Group controlId="formSucursal">
-          <Form.Label>Sucursal</Form.Label>
-          <Form.Control 
-            as="select" 
-            value={sucursal} 
-            onChange={(e) => setSucursal(e.target.value)}
-          >
-            <option value="Sucursal A">Sucursal A</option>
-            <option value="Sucursal B">Sucursal B</option>
-            <option value="Sucursal C">Sucursal C</option>
-          </Form.Control>
-        </Form.Group>
         <Form.Group controlId="formFechaInicio">
           <Form.Label>Fecha de Inicio</Form.Label>
           <Form.Control 
@@ -138,7 +134,7 @@ const GestionTurnos = () => {
                 <tr key={index}>
                   <td>{turno.dia}</td>
                   <td>{turno.hora}</td>
-                  <td>{turno.sucursal}</td>
+                  <td>Sede Central</td>
                 </tr>
               ))}
             </tbody>

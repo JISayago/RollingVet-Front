@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Table, Button, Form, FormControl, Modal, Pagination } from 'react-bootstrap';
 import clienteAxios from '../../helpers/axios.config';
+import { configHeaders } from '../../helpers/extra.config';
+import { json } from 'react-router-dom';
 
 const GestionUsuarios = () => {
-
-    const roles = ['Cliente', 'Administrador', 'Veterinario', 'Pasante', 'Peluquero', 'Empleado'];
+    const roles = ['Cliente', 'Administrador', 'Veterinario'];
 
     const [usuarios, setUsuarios] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
@@ -15,33 +16,65 @@ const GestionUsuarios = () => {
     const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
 
     const obtenerUsuarios = async () => {
-        const usuariosBD = await clienteAxios.get('/usuarios')
+        const usuariosBD = await clienteAxios.get('/usuarios');
         setUsuarios(usuariosBD.data);
-      }
-      useEffect(() => {
-        obtenerUsuarios();
-      },[])
+    };
 
-    const handleRoleChange = (id, newRole) => {
+    useEffect(() => {
+        obtenerUsuarios();
+    }, []);
+
+    const handleRoleChange = (usuario, rolNuevo) => {
         setChangedRoles((prev) => ({
             ...prev,
-            [id]: newRole,
+            [usuario._id]: rolNuevo,
         }));
     };
 
-    const handleDeleteUser = (id) => {
-        setUsuarios(usuarios.map(u => u.id === id ? { ...u, deleted: !u.deleted } : u));
+    const handleUser = async (usuario) => {
+        const rol = JSON.parse(sessionStorage.getItem("rol")) || "";
+        if (rol === "Administrador") {
+            try {
+                const result = await clienteAxios.post(
+                    `/usuarios/habilitarEliminarPerfil/${usuario._id}`,
+                    {},
+                    configHeaders
+                );
+                
+                alert("Usuario modificado correctamente");
+                setUsuarios(usuarios.map(u => u._id === usuario._id ? { ...u, estaEliminado: !u.estaEliminado } : u));
+            }
+            catch (error) {
+                alert("Ocurrió un error al modificar el perfil.")
+            }
+        }
     };
 
-    const handleSaveChanges = (id) => {
-        setUsuarios(usuarios.map(u =>
-            u.id === id ? { ...u, role: changedRoles[id] } : u
-        ));
-        setChangedRoles((prev) => {
-            const newState = { ...prev };
-            delete newState[id];
-            return newState;
-        });
+    const handleSaveChanges = async (usuario) => {
+        const rolNuevo = changedRoles[usuario._id];
+        const rol = JSON.parse(sessionStorage.getItem("rol")) || "";
+        if (rol === "Administrador") {
+            try {
+                await clienteAxios.put(
+                    `/usuarios/cambioRol/${usuario._id}`,
+                    { rol: rolNuevo },
+                    configHeaders
+                );
+                alert("Usuario actualizada correctamente");
+                setUsuarios(usuarios.map(u =>
+                    u._id === usuario._id ? { ...u, rol: rolNuevo } : u
+                ));
+        
+                setChangedRoles((prev) => {
+                    const newState = { ...prev };
+                    delete newState[usuario._id];
+                    return newState;
+                });  
+            }
+              catch (error) {
+                alert("Ocurrió un error al actualizar el Usuario.")
+              }
+        }
     };
 
     const handleShowModal = (usuario) => {
@@ -99,7 +132,7 @@ const GestionUsuarios = () => {
                             <td>
                                 <Form.Select 
                                     defaultValue={usuario.rol} 
-                                    onChange={(e) => handleRoleChange(usuario._id, e.target.value)}
+                                    onChange={(e) => handleRoleChange(usuario, e.target.value)}
                                 >
                                     {roles.map((rol, index) => (
                                         <option key={index} value={rol}>{rol}</option>
@@ -108,13 +141,13 @@ const GestionUsuarios = () => {
                             </td>
                             <td>
                                 {changedRoles[usuario._id] && (
-                                    <Button variant="primary" onClick={() => handleSaveChanges(usuario._id)}>
+                                    <Button variant="primary" onClick={() => handleSaveChanges(usuario)}>
                                         Guardar
                                     </Button>
                                 )}
-                                <Button variant={usuario.estaEliminado ? "success" : "danger"} onClick={() => handleDeleteUser(usuario._id)}>
+                                <Button variant={usuario.estaEliminado ? "success" : "danger"} onClick={() => handleUser(usuario)}>
                                     {usuario.estaEliminado ? "Reincorporar" : "Eliminar"}
-                                </Button>{' '}
+                                </Button>
                                 <Button variant="info" onClick={() => handleShowModal(usuario)}>
                                     Ver Mascotas
                                 </Button>

@@ -1,6 +1,6 @@
 import { Modal, Button, ListGroup } from 'react-bootstrap';
 
-const ModalPlanAsignacion = ({ show, onHide, planes, asignarPlan }) => {
+const ModalPlanAsignacion = ({ show, onHide, planes, handleAsignarPlan }) => {
   return (
     <Modal show={show} onHide={onHide}>
       <Modal.Header closeButton>
@@ -9,7 +9,7 @@ const ModalPlanAsignacion = ({ show, onHide, planes, asignarPlan }) => {
       <Modal.Body>
         <ListGroup>
           {planes.map((plan, index) => (
-            <ListGroup.Item key={index} action onClick={() => asignarPlan(plan)}>
+            <ListGroup.Item key={index} action onClick={() => handleAsignarPlan(plan)}>
               {plan}
             </ListGroup.Item>
           ))}

@@ -79,7 +79,6 @@ const PerfilUsuario = () => {
   
   const eliminarPerfil = async () => {
     const token = JSON.parse(sessionStorage.getItem('token')) || "";
-    console.log(typeof(token))
     if (!token) {
       alert("Por favor logearse para realizar esta acción")
     }
