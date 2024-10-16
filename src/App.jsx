@@ -20,7 +20,8 @@ function App() {
       <Routes>
         <Route path='/' element={<Inicio/> } />
         <Route path='/perfil_usuario' element={<ValidacionUsuario rolRuta={ROL_CLIENTE}><PerfilUsuario /></ValidacionUsuario>} />
-        <Route path='/perfil_mascota/:id' element={<ValidacionUsuario rolRuta={ROL_CLIENTE}><PerfilMascota /></ValidacionUsuario> } />
+        {/*<Route path='/perfil_mascota/:id' element={<ValidacionUsuario rolRuta={ROL_CLIENTE}><PerfilMascota /></ValidacionUsuario> } />*/}
+        <Route path='/perfil_mascota/:id' element={<PerfilMascota /> } />
         <Route path='/contacto' element={<Contacto/> } />
         <Route path='/servicios' element={<ServiciosTurnos/> } />
         <Route path='/planes' element={<PlanesDeSuscripcion/> } />
