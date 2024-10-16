@@ -10,6 +10,7 @@ import ModalVisitaPendiente from '../components/ModalesFormularios/ModalVisitaPe
 import { calcularEdad, convertAFormatoFecha, getCurrentDate } from '../helpers/funcionesUtiles';
 import { asignarPlan,agregarProcedimiento,actualizacionImagen,eliminarMascota,eliminarFicha, marcarCastrado, agregarVacuna, agregarVisitaPendiente } from '../services/PerfilMascotaServices';
 import { ROL_ADMIN, ROL_CLIENTE } from '../helpers/variables';
+import axios from 'axios';
 
 
 const PerfilMascota = () => {
@@ -54,7 +55,15 @@ const PerfilMascota = () => {
     
   const cargarMascota = async () => {
       try {
-        const response = await clienteAxios.get(`/mascotas/${id}`);
+       const response = axios.get(`https://rollingvet-back.onrender.com/mascotas/${id}`)
+  .then(response => {
+    // Manejar la respuesta
+    console.log("Datos de la mascota:", response.data);
+  })
+  .catch(error => {
+    // Manejar el error
+    console.error("Error al obtener la mascota:", error);
+  });
         setMascota(response.data);
         setFichasVeterinarias(response.data.fichas);
         setHistorialVacunas(response.data.historialVacunas);
