@@ -24,9 +24,9 @@ const PerfilMascota = () => {
       'Plan Avanzado',
       'Plan Premium',
     ];
-    const [modalBotonesOpcionesShow, setModalBotonesOpcionesShow] = useState(false); // Modal de botones renombrado
-    const [botonesOpciones, setBotonesOpciones] = useState([]); // Botones dinámicos del modal
-    const params = useParams();
+    const [modalBotonesOpcionesShow, setModalBotonesOpcionesShow] = useState(false); 
+    const [botonesOpciones, setBotonesOpciones] = useState([]); 
+    const {id} = useParams();
     const [mascota, setMascota] = useState({});
     const [tipoUsuario, setTipoUsuario] = useState('');
     const [nuevoProcedimiento, setNuevoProcedimiento] = useState(procedimientoVacio);
@@ -48,12 +48,12 @@ const PerfilMascota = () => {
     }
     
     const handleAbrirModal = (opciones) => {
-      setBotonesOpciones(opciones); // Pasar las opciones de botones
-      setModalBotonesOpcionesShow(true); // Mostrar el modal renombrado
+      setBotonesOpciones(opciones); 
+      setModalBotonesOpcionesShow(true);
     };
     
     const cargarMascota = async () => {
-      const mascotaBD = await clienteAxios.get(`/mascotas/${params.id}`)
+      const mascotaBD = await clienteAxios.get(`/mascotas/${id}`)
       setMascota(mascotaBD.data);
       setFichasVeterinarias(mascotaBD.data.fichas)
       setHistorialVacunas(mascotaBD.data.historialVacunas)
