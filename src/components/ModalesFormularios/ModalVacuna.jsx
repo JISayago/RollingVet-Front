@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
+import { getCurrentDate } from '../../helpers/funcionesUtiles';
 
 const ModalAgregarVacuna = ({ show, handleClose, handleAgregarVacuna }) => {
   const [nuevaVacuna, setNuevaVacuna] = useState('');
-  const [fechaVacuna, setFechaVacuna] = useState('');
+  const [fechaVacuna, setFechaVacuna] = useState(getCurrentDate());
 
   const handleGuardar = () => {
     const vacunaData = {

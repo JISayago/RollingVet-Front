@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import clienteAxios from '../helpers/axios.config';
 import ModalMascotaRegistro from '../components/ModalesFormularios/ModalMascotaRegistro';
 import CardProximoTurnoPerfilUsuario from '../components/Cards/CardProximoTurnoPerfilUsuario';
 import CardMascotaPerfilUsuario from '../components/Cards/CardMascotaPerfilUsuario';
@@ -11,6 +10,7 @@ import ModalActualizarImagenUsuario from '../components/ModalesFormularios/Modal
 import { Camera } from 'react-bootstrap-icons';
 import "../css/perfil_usuario.css"
 import { useNavigate } from 'react-router-dom';
+import { cargarUsuario, eliminarPerfil } from '../services/PerfilUsuarioServices';
 
 const PerfilUsuario = () => {
   const [showModalMascota, setShowModalMascota] = useState(false);
@@ -36,40 +36,28 @@ const PerfilUsuario = () => {
   const [modalTipo, setModalTipo] = useState(""); 
 
   const onMascotaRegistrada = () => {
-    cargarUsuario();
+    handleCargarUsuario();
   };
 
   const onImagenCargada = () => {
-    cargarUsuario(); // Recargar usuario después de cargar la imagen
+    handleCargarUsuario(); // Recargar usuario después de cargar la imagen
   };
 
-  const cargarUsuario = async () => {
-    const token = JSON.parse(sessionStorage.getItem('token'))||"";
-
-    if (token) {
-      try {
-        const result = await clienteAxios.get('/usuarios/perfilUsuario', {
-          headers: {
-            'Content-Type': 'application/json',
-            auth: token,
-          },
-        });
-        if (result) {
+  const handleCargarUsuario = async () => {
+    const result = await cargarUsuario();
+    if (result) {
           setUsuario(result.data.usuario);
           setMascotas(result.data.usuario.mascotas);
           setFichas(result.data.fichas);
           setTurnosPendientes(result.data.turnos);
         }
-      } catch (error) {
-        alert('Error al cargar usuario');
-      }
-    } else {
+     else {
       alert('No se encontró un token.');
     }
   };
 
   useEffect(() => {
-    cargarUsuario();
+    handleCargarUsuario();
   }, [showModalUsuario,showModalCargarImagen]);
 
   const turnoMasProximo =
@@ -77,37 +65,13 @@ const PerfilUsuario = () => {
       ? turnosPendientes.sort((a, b) => new Date(a.fecha) - new Date(b.fecha))[0]
       : null;
   
-  const eliminarPerfil = async () => {
-    const token = JSON.parse(sessionStorage.getItem('token')) || "";
-    if (!token) {
-      alert("Por favor logearse para realizar esta acción")
+  
+  const handleEliminar = async () => {
+    const result = await eliminarPerfil();
+    if (result) {
+      navigate('/');
+      window.location.reload();
     }
-    if (confirm("Está por ELIMINAR el perfil con todos sus datos y los datos de sus mascotas. ¿Está seguro?")) {
-          try {
-            const result = await clienteAxios.delete(
-              "/usuarios/eliminarPerfil",
-              {
-                headers: {
-                  "Content-Type": "application/json",
-                  "auth": token
-                }
-              },
-            );
-          
-            alert("Usuario eliminado correctamente");
-            sessionStorage.removeItem('token');
-            sessionStorage.removeItem('rol');
-            navigate('/');
-            window.location.reload();
-        }
-        catch (error) {
-          alert("Ocurrió un error al eliminar el perfil.")
-        }
-    }
-   
-  }
-  const handleEliminar = () => {
-    eliminarPerfil();
  }   
 
   return (

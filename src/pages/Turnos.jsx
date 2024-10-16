@@ -3,6 +3,7 @@ import { Container, Form, Row, Col } from 'react-bootstrap';
 import clienteAxios from '../helpers/axios.config';
 import CardTurno from '../components/Cards/CardTurno';
 import { useNavigate } from "react-router-dom";
+import { getCurrentDate } from '../helpers/funcionesUtiles';
 
 const Turnos = () => {
   const [turnos, setTurnos] = useState([]);
@@ -10,13 +11,7 @@ const Turnos = () => {
   const [seReserva, setSeReserva] = useState(false)
   const navigate = useNavigate();
 
-  function getCurrentDate() {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = (today.getMonth() + 1).toString().padStart(2, '0');
-    const day = today.getDate().toString().padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  }
+
 
   const cargarrTurnosBD = async () => {
     try {

@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
+import { getCurrentDate } from '../../helpers/funcionesUtiles';
 
 const ModalVisitaPendiente = ({ show, handleClose, handleAgregarVisitaPendiente }) => {
   const [nuevaVisita, setNuevaVisita] = useState({
     detalle: '',
-    fecha: '',
+    fecha: getCurrentDate(),
   });
 
   const handleGuardar = () => {

@@ -58,7 +58,7 @@ const GestionTurnos = () => {
             nuevosTurnos.push({
               dia: d.toISOString().split('T')[0],
               hora: tiempo,
-              sucursal: sucursal,
+              sucursal: "Sede Central",
               motivo: "Consulta Veterinaria",
               reservado: false,
             });

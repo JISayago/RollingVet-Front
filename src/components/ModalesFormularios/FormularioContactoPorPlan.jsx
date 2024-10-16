@@ -1,64 +1,76 @@
-import React from 'react'
-import { Button, Container, Form } from 'react-bootstrap'
+// FormularioContactoPorPlan.js
+import React from 'react';
+import { Form, Button, Container } from 'react-bootstrap';
 
-function FormularioContactoPorPlan({handleSubmit,handleChange,formData }) {
+const FormularioContactoPorPlan = ({ handleSubmit, handleChange, formData, errores }) => {
   return (
     <Container className="mt-4 contacto-form mb-5">
-    <h3 className="text-center">Contacto para {formData.plan}</h3>
+    <h3 className="text-center">Contacto para <label style={{color:'#f45e00'}}>{formData.plan}</label></h3>
     <Form onSubmit={handleSubmit}>
-      <Form.Group controlId="formName">
+      <Form.Group controlId="formNombre">
         <Form.Label>Nombre</Form.Label>
         <Form.Control
           type="text"
           name="nombre"
           value={formData.nombre}
           onChange={handleChange}
-          placeholder="Ingresa tu nombre"
-          required
+          isInvalid={!!errores.nombre} // Indica que hay un error
         />
+        <Form.Control.Feedback type="invalid">
+          {errores.nombre}
+        </Form.Control.Feedback>
       </Form.Group>
+
       <Form.Group controlId="formEmail">
-        <Form.Label>Correo Electrónico</Form.Label>
+        <Form.Label>Email</Form.Label>
         <Form.Control
           type="email"
           name="email"
           value={formData.email}
           onChange={handleChange}
-          placeholder="Ingresa tu correo electrónico"
-          required
+          isInvalid={!!errores.email} // Indica que hay un error
         />
+        <Form.Control.Feedback type="invalid">
+          {errores.email}
+        </Form.Control.Feedback>
       </Form.Group>
-      <Form.Group controlId="formReferenceNumber">
-        <Form.Label>Número de Referencia</Form.Label>
+
+      <Form.Group controlId="formNumero">
+        <Form.Label>Número de Teléfono</Form.Label>
         <Form.Control
           type="text"
           name="numero"
           value={formData.numero}
           onChange={handleChange}
-          placeholder="Ingresa tu número de Teléfono"
-          required
+          isInvalid={!!errores.numero} // Indica que hay un error
         />
+        <Form.Control.Feedback type="invalid">
+          {errores.numero}
+        </Form.Control.Feedback>
       </Form.Group>
-      <Form.Group controlId="formMessage">
+
+      <Form.Group controlId="formMensaje">
         <Form.Label>Mensaje</Form.Label>
         <Form.Control
           as="textarea"
-          rows={3}
           name="mensaje"
           value={formData.mensaje}
           onChange={handleChange}
-          placeholder="Escribe tu mensaje aquí"
-          required
+          isInvalid={!!errores.mensaje} // Indica que hay un error
         />
+        <Form.Control.Feedback type="invalid">
+          {errores.mensaje}
+        </Form.Control.Feedback>
       </Form.Group>
+
       <div className="text-center">
         <Button variant="primary" className='contacto-form-boton' style={{marginTop:'20px'} }type="submit">
           Enviar
         </Button>
       </div>
-    </Form>
-  </Container>
-  )
-}
+      </Form>
+      </Container>
+  );
+};
 
-export default FormularioContactoPorPlan
+export default FormularioContactoPorPlan;
