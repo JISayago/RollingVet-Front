@@ -68,6 +68,7 @@ const PerfilMascota = () => {
       if (sessionStorage.getItem('token')) {
         setTipoUsuario(JSON.parse(sessionStorage.getItem('rol')));
       }
+      console.log("previo cargar mascota")
       cargarMascota();
     }, [modalShow,imagen]);
     
