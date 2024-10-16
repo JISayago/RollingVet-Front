@@ -8,13 +8,14 @@ import CardPlan from '../components/Cards/CardPlan';
 import FormularioContactoPorPlan from '../components/ModalesFormularios/FormularioContactoPorPlan';
 
 const PlanesDeSuscripcion = () => {
-  const [formData, setFormData] = useState({
+  const formLimpio = {
     nombre: '',
     email: '',
     numero: '',
     mensaje: '',
     plan: '',
-  });
+  }
+  const [formData, setFormData] = useState(formLimpio);
 
   const planes = [
     {
@@ -68,13 +69,7 @@ const PlanesDeSuscripcion = () => {
         configHeaders
       );
       alert('Formulario enviado correctamente.');
-      setFormData({
-        nombre: '',
-        email: '',
-        numero: '',
-        mensaje: '',
-        plan: '',
-      });
+      setFormData(formLimpio);
     } catch (error) {
       alert('Hubo un error al enviar el formulario. Por favor, inténtalo nuevamente.');
     }

@@ -9,14 +9,14 @@ import { configHeaders } from '../helpers/extra.config';
 import ModalBotonesOpciones from '../components/ModalesFormularios/ModalBotonesOpciones';
 import ModalVacuna from '../components/ModalesFormularios/ModalVacuna';
 import ModalVisitaPendiente from '../components/ModalesFormularios/ModalVisitaPendiente';
-import { calcularEdad, convertAFormatoFecha } from '../helpers/funcionesUtiles';
+import { calcularEdad, convertAFormatoFecha, getCurrentDate } from '../helpers/funcionesUtiles';
 import { asignarPlan,agregarProcedimiento,actualizacionImagen,eliminarMascota,eliminarFicha, marcarCastrado, agregarVacuna, agregarVisitaPendiente } from '../services/PerfilMascotaServices';
 import { ROL_ADMIN, ROL_CLIENTE } from '../helpers/variables';
 
 
 const PerfilMascota = () => {
   const navigate = useNavigate();
-  const procedimientoVacio = {fecha: '',
+  const procedimientoVacio = {fecha: getCurrentDate(),
     motivo: '',
     vistoPor: '',
     tratamiento: ''}

@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
-import clienteAxios from "../../helpers/axios.config";
-import { configHeaders } from "../../helpers/extra.config";
+import { actualizarPerfil, logearse, registrarse } from "../../services/LoginRegistroServices";
+import { TIPO_EDITAR_PERFIL, TIPO_LOGIN, TIPO_REGISTRO } from "../../helpers/variables";
 
 function ModalLR({ show, handleCerrar, type, usuario }) {
-  console.log(usuario)
   const [formData, setFormData] = useState({});
   
   useEffect(() => {
-    console.log(usuario)
     setFormData({
       nombre: usuario?.nombre || "",
       email: usuario?.email || "",
@@ -26,142 +24,30 @@ function ModalLR({ show, handleCerrar, type, usuario }) {
         });
   };
     
-    const handleLogin = async () => {
-        try {
-            const { email, contrasenia } = formData;
-    
-            if (!email || !contrasenia) {
-                return alert("Algun campo esta vacio");
-            }
-    
-            const result = await clienteAxios.post(
-                "/usuarios/ingresar",
-                {
-                    email,
-                    contrasenia,
-                },
-                configHeaders
-            );
-    
-            if (result && result.status === 200) {
-              sessionStorage.setItem("token", JSON.stringify(result.data.token));
-              sessionStorage.setItem("rol", JSON.stringify(result.data.rol));
-              alert("¡Ingreso Exitoso!")
-              handleCerrar()
-            } else {
-                alert("Error inesperado al intentar iniciar sesión.");
-            }
-        } catch (error) {
-            if (error.response) {
-                if (error.response.status === 400) {
-                    alert("Usuario bloqueado. Comunicarse con un administrador");
-                } else {
-                    alert("Error: " + (error.response.data.message || "Ha ocurrido un error."));
-                }
-            } else if (error.request) {
-                alert("No se pudo conectar al servidor. Por favor, inténtalo más tarde.");
-            } else {
-                alert("Hubo un error al configurar la solicitud.");
-            }
-        }
-        
+  const handleLogin = async () => {
+      const result = await logearse(formData)
+      handleCerrar()
     };
     
     
     const handleRegistro = async () => {
-        try {
-            const {nombre, email, contrasenia, rcontrasenia, telefono, direccion } = formData;
-    
-            if (!nombre || !email || !contrasenia || !rcontrasenia) {
-                return alert("Algun campo esta vacio");
-            }
-    
-            if (contrasenia === rcontrasenia) {
-                const result = await clienteAxios.post(
-                    "/usuarios/registrar",
-                    {
-                        nombre,
-                        email,
-                        contrasenia,
-                        telefono,
-                        direccion
-                    },
-                    configHeaders
-                );
-    
-                if (result && result.status === 201) {
-                  alert("Registro exitoso. Por favor ingresar con las nuevas credenciales.");
-                  handleCerrar()
-                } else {
-                    alert("Error inesperado al intentar registrar.");
-                }
-            } else {
-                alert("Las contraseñas no son iguales");
-            }
-        } catch (error) {
-            if (error.response) {
-                alert("Error: " + (error.response.data.message || "Ha ocurrido un error."));
-            } else if (error.request) {
-                alert("No se pudo conectar al servidor. Por favor, inténtalo más tarde.");
-            } else {
-                alert("Hubo un error al configurar la solicitud.");
-            }
-        }
+      const result = await registrarse(formData)
+      handleCerrar()
     }
     const handleActualizarPerfil = async () => {
-      const token = JSON.parse(sessionStorage.getItem('token')) || "";
-      if (token) {
-        try {
-          const { nombre, email, telefono, direccion} = formData;
-          
-          if (!nombre || !email) {
-            return alert("El nombre y correo electrónico son obligatorios.");
-          }
-          
-          const formDataToSend = new FormData();
-          formDataToSend.append("nombre", nombre);
-          formDataToSend.append("email", email);
-          formDataToSend.append("telefono", telefono);
-          formDataToSend.append("direccion", direccion);
-          
-          const result = await clienteAxios.put(
-            "/usuarios",
-            formDataToSend,
-            { headers: {
-              'Content-Type': 'application/json',
-              auth: token,
-            },
-            }
-          );
-
-
-          if (result && result.status === 200) {
-              alert("Perfil actualizado exitosamente.");
+      
+      const result = await actualizarPerfil(formData)
               handleCerrar();
-            } else {
-              alert("Error al actualizar el perfil.");
-            }
-          } catch (error) {
-          if (error.response) {
-              console.log(error.response)
-              alert("Error: " + (error.response.data.message || "Ha ocurrido un error."));
-            } else if (error.request) {
-              alert("No se pudo conectar al servidor. Por favor, inténtalo más tarde.");
-            } else {
-              alert("Hubo un error al configurar la solicitud.");
-          }
-        }
-      }
   };
 
   const handleSubmit = (e) => {
       e.preventDefault();
 
-      if (type === "login") {
+      if (type === TIPO_LOGIN) {
           handleLogin();
-      } else if (type === "registro") {
+      } else if (type === TIPO_REGISTRO) {
           handleRegistro();
-      } else if (type === "editarPerfil") {
+      } else if (type === TIPO_EDITAR_PERFIL) {
           handleActualizarPerfil();
       }
   };
@@ -169,7 +55,7 @@ function ModalLR({ show, handleCerrar, type, usuario }) {
   return (
     <Modal show={show} onHide={handleCerrar}>
       <Modal.Header closeButton>
-        <Modal.Title>{type === "login" ? "Iniciar Sesión" : "Registro"}</Modal.Title>
+        <Modal.Title>{type === TIPO_LOGIN ? "Iniciar Sesión" : "Registro"}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit}>
@@ -185,7 +71,7 @@ function ModalLR({ show, handleCerrar, type, usuario }) {
                 />
               </Form.Group>
 
-          {type !== "login" && (
+          {type !== TIPO_LOGIN && (
             <>
               <Form.Group className="mb-3">
                 <Form.Label>Nombre</Form.Label>
@@ -223,7 +109,7 @@ function ModalLR({ show, handleCerrar, type, usuario }) {
               </Form.Group>
             </>
           )}
-          {type !== "editarPerfil" && (
+          {type !== TIPO_EDITAR_PERFIL && (
           <Form.Group className="mb-3">
             <Form.Label>Contraseña</Form.Label>
             <Form.Control
@@ -232,13 +118,13 @@ function ModalLR({ show, handleCerrar, type, usuario }) {
               placeholder="Introduce tu contraseña"
               value={formData.contrasenia}
               onChange={handleChange}
-              disabled={type === "editarPerfil"} 
+              disabled={type === TIPO_EDITAR_PERFIL} 
               required
             />
           </Form.Group>
           )}
 
-          {type === "registro" && (
+          {type === TIPO_REGISTRO && (
             <Form.Group className="mb-3">
               <Form.Label>Repetir Contraseña</Form.Label>
               <Form.Control
@@ -247,14 +133,14 @@ function ModalLR({ show, handleCerrar, type, usuario }) {
                 placeholder="Repite tu contraseña"
                 value={formData.rcontrasenia}
                 onChange={handleChange}
-                disabled={type === "editarPerfil"} 
+                disabled={type === TIPO_EDITAR_PERFIL} 
                 required
               />
             </Form.Group>
           )}
                     <Button variant="primary" type="submit">
-                        {type === "login" ? "Iniciar Sesión" : 
-                         type === "registro" ? "Registrarse" : 
+                        {type === TIPO_LOGIN ? "Iniciar Sesión" : 
+                         type === TIPO_REGISTRO ? "Registrarse" : 
                          "Guardar Cambios"}
                     </Button>
         </Form>
