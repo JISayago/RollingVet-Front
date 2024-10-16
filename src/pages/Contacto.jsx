@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Container, Row, Col} from 'react-bootstrap';
+import { Container, Row, Col, Spinner} from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import clienteAxios from '../helpers/axios.config';
 import "../css/contacto_sucursales.css";
@@ -7,9 +7,12 @@ import "../css/contacto_sucursales.css";
 import { configHeaders } from '../helpers/extra.config';
 import ForumularioConsultaSucursales from '../components/ModalesFormularios/ForumularioConsultaSucursales';
 import CardSucursalConsulta from '../components/Cards/CardSucursalConsulta';
+import { validarEmail, validarMensaje } from '../helpers/funcionesUtiles';
 
 const Contacto = () => {
   const [sucursales, setSucursales] = useState([]);
+  const [formErrors, setFormErrors] = useState({});
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
     asunto: '',
@@ -25,6 +28,7 @@ const Contacto = () => {
   };
 
   const envioMail = async () => {
+    setLoading(true); // Inicia el loading
     try {
       const result = await clienteAxios.post(
         '/mensajes/contacto',
@@ -39,13 +43,26 @@ const Contacto = () => {
       });
     } catch (error) {
       alert("Error al enviar el mensaje. Inténtelo de nuevo.");
+    } finally {
+      setLoading(false); // Detiene el loading
     }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    envioMail();
+  
+    // Resetear errores
+    setFormErrors({});
+  
+    // Validaciones
+    const isEmailValido = validarEmail(formData.email, setFormErrors);
+    const isMensajeValido = validarMensaje(formData.mensaje, setFormErrors);
+  
+    if (isEmailValido && isMensajeValido) {
+      envioMail();
+    }
   };
+  
 
   const obtenerSucursales = async () => {
     const sucursalesBD = await clienteAxios.get("/sucursales");
@@ -69,7 +86,17 @@ const Contacto = () => {
         </Col>
 
         <Col xs={12} md={8} lg={6} className="mx-auto mb-4">
-          <ForumularioConsultaSucursales handleSubmit={handleSubmit} handleChange={handleChange} formData={formData} />
+        <>
+          {loading ? (
+            <div className="text-center">
+              <p>Enviando...</p> {/* Mensaje simple */}
+              {/* Puedes usar un spinner de react-bootstrap si lo prefieres */}
+              <Spinner animation="border" variant="primary" />
+            </div>
+          ) : (
+          <ForumularioConsultaSucursales handleSubmit={handleSubmit} handleChange={handleChange} formData={formData} formErrors={formErrors} />
+          )}
+        </>
         </Col>
       </Row>
     </Container>
