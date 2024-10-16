@@ -28,7 +28,7 @@ const Contacto = () => {
   };
 
   const envioMail = async () => {
-    setLoading(true); // Inicia el loading
+    setLoading(true); 
     try {
       const result = await clienteAxios.post(
         '/mensajes/contacto',
@@ -44,17 +44,13 @@ const Contacto = () => {
     } catch (error) {
       alert("Error al enviar el mensaje. Inténtelo de nuevo.");
     } finally {
-      setLoading(false); // Detiene el loading
+      setLoading(false); 
     }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  
-    // Resetear errores
     setFormErrors({});
-  
-    // Validaciones
     const isEmailValido = validarEmail(formData.email, setFormErrors);
     const isMensajeValido = validarMensaje(formData.mensaje, setFormErrors);
   
@@ -89,8 +85,7 @@ const Contacto = () => {
         <>
           {loading ? (
             <div className="text-center">
-              <p>Enviando...</p> {/* Mensaje simple */}
-              {/* Puedes usar un spinner de react-bootstrap si lo prefieres */}
+              <p>Enviando...</p> 
               <Spinner animation="border" variant="primary" />
             </div>
           ) : (

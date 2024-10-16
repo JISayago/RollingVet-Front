@@ -1,4 +1,3 @@
-// FormularioContactoPorPlan.js
 import React from 'react';
 import { Form, Button, Container } from 'react-bootstrap';
 
@@ -14,7 +13,7 @@ const FormularioContactoPorPlan = ({ handleSubmit, handleChange, formData, error
           name="nombre"
           value={formData.nombre}
           onChange={handleChange}
-          isInvalid={!!errores.nombre} // Indica que hay un error
+          isInvalid={!!errores.nombre} 
         />
         <Form.Control.Feedback type="invalid">
           {errores.nombre}
@@ -28,7 +27,7 @@ const FormularioContactoPorPlan = ({ handleSubmit, handleChange, formData, error
           name="email"
           value={formData.email}
           onChange={handleChange}
-          isInvalid={!!errores.email} // Indica que hay un error
+          isInvalid={!!errores.email} 
         />
         <Form.Control.Feedback type="invalid">
           {errores.email}
@@ -42,7 +41,7 @@ const FormularioContactoPorPlan = ({ handleSubmit, handleChange, formData, error
           name="numero"
           value={formData.numero}
           onChange={handleChange}
-          isInvalid={!!errores.numero} // Indica que hay un error
+          isInvalid={!!errores.numero} 
         />
         <Form.Control.Feedback type="invalid">
           {errores.numero}
@@ -56,7 +55,7 @@ const FormularioContactoPorPlan = ({ handleSubmit, handleChange, formData, error
           name="mensaje"
           value={formData.mensaje}
           onChange={handleChange}
-          isInvalid={!!errores.mensaje} // Indica que hay un error
+          isInvalid={!!errores.mensaje} 
         />
         <Form.Control.Feedback type="invalid">
           {errores.mensaje}

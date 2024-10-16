@@ -1,11 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Container, Row, Col, Card, ListGroup, Button, Form} from 'react-bootstrap';
-import { json, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import clienteAxios from '../helpers/axios.config';
 import ModalConsulta from '../components/ModalesFormularios/ModalConsulta';
-import ModalVacunaRegistro from '../components/ModalesFormularios/ModalVacunaRegistro'
 import ModalPlanAsignacion from '../components/ModalesFormularios/ModalPlanAsignacion';
-import { configHeaders } from '../helpers/extra.config';
 import ModalBotonesOpciones from '../components/ModalesFormularios/ModalBotonesOpciones';
 import ModalVacuna from '../components/ModalesFormularios/ModalVacuna';
 import ModalVisitaPendiente from '../components/ModalesFormularios/ModalVisitaPendiente';
@@ -44,7 +42,8 @@ const PerfilMascota = () => {
     
     
     const handleAsignarPlan = (plan) => {
-      asignarPlan(plan)
+      asignarPlan(plan, mascota._id)
+      mascota.plan = plan;
       setModalPlanShow(false); 
     }
     

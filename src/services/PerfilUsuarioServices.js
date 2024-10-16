@@ -26,7 +26,6 @@ export const eliminarPerfil = async () => {
     }
     if (confirm("Está por ELIMINAR el perfil con todos sus datos y los datos de sus mascotas. ¿Está seguro?")) {
         try {
-              console.log("en el try")
             const result = await clienteAxios.delete(
               "/usuarios/eliminarPerfil",
               {

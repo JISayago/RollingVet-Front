@@ -27,7 +27,6 @@ const PerfilUsuario = () => {
     setShowModalUsuario(true);
   };
   const handleCloseUsuario = () => {
-    console.log('cerrau')
     setShowModalUsuario(false);
   }
   const handleShowMascota = () => setShowModalMascota(true);

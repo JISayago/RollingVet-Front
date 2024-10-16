@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { Table, Button, Form, FormControl, Modal, Pagination } from 'react-bootstrap';
 import clienteAxios from '../../helpers/axios.config';
 import { configHeaders } from '../../helpers/extra.config';
-import { json } from 'react-router-dom';
 
 const GestionUsuarios = () => {
     const roles = ['Cliente', 'Administrador', 'Veterinario'];

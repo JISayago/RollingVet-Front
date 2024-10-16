@@ -4,7 +4,7 @@ import { ROL_ADMIN } from "../helpers/variables";
 
 
 
-export const asignarPlan = async (plan) => {
+export const asignarPlan = async (plan,idMascota) => {
     const rol = JSON.parse(sessionStorage.getItem('rol')) || "";
     if (rol !== ROL_ADMIN) {
         alert("No cuenta con permisos suficientes.")
@@ -12,13 +12,12 @@ export const asignarPlan = async (plan) => {
     if (confirm(`Usted está por asignar el plan: ${plan}. ¿Está seguro?`)) {
         try { 
             const result = await clienteAxios.post(
-          `/mascotas/asignarPlan/${mascota._id}`,
+          `/mascotas/asignarPlan/${idMascota}`,
                 {plan:plan},
                 configHeaders
             );
             if (result.status === 200) {
                 alert("Plan asignado correctamente.")
-                mascota.plan = plan
             }
         }
         catch (error) { }
@@ -54,7 +53,7 @@ export const actualizacionImagen = async (imagen,idMascota) => {
             alert("Error al actualizar la imagen. Inténtelo de nuevo.");
         }
     };
-export const eliminarMascota = async (mascotaId,rol) => {
+export const eliminarMascota = async (mascotaId) => {
     try {
         const result = await clienteAxios.delete(
         `/mascotas/${mascotaId}`,
@@ -104,7 +103,6 @@ export  const marcarCastrado = async (idMascota) => {
 export const agregarVacuna = async (nuevaVacuna,idMascota) => {
     const rol = JSON.parse(sessionStorage.getItem("rol")) || "";
     if (rol === ROL_ADMIN) {
-      console.log(nuevaVacuna)
       try {
         const result = await clienteAxios.post(
         `/mascotas/agregarVacuna/${idMascota}`,
