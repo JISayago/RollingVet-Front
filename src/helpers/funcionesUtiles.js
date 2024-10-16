@@ -70,3 +70,29 @@ export const validarContrasenia = (contrasenia, rcontrasenia = null, setFormErro
   setFormErrors(prev => ({ ...prev, ...errors }));
   return Object.keys(errors).length === 0; // Retorna true si no hay errores
 };
+
+export const validarNombre = (nombre, setFormErrors) => {
+  if (nombre.trim().length < 4) {
+    setFormErrors(prev => ({ ...prev, nombre: 'El nombre debe tener al menos 4 caracteres.' }));
+    return false;
+  }
+  return true;
+};
+
+
+export const validarNumero = (numero, setFormErrors) => {
+  const numeroRegex = /^[0-9]{7,15}$/; // Solo dígitos, entre 7 y 15 caracteres
+  if (!numeroRegex.test(numero)) {
+    setFormErrors(prev => ({ ...prev, numero: 'Ingrese un número de teléfono válido (solo dígitos y entre 7 a 15 caracteres).' }));
+    return false;
+  }
+  return true;
+};
+
+export const validarMensaje = (mensaje, setFormErrors) => {
+  if (mensaje.trim().length === 0) {
+    setFormErrors(prev => ({ ...prev, mensaje: 'El mensaje no puede estar vacío.' }));
+    return false;
+  }
+  return true;
+};
