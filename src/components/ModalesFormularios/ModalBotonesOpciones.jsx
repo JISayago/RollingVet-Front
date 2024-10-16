@@ -15,7 +15,7 @@ const ModalBotonesOpciones = ({ show, onHide, botones }) => {
             className="mb-2 w-100"
             onClick={() => {
               boton.accion();
-              onHide(); // Cierra el modal después de ejecutar la acción
+              onHide(); 
             }}
           >
             {boton.texto}

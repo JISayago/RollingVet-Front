@@ -14,7 +14,7 @@ function ForumularioConsultaSucursales({ handleChange, handleSubmit, formData, f
             value={formData.email}
             onChange={handleChange}
             placeholder="Ingrese su correo electrónico"
-            isInvalid={!!formErrors.email} // Verifica si hay un error
+            isInvalid={!!formErrors.email} 
             required
           />
           <Form.Control.Feedback type="invalid">
@@ -30,7 +30,7 @@ function ForumularioConsultaSucursales({ handleChange, handleSubmit, formData, f
             value={formData.asunto}
             onChange={handleChange}
             required
-            isInvalid={!!formErrors.asunto} // Verifica si hay un error
+            isInvalid={!!formErrors.asunto} 
           >
             <option value="">Seleccione un asunto</option>
             <option value="consulta">Consulta</option>
@@ -51,7 +51,7 @@ function ForumularioConsultaSucursales({ handleChange, handleSubmit, formData, f
             value={formData.mensaje}
             onChange={handleChange}
             placeholder="Ingrese su mensaje"
-            isInvalid={!!formErrors.mensaje} // Verifica si hay un error
+            isInvalid={!!formErrors.mensaje} 
             required
           />
           <Form.Control.Feedback type="invalid">

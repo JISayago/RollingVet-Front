@@ -1,18 +1,14 @@
 import clienteAxios from "../helpers/axios.config";
 import { configHeaders } from "../helpers/extra.config";
-import { validarCamposVacios, validarContrasenia, validarEmail } from "../helpers/funcionesUtiles";
 
 export const logearse = async (formData) => {
     try {
         const { email, contrasenia } = formData;
-
-        if (!validarCamposVacios({ email, contrasenia })) return;
-        if (!validarEmail(email)) return;
-        if (!validarContrasenia(contrasenia)) return;
-
+        
+        const formDataLogin = { email, contrasenia }
         const result = await clienteAxios.post(
             "/usuarios/ingresar",
-            { email, contrasenia },
+            formDataLogin,
             configHeaders
         );
 
@@ -32,10 +28,6 @@ export const logearse = async (formData) => {
 export const registrarse = async (formData) => {
     try {
         const { nombre, email, contrasenia, rcontrasenia, telefono, direccion } = formData;
-
-        if (!validarCamposVacios({ nombre, email, contrasenia, rcontrasenia, telefono, direccion })) return;
-        if (!validarEmail(email)) return;
-        if (!validarContrasenia(contrasenia, rcontrasenia)) return;
 
         const result = await clienteAxios.post(
             "/usuarios/registrar",
@@ -60,10 +52,7 @@ export const actualizarPerfil = async (formData) => {
       try {
         const { nombre, email, telefono, direccion } = formData;
 
-        if (!validarCamposVacios({ nombre, email, telefono, direccion })) return;
-        if (!validarEmail(email)) return;
-
-        const result = await clienteAxios.put(
+          const result = await clienteAxios.put(
           "/usuarios",
           { nombre, email, telefono, direccion },
           { headers: { 'Content-Type': 'application/json', auth: token } }

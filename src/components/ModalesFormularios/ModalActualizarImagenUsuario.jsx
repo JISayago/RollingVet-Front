@@ -37,7 +37,6 @@ const ModalActualizarImagenUsuario = ({ show, handleCerrar, usuario, onImagenCar
         alert('Error al cargar la imagen.');
       }
     } catch (error) {
-      console.error('Error al cargar la imagen:', error);
       alert('Error al cargar la imagen.');
     }
   };

@@ -18,7 +18,7 @@ const PlanesDeSuscripcion = () => {
     plan: '',
   };
   const [formData, setFormData] = useState(formLimpio);
-  const [formErrors, setFormErrors] = useState({}); // Manejo de errores
+  const [formErrors, setFormErrors] = useState({}); 
   const [loading, setLoading] = useState(false);
 
 
@@ -28,7 +28,7 @@ const PlanesDeSuscripcion = () => {
       ...prevData,
       [name]: value,
     }));
-    // Limpiamos el error del campo al cambiar
+    
     setFormErrors(prev => ({ ...prev, [name]: '' }));
   };
 
@@ -50,7 +50,7 @@ const PlanesDeSuscripcion = () => {
       setFormErrors(prev => ({ ...prev, plan: 'Debe seleccionar un plan de suscripción.' }));
     }
 
-    // Retornamos verdadero solo si todas las validaciones son válidas
+    
     return isNombreValido && isEmailValido && isNumeroValido && isMensajeValido && !!formData.plan;
   };
 
@@ -59,7 +59,7 @@ const PlanesDeSuscripcion = () => {
       return;
     }
   
-    setLoading(true); // Inicia el loading
+    setLoading(true); 
   
     try {
       await clienteAxios.post(
@@ -72,7 +72,7 @@ const PlanesDeSuscripcion = () => {
     } catch (error) {
       alert('Hubo un error al enviar el formulario. Por favor, inténtalo nuevamente.');
     } finally {
-      setLoading(false); // Detiene el loading
+      setLoading(false); 
     }
   };
   
@@ -95,9 +95,8 @@ const PlanesDeSuscripcion = () => {
         <>
           {loading ? (
             <div className="text-center">
-              <p>Enviando...</p> {/* Mensaje simple */}
-              {/* Puedes usar un spinner de react-bootstrap si lo prefieres */}
-              <Spinner animation="border" variant="primary" />
+              <p>Enviando...</p> 
+               <Spinner animation="border" variant="primary" />
             </div>
           ) : (
               <FormularioContactoPorPlan handleSubmit={handleSubmit} handleChange={handleChange} formData={formData} errores={ formErrors} />

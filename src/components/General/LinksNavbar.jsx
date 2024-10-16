@@ -1,6 +1,7 @@
 import { Nav } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { ROL_ADMIN, ROL_CLIENTE } from '../../helpers/variables';
 
 function LinksNavbar({ usuarioLogeado }) {
     const [user, setUser] = useState({ logeado: false, rol: "-" });
@@ -18,12 +19,12 @@ function LinksNavbar({ usuarioLogeado }) {
                     <Link className="link" to="/contacto">Contacto</Link>
                     <Link className="link" to="/turnos">Turnos</Link>
                     <Link className="link" to="/sobre_nosotros">Sobre Nosotros</Link>
-            {user.logeado && user.rol === 'Cliente' && (
+            {user.logeado && user.rol === ROL_CLIENTE && (
                 <>
                     <Link className="link" to="/perfil_usuario">Mi Perfil</Link>
                 </>
             )}
-            {user.logeado && user.rol === 'Administrador' && (
+            {user.logeado && user.rol === ROL_ADMIN && (
                 <>
                     <Link className="link" to="/administracion">Administración</Link>
                 </>

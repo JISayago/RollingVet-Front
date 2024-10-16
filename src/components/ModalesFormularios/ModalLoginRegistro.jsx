@@ -34,9 +34,7 @@ function ModalLR({ show, handleCerrar, type, usuario }) {
 
     if (valid) {
       const result = await logearse(formData);
-      if (result.status === 200) {
         handleCerrar();
-      }
     }
   };
 
