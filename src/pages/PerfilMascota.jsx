@@ -52,13 +52,17 @@ const PerfilMascota = () => {
       setModalBotonesOpcionesShow(true);
     };
     
-    const cargarMascota = async () => {
-      const mascotaBD = await clienteAxios.get(`/mascotas/${id}`)
-      setMascota(mascotaBD.data);
-      setFichasVeterinarias(mascotaBD.data.fichas)
-      setHistorialVacunas(mascotaBD.data.historialVacunas)
-      setProximosProcedimientos(mascotaBD.data.proximosProcemientos)
-    }
+  const cargarMascota = async () => {
+      try {
+        const response = await clienteAxios.get(`/mascotas/${id}`);
+        setMascota(response.data);
+        setFichasVeterinarias(response.data.fichas);
+        setHistorialVacunas(response.data.historialVacunas);
+        setProximosProcedimientos(response.data.proximosProcemientos);
+      } catch (error) {
+        console.error("Error al cargar la mascota:", error);
+      }
+    };
     
     useEffect(() => {
       if (sessionStorage.getItem('token')) {
