@@ -39,3 +39,34 @@ export function getCurrentDate() {
   const day = today.getDate().toString().padStart(2, '0');
   return `${year}-${month}-${day}`;
 }
+export const validarCamposVacios = (campos, setFormErrors) => {
+  const errors = {};
+  for (const [campo, valor] of Object.entries(campos)) {
+    if (!valor) {
+      errors[campo] = `El campo ${campo} es obligatorio.`;
+    }
+  }
+  setFormErrors(errors);
+  return Object.keys(errors).length === 0; // Si no hay errores, devolver true
+};
+
+export const validarEmail = (email, setFormErrors) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    setFormErrors(prev => ({ ...prev, email: "El correo electrónico no es válido." }));
+    return false;
+  }
+  return true;
+};
+
+export const validarContrasenia = (contrasenia, rcontrasenia = null, setFormErrors) => {
+  const errors = {};
+  if (contrasenia.length < 5 || contrasenia.length > 16) {
+    errors.contrasenia = "La contraseña debe tener entre 5 y 16 caracteres.";
+  }
+  if (rcontrasenia && contrasenia !== rcontrasenia) {
+    errors.rcontrasenia = "Las contraseñas no coinciden.";
+  }
+  setFormErrors(prev => ({ ...prev, ...errors }));
+  return Object.keys(errors).length === 0; // Retorna true si no hay errores
+};
