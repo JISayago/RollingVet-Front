@@ -55,15 +55,7 @@ const PerfilMascota = () => {
     
   const cargarMascota = async () => {
       try {
-       const response = axios.get(`https://rollingvet-back.onrender.com/mascotas/${id}`)
-  .then(response => {
-    // Manejar la respuesta
-    console.log("Datos de la mascota:", response.data);
-  })
-  .catch(error => {
-    // Manejar el error
-    console.error("Error al obtener la mascota:", error);
-  });
+       const response = clienteAxios.get(`/mascotas/${id}`)
         setMascota(response.data);
         setFichasVeterinarias(response.data.fichas);
         setHistorialVacunas(response.data.historialVacunas);
