@@ -54,16 +54,17 @@ const PerfilMascota = () => {
     };
     
   const cargarMascota = async () => {
-    console.log(`${import.meta.env.VITE_URL_BACK_DEPLOY}/mascotas/${id}`);
-      try {
-       const response = clienteAxios.get(`/mascotas/${id}`)
+    try {
+      const response = await clienteAxios.get(`/mascotas/${id}`);
+      if (response.data) {
         setMascota(response.data);
-        setFichasVeterinarias(response.data.fichas);
-        setHistorialVacunas(response.data.historialVacunas);
-        setProximosProcedimientos(response.data.proximosProcemientos);
-      } catch (error) {
-        console.error("Error al cargar la mascota:", error);
+        setFichasVeterinarias(response.data.fichas || []);
+        setHistorialVacunas(response.data.historialVacunas || []);
+        setProximosProcedimientos(response.data.proximosProcemientos || []);
       }
+    } catch (error) {
+      console.error("Error al cargar la mascota:", error);
+    }
     };
     
     useEffect(() => {
