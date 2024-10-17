@@ -54,6 +54,7 @@ const PerfilMascota = () => {
     };
     
   const cargarMascota = async () => {
+    console.log(`${import.meta.env.VITE_URL_BACK_DEPLOY}/mascotas/${id}`);
       try {
        const response = clienteAxios.get(`/mascotas/${id}`)
         setMascota(response.data);
