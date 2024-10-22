@@ -12,6 +12,7 @@ import ValidacionUsuario from './components/ComponentsHelpers/ValidacionUsuario'
 import Error404 from './pages/Error404';
 import SobreNosotros from './pages/SobreNosotros';
 import { ROL_ADMIN, ROL_CLIENTE } from './helpers/variables';
+import Especialistas from './pages/Especialistas';
 
 function App() {
  
@@ -25,7 +26,7 @@ function App() {
         <Route path='/contacto' element={<Contacto/> } />
         <Route path='/servicios' element={<ServiciosTurnos/> } />
         <Route path='/planes' element={<PlanesDeSuscripcion/> } />
-      {/*<Route path='/nuestros_especialistas' element={<Especialistas />} />*/}
+        <Route path='/nuestros_especialistas' element={<Especialistas />} />
         <Route path='/turnos' element={<Turnos />} />
         <Route path='/sobre_nosotros' element={<SobreNosotros />} />
         

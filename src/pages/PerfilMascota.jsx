@@ -11,6 +11,9 @@ import { calcularEdad, convertAFormatoFecha, getCurrentDate } from '../helpers/f
 import { asignarPlan,agregarProcedimiento,actualizacionImagen,eliminarMascota,eliminarFicha, marcarCastrado, agregarVacuna, agregarVisitaPendiente } from '../services/PerfilMascotaServices';
 import { ROL_ADMIN, ROL_CLIENTE } from '../helpers/variables';
 import axios from 'axios';
+import ListaVacuna from '../components/Listas/ListaVacuna';
+import ListaFichaVeterinaria from '../components/Listas/ListaFichaVeterinaria';
+import ListaProximosProcedimientos from '../components/Listas/ListaProximosProcedimientos';
 
 
 const PerfilMascota = () => {
@@ -71,7 +74,6 @@ const PerfilMascota = () => {
       if (sessionStorage.getItem('token')) {
         setTipoUsuario(JSON.parse(sessionStorage.getItem('rol')));
       }
-      console.log("previo cargar mascota")
       cargarMascota();
     }, [modalShow,imagen]);
     
@@ -87,8 +89,9 @@ const PerfilMascota = () => {
   
   const handleActualizacionImagen = async () => {
     if (imagen) {
-      actualizacionImagen(imagen,mascota._id)
-          cargarMascota();
+      const result = await actualizacionImagen(imagen, mascota._id)
+      console.log(result)
+      if (result.status === 200) { cargarMascota() };
       } else {
         alert("Por favor, seleccione una imagen para actualizar.");
       }
@@ -232,22 +235,10 @@ const PerfilMascota = () => {
         overflowY: 'auto',
       }}
       >
-      {(proximosProcedimientos.length <= 0) && (<h5 style={{padding:'15px', color:'black'}}>Aún notienes procedimiento pendiente registrado.</h5>)}
+      {(proximosProcedimientos.length <= 0) && (<h5 style={{padding:'15px', color:'black'}}>Aún no tienes procedimiento pendiente registrado.</h5>)}
       
       {proximosProcedimientos.map((procedimiento, index) => (
-        <ListGroup.Item key={index}>
-        <Row className="align-items-center">
-        <Col md={9}>
-        <strong>{procedimiento.detalle}</strong> - {convertAFormatoFecha(procedimiento.fecha)}
-        </Col>
-        {tipoUsuario === ROL_ADMIN && (
-          <Col md={3} className="text-end">
-          <Button variant="danger" onClick={() => console.log('Eliminar')}>
-          Eliminar
-          </Button>
-          </Col>)}
-          </Row>
-          </ListGroup.Item>
+          <ListaProximosProcedimientos key={index} index={index} procedimiento={procedimiento} tipoUsuario={tipoUsuario}  />
         ))}
         </ListGroup>
         </Card>
@@ -261,21 +252,9 @@ const PerfilMascota = () => {
           overflowY: 'auto',
         }}
         >
-        {(historialVacunas.length <= 0) && (<h5 style={{padding:'15px', color:'black'}}>Aún notienes ninguna vacuna registrada para esta mascota.</h5>)}
-        {historialVacunas.map((vacuna, index) => (
-          <ListGroup.Item key={index}>
-          <Row className="align-items-center">
-          <Col md={9}>
-          <strong>{`${convertAFormatoFecha(vacuna.fecha)} - ${vacuna.nombre}`}</strong>
-          </Col>
-          {tipoUsuario === ROL_ADMIN && (
-            <Col md={3} className="text-end">
-            <Button variant="danger" onClick={() => console.log('Eliminar')}>
-            Eliminar
-            </Button>
-            </Col>)}
-            </Row>
-            </ListGroup.Item>
+        {(historialVacunas.length <= 0) && (<h5 style={{padding:'15px', color:'black'}}>Aún no tienes ninguna vacuna registrada para esta mascota.</h5>)}
+                {historialVacunas.map((vacuna, index) => (
+                  <ListaVacuna key={index} vacuna={vacuna} index ={index} tipoUsuario={tipoUsuario} />
           ))}
           </ListGroup>
           </Card>
@@ -295,31 +274,9 @@ const PerfilMascota = () => {
             overflowY: 'auto',
           }}
           >
-          {(fichasVeterinarias.length <= 0) && (<h5 style={{padding:'15px', color:'black'}}>Aún notienes ninguna ficha registrada para esta mascota.</h5>)}
-          {fichasVeterinarias.map((ficha, index) => (
-            <ListGroup.Item key={index}>
-            <Row className="align-items-center">
-            <Col md={9}>
-            <strong>Fecha:</strong> {convertAFormatoFecha(ficha.fecha)} <br />
-            <strong>Motivo:</strong> {ficha.motivo} <br />
-            <strong>Visto por:</strong> {ficha.vistoPor} <br />
-            <strong>Tratamiento:</strong> {ficha.tratamiento} <br />
-            {ficha.estaEliminada && (
-              <span style={{ color: 'red' }}>
-              <strong>Estado:</strong> Eliminado
-              </span>
-            )}
-            </Col>
-            {tipoUsuario === ROL_ADMIN && (
-              
-              <Col md={3} className="text-center">
-              <Button variant="danger" onClick={() => handleEliminarFicha(ficha.fichaId)}>
-              Eliminar
-              </Button>
-              </Col>)
-            }
-            </Row>
-            </ListGroup.Item>
+          {(fichasVeterinarias.length <= 0) && (<h5 style={{padding:'15px', color:'black'}}>Aún no tienes ninguna ficha registrada para esta mascota.</h5>)}
+                {fichasVeterinarias.map((ficha, index) => (
+                  <ListaFichaVeterinaria key={index} index={index} ficha={ficha} tipoUsuario={tipoUsuario} handleEliminarFicha={handleEliminarFicha} />
           ))}
           </ListGroup>
           </Card>

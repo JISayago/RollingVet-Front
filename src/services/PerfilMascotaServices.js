@@ -48,7 +48,8 @@ export const actualizacionImagen = async (imagen,idMascota) => {
               `mascotas/agregarImagen/${idMascota}`,
             formData,
             configHeaders);
-            alert("Imagen actualizada con éxito!");
+      alert("Imagen actualizada con éxito!");
+      return result;
         } catch (error) {
             alert("Error al actualizar la imagen. Inténtelo de nuevo.");
         }

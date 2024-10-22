@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { ROL_ADMIN } from "../../helpers/variables";
+import { ROL_ADMIN, ROL_VETERINARIO } from "../../helpers/variables";
 
 const ValidacionUsuario = ({ children, rolRuta }) => {
   const navigate = useNavigate();
@@ -10,7 +10,7 @@ const ValidacionUsuario = ({ children, rolRuta }) => {
     setTimeout(() => {
     navigate("/");
     }, 100);
-  }else if (rolRuta === rolUsuario || rolUsuario === ROL_ADMIN) {
+  }else if (rolRuta === rolUsuario || rolUsuario === ROL_ADMIN || rolUsuario === ROL_VETERINARIO) {
     return children
   } else {
         alert("No posee las credenciales suficientes!")
