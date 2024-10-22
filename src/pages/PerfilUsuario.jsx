@@ -76,12 +76,12 @@ const PerfilUsuario = () => {
   return (
     <Container fluid className="p-0 min-h-screen max-h-content" style={{ backgroundColor: '#f8f9fa' }}>
       <Row>
-        <Col lg={3} className="text-center" style={{backgroundColor:'#09336b', padding: '15px',height:'auto' }}>
+        <Col lg={3} className="text-center" style={{backgroundColor:'#09336b', padding: '15px',height:'80vh' }}>
           <div style={{ position: 'relative', display: 'inline-block' }}>
             <img
               src={usuario.imagen}
               alt="Profile"
-              style={{ width: '220px', height: '220px', borderRadius: '50%' }}
+              style={{ width: '220px', height: '220px', borderRadius: '50%', objectFit: 'cover'}}
             />
             
             <Button
@@ -140,9 +140,11 @@ const PerfilUsuario = () => {
               <h6 style={{ color: 'grey' }}>No tienes ninguna visita registrada!</h6>
             )}
             <Col>
+            <Container fluid className="d-flex" style={{ overflowY: 'auto' }}>
               {fichas.map((ficha) => (
                 <ConsultaMascotaPerfilUsuario key={ficha._id} ficha={ficha} />
               ))}
+                </Container>
             </Col>
           </Row>
         </Col>
