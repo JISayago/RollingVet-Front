@@ -7,10 +7,9 @@ import ModalPlanAsignacion from '../components/ModalesFormularios/ModalPlanAsign
 import ModalBotonesOpciones from '../components/ModalesFormularios/ModalBotonesOpciones';
 import ModalVacuna from '../components/ModalesFormularios/ModalVacuna';
 import ModalVisitaPendiente from '../components/ModalesFormularios/ModalVisitaPendiente';
-import { calcularEdad, convertAFormatoFecha, getCurrentDate } from '../helpers/funcionesUtiles';
+import { calcularEdad, getCurrentDate } from '../helpers/funcionesUtiles';
 import { asignarPlan,agregarProcedimiento,actualizacionImagen,eliminarMascota,eliminarFicha, marcarCastrado, agregarVacuna, agregarVisitaPendiente } from '../services/PerfilMascotaServices';
 import { ROL_ADMIN, ROL_CLIENTE } from '../helpers/variables';
-import axios from 'axios';
 import ListaVacuna from '../components/Listas/ListaVacuna';
 import ListaFichaVeterinaria from '../components/Listas/ListaFichaVeterinaria';
 import ListaProximosProcedimientos from '../components/Listas/ListaProximosProcedimientos';
@@ -184,10 +183,8 @@ const PerfilMascota = () => {
         </Button>
         </>
       )}
-      {/* Botones del Administrador */}
       {tipoUsuario === ROL_ADMIN && (
         <div className="mt-4 d-flex flex-column">
-        {/* Botón de Consulta que abre el modal con opciones */}
         <Button
         variant="primary"
         className="mb-2"
@@ -201,7 +198,6 @@ const PerfilMascota = () => {
         >
         Consulta
         </Button>
-        {/* Botón de Mascota que abre el modal con otras opciones */}
         <Button
         variant="success"
         className="mb-2"
@@ -214,7 +210,6 @@ const PerfilMascota = () => {
         >
         Mascota
         </Button>
-        {/* Botón para eliminar la mascota */}
         <Button variant="danger" className="mb-2" onClick={handleEliminarMascota}>
         Eliminar
         </Button>
@@ -224,7 +219,6 @@ const PerfilMascota = () => {
       </Card>
       </Col>
       
-      {/* Columna derecha - Próximos Procedimientos */}
       <Col md={8}>
       <Card className="mb-4">
       <Card.Header>Próximos Procedimientos</Card.Header>
@@ -242,7 +236,6 @@ const PerfilMascota = () => {
         ))}
         </ListGroup>
         </Card>
-        {/* Historial de Vacunas */}
         <Card className="mb-4">
         <Card.Header>Historial de Vacunas</Card.Header>
         <ListGroup
@@ -261,9 +254,7 @@ const PerfilMascota = () => {
           </Col>
           </Row>
           
-          {/* Segunda fila - Historial de Procedimientos */}
           <Row style={{ marginBottom: '20px' }}>
-          {/* Historial de Procedimientos */}
           <Col md={12}>
           <Card>
           <Card.Header>Historial de Procedimientos</Card.Header>

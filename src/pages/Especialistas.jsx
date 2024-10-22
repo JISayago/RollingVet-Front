@@ -8,7 +8,6 @@ function Especialistas() {
   const cargarVeterinarios = async () => {
     try {
       const veterinarios = await clienteAxios.get('/usuarios/veterinarios');
-      console.log(veterinarios);
       setVeterinarios(veterinarios.data);
     } catch (error) {
       alert("Ocurrió un error al cargar los Veterinarios.");

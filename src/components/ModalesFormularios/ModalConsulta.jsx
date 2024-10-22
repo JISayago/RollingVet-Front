@@ -1,6 +1,22 @@
 import { Modal, Button, Form } from 'react-bootstrap';
+import { useState, useEffect } from 'react';
+import clienteAxios from '../../helpers/axios.config';
 
 const ModalConsulta = ({ show, onHide, nuevoProcedimiento, setNuevoProcedimiento, handleAgregarProcedimiento }) => {
+  const [veterinarios, setVeterinarios] = useState([]);
+
+  const cargarVeterinarios = async () => {
+    try {
+      const veterinarios = await clienteAxios.get('/usuarios/veterinarios');
+      setVeterinarios(veterinarios.data);
+    } catch (error) {
+      alert("Ocurrió un error al cargar los Veterinarios.");
+    }
+  };
+  useEffect(() => {
+        cargarVeterinarios();
+  }, []);
+
   return (
     <Modal show={show} onHide={onHide}>
       <Modal.Header closeButton>
@@ -29,11 +45,18 @@ const ModalConsulta = ({ show, onHide, nuevoProcedimiento, setNuevoProcedimiento
           <Form.Group controlId="vistoPor">
             <Form.Label>Visto por</Form.Label>
             <Form.Control
-              type="text"
+              as="select"
               value={nuevoProcedimiento.vistoPor}
               onChange={(e) => setNuevoProcedimiento({ ...nuevoProcedimiento, vistoPor: e.target.value })}
               required
-            />
+            >
+              <option value="">Seleccionar Veterinario</option>
+              {veterinarios.map((veterinario) => (
+                <option key={veterinario.id} value={veterinario.nombre}>
+                  {veterinario.nombre}
+                </option>
+              ))}
+            </Form.Control>
           </Form.Group>
           <Form.Group controlId="tratamiento">
             <Form.Label>Tratamiento</Form.Label>
