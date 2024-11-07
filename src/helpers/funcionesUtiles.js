@@ -110,6 +110,7 @@ export const validarSoloLetrasSinSimbolos = (valor, campo, setFormErrors) => {
 };
 
 export const validarCantidadCaracteres = (valor, campo, min, max, setFormErrors) => {
+  console.log({valor:valor,campo:campo,min:min,max:max})
   if (valor.length < min || valor.length > max) {
     setFormErrors(prev => ({
       ...prev,
