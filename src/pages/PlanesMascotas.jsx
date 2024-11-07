@@ -7,7 +7,7 @@ import "../css/inicio.css";
 import CardPlan from '../components/Cards/CardPlan';
 import FormularioContactoPorPlan from '../components/ModalesFormularios/FormularioContactoPorPlan';
 import { planes } from '../helpers/variables';
-import { validarEmail, validarMensaje, validarNombre, validarNumero } from '../helpers/funcionesUtiles';
+import { validarEmail, validarMensaje, validarNombre, validarNumero, validarCantidadCaracteres, validarSoloLetrasSinSimbolos } from '../helpers/funcionesUtiles';
 
 const PlanesDeSuscripcion = () => {
   const formLimpio = {
@@ -41,18 +41,20 @@ const PlanesDeSuscripcion = () => {
   };
 
   const validarFormulario = () => {
-    const isNombreValido = validarNombre(formData.nombre, setFormErrors);
+    const isNombreSoloLetras = validarSoloLetrasSinSimbolos(formData.nombre, 'nombre', setFormErrors);
+    const isNombreRangoValido = validarCantidadCaracteres(formData.nombre, 'nombre', 4, 25, setFormErrors);
+    const isNombreValido = isNombreSoloLetras && isNombreRangoValido;
+  
     const isEmailValido = validarEmail(formData.email, setFormErrors);
     const isNumeroValido = validarNumero(formData.numero, setFormErrors);
-    const isMensajeValido = validarMensaje(formData.mensaje, setFormErrors);
-    
+    const isMensajeValido = validarCantidadCaracteres(formData.mensaje, 'mensaje', 10, 230, setFormErrors);
+  
     if (!formData.plan) {
       setFormErrors(prev => ({ ...prev, plan: 'Debe seleccionar un plan de suscripción.' }));
-    }
-
-    
+    }  
     return isNombreValido && isEmailValido && isNumeroValido && isMensajeValido && !!formData.plan;
   };
+  
 
   const envioMail = async () => {
     if (!validarFormulario()) {
