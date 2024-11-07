@@ -7,7 +7,7 @@ import "../css/contacto_sucursales.css";
 import { configHeaders } from '../helpers/extra.config';
 import ForumularioConsultaSucursales from '../components/ModalesFormularios/ForumularioConsultaSucursales';
 import CardSucursalConsulta from '../components/Cards/CardSucursalConsulta';
-import { validarEmail, validarMensaje } from '../helpers/funcionesUtiles';
+import { validarCamposVacios, validarCantidadCaracteres, validarEmail, validarMensaje } from '../helpers/funcionesUtiles';
 
 const Contacto = () => {
   const [sucursales, setSucursales] = useState([]);
@@ -51,11 +51,14 @@ const Contacto = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setFormErrors({});
-    const isEmailValido = validarEmail(formData.email, setFormErrors);
-    const isMensajeValido = validarMensaje(formData.mensaje, setFormErrors);
-  
-    if (isEmailValido && isMensajeValido) {
-      envioMail();
+    const validarCVacios = validarCamposVacios(formData, setFormErrors);
+    if (validarCVacios) {
+      const isEmailValido = validarEmail(formData.email, setFormErrors);
+      const isMensajeValido = validarMensaje(formData.mensaje, setFormErrors)
+      && validarCantidadCaracteres(formData.mensaje, 'mensaje',10, 230, setFormErrors); 
+      if (isEmailValido && isMensajeValido) {
+        envioMail();
+      }
     }
   };
   

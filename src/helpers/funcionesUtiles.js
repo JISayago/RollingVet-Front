@@ -96,3 +96,27 @@ export const validarMensaje = (mensaje, setFormErrors) => {
   }
   return true;
 };
+
+export const validarSoloLetrasSinSimbolos = (valor, campo, setFormErrors) => {
+  const soloLetrasSinSimbolosRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
+  if (!soloLetrasSinSimbolosRegex.test(valor)) {
+    setFormErrors(prev => ({
+      ...prev,
+      [campo]: `El campo ${campo} solo puede contener letras y espacios.`
+    }));
+    return false;
+  }
+  return true;
+};
+
+export const validarCantidadCaracteres = (valor, campo, min, max, setFormErrors) => {
+  console.log({valor:valor,campo:campo,min:min,max:max})
+  if (valor.length < min || valor.length > max) {
+    setFormErrors(prev => ({
+      ...prev,
+      [campo]: `El campo ${campo} debe tener entre ${min} y ${max} caracteres.`
+    }));
+    return false;
+  }
+  return true;
+};

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import { actualizarPerfil, logearse, registrarse } from "../../services/LoginRegistroServices";
 import { TIPO_EDITAR_PERFIL, TIPO_LOGIN, TIPO_REGISTRO } from "../../helpers/variables";
-import { validarCamposVacios, validarContrasenia, validarEmail } from "../../helpers/funcionesUtiles";
+import { validarCamposVacios, validarContrasenia, validarEmail, validarSoloLetrasSinSimbolos } from "../../helpers/funcionesUtiles";
 
 function ModalLR({ show, handleCerrar, type, usuario }) {
   const [formData, setFormData] = useState({});
@@ -41,13 +41,14 @@ function ModalLR({ show, handleCerrar, type, usuario }) {
   const handleRegistro = async () => {
     const valid = validarCamposVacios(formData, setFormErrors) 
                  && validarEmail(formData.email, setFormErrors) 
-                 && validarContrasenia(formData.contrasenia, formData.rcontrasenia, setFormErrors);
+                 && validarContrasenia(formData.contrasenia, formData.rcontrasenia, setFormErrors)
+                 && validarSoloLetrasSinSimbolos(formData.nombre, 'nombre', setFormErrors);
 
     if (valid) {
       const result = await registrarse(formData);
       handleCerrar();
     }
-  };
+};
 
   const handleActualizarPerfil = async () => {
     const valid = validarCamposVacios(formData, setFormErrors) 
